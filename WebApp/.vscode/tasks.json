@@ -1,0 +1,25 @@
+{
+    "version": "0.1.0",
+    "taskSelector": "/t:",
+    "showOutput": "always",
+    "tasks": [
+        {
+            "taskName": "build",
+            "linux": {
+                // change according your msbuild location
+                "command": "dotnet",
+                "isShellCommand": true,
+                "options": {
+                    "cwd": "${workspaceRoot}"
+                },
+                "args": [
+                    "build"
+                ]
+            },
+            // Show the output window only if unrecognized errors occur.
+            "showOutput": "always",
+            // Use the standard MS compiler pattern to detect errors, warnings and infos
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}
