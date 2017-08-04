@@ -1,0 +1,33 @@
+{
+    "Pages": [
+      {
+        "Name": "Page 1",
+        "Sections": [
+          {
+            "Name": "Section 1",
+            "Elements": [
+              {
+                "Name": "Nom",
+                "Type": "Text",
+                "TextType": "string"
+              },
+              {
+                "Name": "Date",
+                "Type": "Text",
+                "TextType": "date"
+              },
+              {
+                "Name": "Status marital",
+                "Type": "List",
+                "Items": [
+                  "Item1",
+                  "Item2",
+                  "Item3"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
