@@ -13,20 +13,11 @@ namespace WebApp.Controllers
             return View();
         }
 
-        public IActionResult About()
+        public IActionResult Admin()
         {
-            ViewData["Message"] = "Your application description page.";
-
             return View();
         }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
+        
         public IActionResult Error()
         {
             return View();

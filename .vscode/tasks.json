@@ -8,6 +8,10 @@
             "linux": {
                 // change according your msbuild location
                 "command": "dotnet",
+                "isShellCommand": true,
+                "options": {
+                    "cwd": "${workspaceRoot}/WebApp"
+                },
                 "args": [
                     "build"
                 ]
