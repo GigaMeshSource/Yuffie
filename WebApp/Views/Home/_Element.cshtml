@@ -5,14 +5,15 @@
 }
 
 <div class="element">
-    <label for="el_@elementId">@(Model.Name)</label>
     @if(Model.Type == "Text")
     {
-        <input type="@(Model.TextType)" id="el_@elementId"></input>
+        <label for="el_@elementId">@(Model.Name)</label>
+        <input watch="@elementId" type="@(Model.TextType)" id="el_@elementId"></input>
     }
     @if(Model.Type == "List")
     {
-        <select id="el_@elementId">
+        <label for="el_@elementId">@(Model.Name)</label>
+        <select watch="@elementId" id="el_@elementId">
             @for(var itemIndex = 0; itemIndex < Model.Items.Count(); ++itemIndex)
             {
                 var item = Model.Items[itemIndex];
@@ -22,18 +23,22 @@
     }
     @if(Model.Type == "UpdateList")
     {
-
+         <label>@(Model.Name)</label>
+         <input type="text" id="@elementId" updateList>
+         <ul watch="@elementId" id="ul_@elementId">
+        </ul>        
     }
     @if(Model.Type == "Check")
     {
-
+        <label><input watch="@elementId" type="checkbox" id="el_@elementId" value="@(Model.Name)" />@(Model.Name)</label>
     }
     @if(Model.Type == "Radio")
     {
+         <label>@(Model.Name)</label>
         @for(var itemIndex = 0; itemIndex < Model.Items.Count(); ++itemIndex)
         {
             var item = Model.Items[itemIndex];
-            <input type="radio" value="@(item)" group="@elementId" />
-        }
+            <label><input type="radio" id="el_@(elementId)_@(item)" watch="@elementId" value="@(item)" name="@(elementId)" />@item</label>
+        } 
     }
 </div>

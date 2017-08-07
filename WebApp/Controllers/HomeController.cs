@@ -18,6 +18,13 @@ namespace WebApp.Controllers
         {
             return View("Admin", YuffieApp.Config);
         }
+
+        [HttpPost]
+        public IActionResult PushData(IDictionary<string, object> data)
+        {
+            
+            return Redirect("/Home/Index");
+        }
         
         public IActionResult Error()
         {
