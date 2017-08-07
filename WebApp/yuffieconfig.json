@@ -9,7 +9,7 @@
               {
                 "Name": "Nom",
                 "Type": "Text",
-                "TextType": "string"
+                "TextType": "text"
               },
               {
                 "Name": "Date",
@@ -24,6 +24,22 @@
                   "Item2",
                   "Item3"
                 ]
+              },
+              {
+                "Name": "Vivant",
+                "Type": "Radio",
+                "Items": [
+                  "Oui",
+                  "Non"
+                ]
+              },
+              {
+                "Name": "Advanced",
+                "Type": "Check"
+              },
+              {
+                "Name": "Enfants",
+                "Type": "UpdateList"
               }
             ]
           }

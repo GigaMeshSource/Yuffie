@@ -1,0 +1,39 @@
+@model Yuffie.WebApp.Models.YCPSElement
+
+@{
+    var elementId = Model.Name.Replace(" ", "_");
+}
+
+<div class="element">
+    <label for="el_@elementId">@(Model.Name)</label>
+    @if(Model.Type == "Text")
+    {
+        <input type="@(Model.TextType)" id="el_@elementId"></input>
+    }
+    @if(Model.Type == "List")
+    {
+        <select id="el_@elementId">
+            @for(var itemIndex = 0; itemIndex < Model.Items.Count(); ++itemIndex)
+            {
+                var item = Model.Items[itemIndex];
+                <option value="@(item)">@(item)</option>
+            }
+        </select>
+    }
+    @if(Model.Type == "UpdateList")
+    {
+
+    }
+    @if(Model.Type == "Check")
+    {
+
+    }
+    @if(Model.Type == "Radio")
+    {
+        @for(var itemIndex = 0; itemIndex < Model.Items.Count(); ++itemIndex)
+        {
+            var item = Model.Items[itemIndex];
+            <input type="radio" value="@(item)" group="@elementId" />
+        }
+    }
+</div>

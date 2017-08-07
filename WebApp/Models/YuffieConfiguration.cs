@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Yuffie.WebApp
+namespace Yuffie.WebApp.Models
 {
     public class YuffieConfiguration
     {

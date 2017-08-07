@@ -1,1 +1,20 @@
-﻿
+﻿@model Yuffie.WebApp.Models.YuffieConfiguration
+
+@for(var pageIndex = 0; pageIndex < Model.Pages.Count(); ++pageIndex)
+{
+    var page = Model.Pages[pageIndex];
+    <div class="page" id="page@(pageIndex)">
+        <h1>@(page.Name)</h1>
+            @for(var sectionIndex = 0; sectionIndex < page.Sections.Count(); ++sectionIndex)
+            {
+                var section = page.Sections[sectionIndex];
+                <div class="section" id="section@(sectionIndex)">
+                    <h2>@(section.Name)</h2>
+                    @foreach(var element in section.Elements)
+                    {
+                        Html.RenderPartial("_Element", element);
+                    }
+                </div>      
+            }
+    </div>
+}

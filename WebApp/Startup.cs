@@ -7,9 +7,20 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Yuffie.WebApp.Models;
 
 namespace WebApp
 {
+
+    public static class YuffieApp
+    {
+        public static void SetConfiguration(IConfigurationBuilder builder)
+        {
+            var configuration = builder.Build();
+            Config = configuration.Get<YuffieConfiguration>();
+        }
+        public static YuffieConfiguration Config {get;private set;}
+    }
     public class Startup
     {
         public Startup(IHostingEnvironment env)
@@ -18,9 +29,15 @@ namespace WebApp
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddJsonFile("yuffieconfig.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            var specificBuilder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("yuffieconfig.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables();
+
+            YuffieApp.SetConfiguration(specificBuilder);
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -30,6 +47,7 @@ namespace WebApp
         {
             // Add framework services.
             services.AddMvc();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

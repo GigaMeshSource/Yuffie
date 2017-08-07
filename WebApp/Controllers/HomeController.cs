@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Yuffie.WebApp;
 
 namespace WebApp.Controllers
 {
@@ -10,12 +11,12 @@ namespace WebApp.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return View("Index", YuffieApp.Config);
         }
 
         public IActionResult Admin()
         {
-            return View();
+            return View("Admin", YuffieApp.Config);
         }
         
         public IActionResult Error()
