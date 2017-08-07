@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Yuffie.WebApp;
 
 namespace WebApp.Controllers
@@ -20,9 +21,10 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult PushData(IDictionary<string, object> data)
+        public IActionResult PushData(string data)
         {
-            
+            var parsed = JsonConvert.DeserializeObject<List<YuffieFrontValue>>(data);
+            //TODO ALT object is here 
             return Redirect("/Home/Index");
         }
         
@@ -30,5 +32,11 @@ namespace WebApp.Controllers
         {
             return View();
         }
+
+        public class YuffieFrontValue 
+        {
+            public string Key {get;set;}
+            public object Value {get;set;}
+        } 
     }
 }

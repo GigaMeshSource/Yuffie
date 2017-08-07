@@ -1,78 +1,59 @@
-﻿// Write your Javascript code.
-(function($){
-    var oldHtml = $.fn.html;
-    $.fn.html = function()
-    {
-        var ret = oldHtml.apply(this, arguments);
-
-        //trigger your event.
-        this.trigger("change");
-
-        return ret;
-    };
-})(jQuery);
-
-$(function() {
-    var elements = {}
+﻿$(function() {
+    var elements = []
     var getElement = function(key){
         for(var i = 0; i < elements.length; ++i) {
-            if(elements[i].key == key) {
+            if(elements[i].Key == key) {
                 return elements[i]
             }
         }
     }
 
-    $("input[updateList]").each(function(index, updateListElement) {
-        $(updateListElement).keyup(function(e) {
-            if(e.keyCode == 13) { //enter
-                var list = $(updateListElement).next("ul")
-                list.append("<li>" + $(updateListElement).val() + "</li>")
-                $(updateListElement).val("")
-            }
-        })  
-    })
-
     $("[watch]").each(function(index, watchElement) {
-        var key = watchElement.prop("watch")
+        watchElement = $(watchElement)
+        var key = watchElement.attr("watch")
         var element = {
-            key: key,
-            type:"Text",
-            element: watchElement.id(),
-            value: null
+            Key: key,
+            Value: null
         }
         if(watchElement.is("ul")) {
-             watchElement.on("change",function(){
-                $("#" + element.element).each("li", function(i, o) {
-                    $(o).innerHtml()
-                })
-             })
+            element.Value = []
+            var inp = $(watchElement.prev())
+            inp.keyup(function(e) {
+                if(e.keyCode == 13) { //enter
+                    watchElement.append("<li>" + inp.val() + "</li>")
+                    element.Value.push(inp.val())
+                    inp.val("")
+                }
+            })  
+        }
+        if(watchElement.is("input") || watchElement.is("select")) {
+            watchElement.change(function() {
+                element.Value = watchElement.val()                
+            })
         }
 
         if(watchElement.is("[type=radio]")) {
-            element.type = "Radio"
+            //TODO
         }
 
         if(watchElement.is("[type=checkbox]")) {
-            element.type = "Check"
-        }
-
-        if(watchElement.is("select")) {
-            element.type = "List"
+            watchElement.change(function() {
+                element.Value = watchElement.prop("checked")                
+            })
         }
 
         elements.push(element);
     })
     
     $("#yuffieValidate").click(function(){
-        data = [];
-        for(var i = 0; i < elements.length; ++i)
-        {
-            var element = elements[i]
-            var value = "";
-            if(element.type == "")
-            data.push({element.key, value});
-        }
-
-        $.post("/Home/PushData", data)
+        console.log(elements)
+        $.ajax({
+            type: "POST",
+            url: "/Home/PushData",
+            data: "data=" + JSON.stringify(elements),
+            success: function() {
+                window.location = window.location.href
+            }
+        });
     })
 })
