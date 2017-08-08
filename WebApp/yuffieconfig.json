@@ -20,13 +20,13 @@
                 "Name": "Status marital",
                 "Type": "List",
                 "Items": [
-                  "Item1",
-                  "Item2",
-                  "Item3"
+                  "Celibataire",
+                  "Marié(e)",
+                  "Divorcé(e)"
                 ]
               },
               {
-                "Name": "Vivant",
+                "Name": "Ex conjoint vivant",
                 "Type": "Radio",
                 "Items": [
                   "Oui",
