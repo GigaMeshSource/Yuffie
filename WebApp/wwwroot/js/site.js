@@ -33,7 +33,11 @@
         }
 
         if(watchElement.is("[type=radio]")) {
-            //TODO
+            watchElement.change(function() {
+                if(watchElement.attr("checked")) {
+                    element.Value = watchElement.val()
+                }
+            })
         }
 
         if(watchElement.is("[type=checkbox]")) {
