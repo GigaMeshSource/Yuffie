@@ -1,16 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using ServiceStack;
 using Yuffie.WebApp;
+using Yuffie.WebApp.Models;
 
 namespace WebApp.Controllers
 {
     public class HomeController : Controller
     {
+        private IHostingEnvironment HostingEnv {get;set;}
+
+        public HomeController(IHostingEnvironment hostingEnv)
+        {
+            HostingEnv = hostingEnv;
+        }
         public IActionResult Index()
         {
             return View("Index", YuffieApp.Config);
@@ -18,11 +28,17 @@ namespace WebApp.Controllers
 
         public IActionResult Admin()
         {
-            object data = null;
+            return View("Admin");
+        }
 
-            var sb = new StringBuilder();
+        public async Task<IActionResult> Download()
+        {
+            var data = new List<object>(); //recup info
 
-            return View("Admin", YuffieApp.Config);
+            var fileName = DateTime.Now.ToString("yyyy-MM-dd HH:mm") + ".csv";            
+            var fileData = UTF8Encoding.UTF8.GetBytes(data.ToCsv());
+                
+            return File(fileData, "text/plain", fileName);
         }
 
         [HttpPost]
