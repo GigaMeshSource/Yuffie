@@ -4,11 +4,11 @@
     var elementId = Model.Name.Replace(" ", "_");
 }
 
-<div element>
+<div element id="con_@elementId">
     @if(Model.Type == "Text")
     {
         <label for="el_@elementId">@(Model.Name)</label>
-        <input watch="@elementId" type="@(Model.TextType)" id="el_@elementId"></input>
+        <input watch="@elementId" type="@(Model.TextType)" value="@(Model.Default)" id="el_@elementId"></input>
     }
     @if(Model.Type == "List")
     {
@@ -17,7 +17,15 @@
             @for(var itemIndex = 0; itemIndex < Model.Items.Count(); ++itemIndex)
             {
                 var item = Model.Items[itemIndex];
-                <option value="@(item)">@(item)</option>
+                var selected = "";
+                if(Model.Default == item)
+                {
+                    <option selected value="@(item)">@(item)</option>
+                }
+                else 
+                {
+                    <option value="@(item)">@(item)</option>                    
+                }
             }
         </select>
     }
@@ -30,7 +38,13 @@
     }
     @if(Model.Type == "Check")
     {
-        <label><input watch="@elementId" type="checkbox" id="el_@elementId" value="@(Model.Name)" />@(Model.Name)</label>
+        if(Model.Default != null && Model.Default.ToLower() == "true")
+        {
+            <label><input checked watch="@elementId" type="checkbox" id="el_@elementId" value="@(Model.Name)" />@(Model.Name)</label>
+        }
+        else {
+            <label><input watch="@elementId" type="checkbox" id="el_@elementId" value="@(Model.Name)" />@(Model.Name)</label>
+        }
     }
     @if(Model.Type == "Radio")
     {
@@ -38,7 +52,14 @@
         @for(var itemIndex = 0; itemIndex < Model.Items.Count(); ++itemIndex)
         {
             var item = Model.Items[itemIndex];
-            <label><input type="radio" id="el_@(elementId)_@(item)" watch="@elementId" value="@(item)" name="@(elementId)" />@item</label>
+            if(Model.Default == item)
+            {
+                <label><input type="radio" id="el_@(elementId)_@(item)" checked watch="@elementId" value="@(item)" name="@(elementId)" />@item</label>             
+            }
+            else 
+            {
+                <label><input type="radio" id="el_@(elementId)_@(item)" watch="@elementId" value="@(item)" name="@(elementId)" />@item</label>
+            }
         } 
     }
 </div>
