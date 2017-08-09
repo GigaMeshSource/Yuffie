@@ -16,11 +16,15 @@ namespace WebApp.Controllers
     public class HomeController : Controller
     {
         private IHostingEnvironment HostingEnv {get;set;}
+        private readonly Yuffie.WebApp.Models.AppContext _context;
 
-        public HomeController(IHostingEnvironment hostingEnv)
+
+        public HomeController(IHostingEnvironment hostingEnv, Yuffie.WebApp.Models.AppContext context)
         {
             HostingEnv = hostingEnv;
+            _context = context;    
         }
+        
         public IActionResult Index()
         {
             return View("Index", YuffieApp.Config);
