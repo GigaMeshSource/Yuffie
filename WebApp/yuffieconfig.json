@@ -7,39 +7,57 @@
             "Name": "Section 1",
             "Elements": [
               {
-                "Name": "Nom",
-                "Type": "Text",
-                "TextType": "text"
-              },
-              {
-                "Name": "Date",
-                "Type": "Text",
-                "TextType": "date"
-              },
-              {
-                "Name": "Status marital",
+                "Name": "Animateur",
                 "Type": "List",
                 "Items": [
-                  "Celibataire",
-                  "Marié(e)",
-                  "Divorcé(e)"
+                  "Kevin Briffaut",
+                  "Anne-Laure Trabon",
+                  "Aurélien Sberro"
                 ]
               },
               {
-                "Name": "Ex conjoint vivant",
-                "Type": "Radio",
+                "Name": "Type d'animation",
+                "Type": "List",
                 "Items": [
-                  "Oui",
+                  "Co-animation",
+                  "Observation",
                   "Non"
+                ],
+                "Default":"Non"
+              },
+              {
+                "Name": "Co-animateur",
+                "Type": "List",
+                "Items": [
+                  "Kevin Briffaut",
+                  "Anne-Laure Trabon",
+                  "Aurélien Sberro"
                 ]
               },
               {
-                "Name": "Advanced",
-                "Type": "Check"
+                "Name": "Service DCO",
+                "Type": "List",
+                "Items": [
+                  "ANI SG",
+                  "ANI CDN",
+                  "FOR",
+                  "IP"
+                ]
               },
               {
-                "Name": "Enfants",
-                "Type": "UpdateList"
+                "Name": "Distributeur",
+                "Type": "List",
+                "Items": [
+                  "SG",
+                  "SG PRIV",
+                  "CDN",
+                  "CDN PRIV",
+                  "CRCM",
+                  "PSC",
+                  "ASSU",
+                  "ORADEA",
+                  "IBFS"
+                ]
               }
             ]
           }

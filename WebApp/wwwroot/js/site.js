@@ -1,13 +1,13 @@
 ﻿var rules = [ {
-    "Key": "Ex conjoint vivant",
+    "Key": "Co-animateur",
     "StartingEffect": {
         "Css": {
             "display": "none"
         }
     },
     "Conditions": [{
-        "Key": "Status marital",
-        "Value": "Item3",
+        "Key": "Type d'animation",
+        "Value": "Co-animation",
     }],
     "Effect": {
         "Css": {
@@ -40,7 +40,7 @@ $(function() {
     var processEffect = function(key, effect) {
         if(effect.Css != undefined && effect.Css != null) {
             var element = getElement(key)
-            var block = $($("#" + element.Key).parents("[element]"))
+            var block = $("#con_" + element.Key)
             for(var property in effect.Css) {
                 block.css(property, effect.Css[property])
             }
@@ -70,6 +70,9 @@ $(function() {
             }
             if(result) {
                 processEffect(rule.Key, rule.Effect)
+            }
+            else if(rule.StartingEffect != undefined) {
+                processEffect(rule.Key, rule.StartingEffect)
             }
         }
     }
