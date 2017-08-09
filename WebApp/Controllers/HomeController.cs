@@ -24,7 +24,7 @@ namespace WebApp.Controllers
             HostingEnv = hostingEnv;
             _context = context;    
         }
-        
+
         public IActionResult Index()
         {
             return View("Index", YuffieApp.Config);
@@ -50,6 +50,7 @@ namespace WebApp.Controllers
         {
             var parsed = JsonConvert.DeserializeObject<List<YuffieFrontValue>>(data);
             //TODO ALT object is here 
+            
             return Redirect("/Home/Index");
         }
         
