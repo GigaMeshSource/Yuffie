@@ -28,6 +28,22 @@ $(function() {
         return null
     }
 
+    var getSubElement = function(parentKey, key) {
+        var parent = getElement(parentKey)
+        var elements = parent.Value[parent.Value.length - 1]
+        for(var i = 0; i < elements.length; ++i) {
+            if(elements[i].Key == key) {
+                return elements[i]
+            }
+        }
+        var add = {
+            Key: key,
+            Value: null
+        }
+        elements.push(add)
+        return add
+    }
+
     var getRule = function(key){
         for(var i = 0; i < rules.length; ++i) {
             if(rules[i].Key == key) {
@@ -80,24 +96,28 @@ $(function() {
     $("[watch]").each(function(index, watchElement) {
         watchElement = $(watchElement)
         var key = watchElement.attr("watch")
-        var element = {
-            Key: key,
-            Value: null
-        }
+
         var parentId = null
+        var element = null
+        var parentElement = null
         var parent = watchElement.parents("[parent-element]")
         if(parent.length > 0) {
-            parentId =$(parent[0]).attr("parent-element")
-            element.Value = [{}]
+            parentId = $(parent[0]).attr("parent-element")
         }
+        else {
+            element = {
+                Key: key,
+                Value: null
+            }
+            elements.push(element);
+        }
+
         if(watchElement.is("input") || watchElement.is("select")) {
             watchElement.change(function() {
                 if(parentId == null)
                     element.Value = watchElement.val()
                 else {
-                    var parentElement = getElement(parentId);
-                    var e = parentElement.Value[parentElement.Value.length - 1]
-                    e[element.Key] = watchElement.val()
+                    getSubElement(parentId, key).Value = watchElement.val()
                 }
                 processChange()
             })
@@ -109,9 +129,7 @@ $(function() {
                     if(parentId == null)
                         element.Value = watchElement.val()
                     else {
-                        var parentElement = getElement(parentId);
-                        var e = parentElement.Value[parentElement.Value.length - 1]
-                        e[element.Key] = watchElement.val()
+                        getSubElement(parentId, key).Value = watchElement.val()
                     }
                     element.Value = watchElement.val()
                     processChange()
@@ -124,21 +142,20 @@ $(function() {
                 if(parentId == null)
                     element.Value = watchElement.attr("checked")
                 else {
-                    var parentElement = getElement(parentId);
-                    var e = parentElement.Value[parentElement.Value.length - 1]
-                    e[element.Key] = watchElement.attr("checked")
+                    getSubElement(parentId, key).Value = watchElement.attr("checked")
                 }
                 processChange()
             })
         }
 
         if(watchElement.is("[type=button]")) {
+            element.Value = [[]]
             watchElement.click(function() {
                 var item = element.Value[element.Value.length - 1]
-                element.Value.push({})
+                element.Value.push([])
                 var id = ""
                 for(var i in item) {
-                    id += i + ": " + item[i] + ", "
+                    id += item[i].Key + ": " + item[i].Value + ", "
                 }
                 $("#con_" + element.Key + " ul").append("<li>" + id + "</li>")
 
@@ -147,8 +164,6 @@ $(function() {
                 processChange()
             })
         }
-
-        elements.push(element);
     })
 
     initEffect()
@@ -158,12 +173,27 @@ $(function() {
         $.ajax({
             type: "POST",
             url: "/Home/PushData",
-            data: "data=" + JSON.stringify(elements),
+            data: "data=" + JSON.stringify(convertToDictionary(elements)),
             success: function() {
                 window.location = window.location.href
             }
         });
     })
 
- 
+    var convertToDictionary = function(array) {
+        var dic = {}
+        for(var i in array) {
+            var e = array[i]
+            if(e.Value != null && e.Value.constructor === Array) {
+                dic[e.Key] = []
+                for(var j in e.Value) {
+                    dic[e.Key].push(convertToDictionary(e.Value[j]))
+                }
+            }
+            else {
+                dic[e.Key] = e.Value
+            }
+        }
+        return dic;
+    }
 })

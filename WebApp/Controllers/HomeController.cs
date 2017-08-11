@@ -48,7 +48,9 @@ namespace WebApp.Controllers
         [HttpPost]
         public IActionResult PushData(string data)
         {
-            var parsed = JsonConvert.DeserializeObject<List<YuffieFrontValue>>(data);
+            // var parsed = JsonConvert.DeserializeObject<List<YuffieFrontValue>>(data);
+            var parsed = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
+            
             //TODO ALT object is here 
             
             return Redirect("/Home/Index");
