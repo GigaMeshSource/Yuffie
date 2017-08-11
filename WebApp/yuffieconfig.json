@@ -5,7 +5,7 @@
         "Sections": [
           {
             "Name": "Participants externes",
-            "Elements": [
+            "Elements" : [
               {
                 "Name": "Intervenants",
                 "Type": "SubElement",
@@ -39,7 +39,12 @@
                     ]
                   } 
                 ]
-              },
+              }
+            ]
+          },
+          {
+            "Name": "Localisation agence",
+            "Elements" : [
               {
                 "Name": "Service DCO",
                 "Type": "List",
@@ -64,12 +69,7 @@
                   "ORADEA",
                   "IBFS"
                 ]
-              }
-            ]
-          },
-          {
-            "Name": "Section 2",
-            "Elements": [
+              },
               {
                 "Name": "CRCM",
                 "Type": "List",
@@ -183,7 +183,12 @@
                   "CRCM",
                   "PSC"
                 ]
-              },
+              }
+            ]
+          },
+          {
+            "Name": "Date et heure de l'évenement",
+            "Elements" : [
               {
                 "Name": "'laps''",
                 "Type": "List",
@@ -195,15 +200,25 @@
                 ]
               },
               {
-                "Name": "Heure début",
+                "Name": "Date début",
                 "Type": "Text",
                 "TextType": "date"
               },
               {
-                "Name": "Heure fin",
+                "Name": "Date fin",
                 "Type": "Text",
                 "TextType": "date"
-              },
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Audience",
+        "Sections": [
+          {
+            "Name": "Participants",
+            "Elements" : [
               {
                 "Name": "Conseiller",
                 "Type": "SubElement",
@@ -257,63 +272,17 @@
                 "Name": "Nombre conseiller",
                 "Type": "Text",
                 "TextType": "numeric"
-              },
-              {
-                "Name": "Fonction CRCM/PSC",
-                "Type": "List",
-                "Items": [
-                  "CCm junior",
-                  "CCm senior",
-                  "Adjoint RE",
-                  "RE",
-                  "RUO",
-                  "Directeur CRC",
-                  "Formateur",
-                  "Directeur PSC",
-                  "RDO",
-                  "RST",
-                  "Chargé de traitement Hdg",
-                  "Chargé de traitement Standard",
-                  "Agent PSC"
-                ]
-              },
-              {
-                "Name": "Lieu formation",
-                "Type": "List",
-                "Items": [
-                  "DR DE BORDEAUX",
-                  "DR DE LILLE",
-                  "DR DE LYON",
-                  "DR DE MARSEILLE",
-                  "DR DE RENNES",
-                  "DR DE STRASBOURG",
-                  "DR ILE DE FRANCE NORD",
-                  "DR ILE DE FRANCE SUD",
-                  "Val de Fontenay",
-                  "La défense",
-                  "BANQUE LAYDERNIER",
-                  "BANQUE COURTOIS",
-                  "BANQUE RHONES ALPES",
-                  "BANQUE TARNEAUD",
-                  "BANQUE KOLB",
-                  "BANQUE NUGER",
-                  "CDN - ILE DE FRANCE",
-                  "CDN - LES PROVINCES DU NORD",
-                  "CDN - REGIONS NORD METROPOLE",
-                  "CDN - REGIONS NORD OUEST",
-                  "SOCIETE MARSEILLAISE DE CREDIT"
-                ]
-              },
-              {
-                "Name": "Marché",
-                "Type": "List",
-                "Items": [
-                  "PRI/PART",
-                  "PRO",
-                  "ENT",
-                  "Mixte"
-                ]
-              },
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Discussion",
+        "Sections": [
+          {
+            "Name": "Sujet de la discussion",
+            "Elements" : [
               {
                 "Name": "Thème",
                 "Type": "List",
@@ -376,6 +345,83 @@
             ]
           }
         ]
+      },
+      {
+        "Name": "Recapitulatif",
+        "Sections": [
+          {
+            "Name": "Intervention",
+            "Elements" : [
+
+            ]
+          },
+          {
+            "Name": "Audience",
+            "Elements" : [
+              
+            ]
+          },
+          {
+            "Name": "Discussion",
+            "Elements" : [
+
+            ]
+          }
+        ]
       }
     ]
   }
+  /* 
+              {
+                "Name": "Fonction CRCM/PSC",
+                "Type": "List",
+                "Items": [
+                  "CCm junior",
+                  "CCm senior",
+                  "Adjoint RE",
+                  "RE",
+                  "RUO",
+                  "Directeur CRC",
+                  "Formateur",
+                  "Directeur PSC",
+                  "RDO",
+                  "RST",
+                  "Chargé de traitement Hdg",
+                  "Chargé de traitement Standard",
+                  "Agent PSC"
+                ]
+              },
+              {
+                "Name": "Lieu formation",
+                "Type": "List",
+                "Items": [
+                  "DR DE BORDEAUX",
+                  "DR DE LILLE",
+                  "DR DE LYON",
+                  "DR DE MARSEILLE",
+                  "DR DE RENNES",
+                  "DR DE STRASBOURG",
+                  "DR ILE DE FRANCE NORD",
+                  "DR ILE DE FRANCE SUD",
+                  "Val de Fontenay",
+                  "La défense",
+                  "BANQUE LAYDERNIER",
+                  "BANQUE COURTOIS",
+                  "BANQUE RHONES ALPES",
+                  "BANQUE TARNEAUD",
+                  "BANQUE KOLB",
+                  "BANQUE NUGER",
+                  "CDN - ILE DE FRANCE",
+                  "CDN - LES PROVINCES DU NORD",
+                  "CDN - REGIONS NORD METROPOLE",
+                  "CDN - REGIONS NORD OUEST",
+                  "SOCIETE MARSEILLAISE DE CREDIT"
+                ]
+              },
+              ,
+              
+            ]
+          }
+        ]
+      },
+  */
