@@ -1,37 +1,43 @@
 {
     "Pages": [
       {
-        "Name": "Page 1",
+        "Name": "Intervention",
         "Sections": [
           {
-            "Name": "Section 1",
+            "Name": "Participants externes",
             "Elements": [
               {
-                "Name": "Animateur",
-                "Type": "List",
-                "Items": [
-                  "Kevin Briffaut",
-                  "Anne-Laure Trabon",
-                  "Aurélien Sberro"
-                ]
-              },
-              {
-                "Name": "Type d'animation",
-                "Type": "List",
-                "Items": [
-                  "Co-animation",
-                  "Observation",
-                  "Non"
-                ],
-                "Default":"Non"
-              },
-              {
-                "Name": "Co-animateur",
-                "Type": "List",
-                "Items": [
-                  "Kevin Briffaut",
-                  "Anne-Laure Trabon",
-                  "Aurélien Sberro"
+                "Name": "Intervenants",
+                "Type": "SubElement",
+                "Elements": [
+                  {
+                    "Name": "Animateur",
+                    "Type": "List",
+                    "Items": [
+                      "Kevin Briffaut",
+                      "Anne-Laure Trabon",
+                      "Aurélien Sberro"
+                    ]
+                  },
+                  {
+                    "Name": "Type animation",
+                    "Type": "List",
+                    "Items": [
+                      "Co-animation",
+                      "Observation",
+                      "Non"
+                    ],
+                    "Default":"Non"
+                  },
+                  {
+                    "Name": "Co-animateur",
+                    "Type": "List",
+                    "Items": [
+                      "Kevin Briffaut",
+                      "Anne-Laure Trabon",
+                      "Aurélien Sberro"
+                    ]
+                  } 
                 ]
               },
               {
@@ -58,6 +64,314 @@
                   "ORADEA",
                   "IBFS"
                 ]
+              }
+            ]
+          },
+          {
+            "Name": "Section 2",
+            "Elements": [
+              {
+                "Name": "CRCM",
+                "Type": "List",
+                "Items": [
+                  "Nanterre",
+                  "Lille",
+                  "Lyon",
+                  "Marseille"
+                ]
+              },
+              {
+                "Name": "PSC",
+                "Type": "List",
+                "Items": [
+                  "SCS Lyon",
+                  "Scs 2",
+                  "Succ SdF",
+                  "Succ Strasbourg",
+                  "Succ Caen",
+                  "Succ Orléans",
+                  "Succ Nice",
+                  "PSC xxx"
+                ]
+              },
+              {
+                "Name": "ASSU",
+                "Type": "List",
+                "Items": [
+                  "D2",
+                  "Orléans",
+                  "St Quentin"
+                ]
+              },
+              {
+                "Name": "Type d'intervention",
+                "Type": "List",
+                "Items": [
+                  "Animation",
+                  "Formation",
+                  "Conception",
+                  "4)Réunion (RRA)"
+                ]
+              },
+              {
+                "Name": "Intervention IP",
+                "Type": "List",
+                "Items": [
+                  "Actualités - en DEC",
+                  "Actualités - en JV Priv",
+                  "Atelier PAT en DEC",
+                  "Atelier PAT en JV PRIV",
+                  "Conf Client",
+                  "Conf Tél",
+                  "Convention CGP en DR",
+                  "Formation interne DCO",
+                  "Intervention NBP",
+                  "Niveau 3",
+                  "RAG",
+                  "Réunion DR - Autre",
+                  "Réunion DEC - Autre",
+                  "Vivier",
+                  "WebEx DR",
+                  "WebEx inscription libre",
+                  "WebEx nationale",
+                  "WebEx Vivier",
+                  "BDDF Divers",
+                  "PRIV Divers",
+                  "CDN Divers",
+                  "Divers"
+                ]
+              },
+              {
+                "Name": "Formation",
+                "Type": "List",
+                "Items": [
+                  "Ass vie Niv 1",
+                  "Ass vie Niv 2",
+                  "Ass vie Niv 3",
+                  "FAC BG 3616",
+                  "FAC CGP",
+                  "PRO",
+                  "IARD 4060",
+                  "HAV",
+                  "CBP",
+                  "CRCM 111706",
+                  "Webex 111159",
+                  "Webex 111162",
+                  "Webex 111163",
+                  "Webex 110511",
+                  "Webex 110787",
+                  "DAV"
+                ]
+              },
+              {
+                "Name": "Type d'intervention 2",
+                "Type": "List",
+                "Items": [
+                  "Collectif",
+                  "Individuel",
+                  "Convention",
+                  "Distanciel",
+                  "Client",
+                  "Classe virtuelle",
+                  "Rapid learning",
+                  "Présentiel",
+                  "Micro learning",
+                  "autre",
+                  "DR",
+                  "DEC",
+                  "UC",
+                  "CRCM",
+                  "PSC"
+                ]
+              },
+              {
+                "Name": "'laps''",
+                "Type": "List",
+                "Items": [
+                  "journée",
+                  "matin",
+                  "après midi",
+                  "h spécifique"
+                ]
+              },
+              {
+                "Name": "Heure début",
+                "Type": "Text",
+                "TextType": "date"
+              },
+              {
+                "Name": "Heure fin",
+                "Type": "Text",
+                "TextType": "date"
+              },
+              {
+                "Name": "Conseiller",
+                "Type": "SubElement",
+                "Elements": [
+                  {
+                    "Name": "Nom conseiller",
+                    "Type": "Text",
+                    "TextType": "text"
+                  },
+                  {
+                    "Name": "Prénom conseiller",
+                    "Type": "Text",
+                    "TextType": "text"
+                  },
+                  {
+                    "Name": "Matricule conseiller",
+                    "Type": "Text",
+                    "TextType": "text"
+                  },
+                  {
+                    "Name": "Fonction conseiller",
+                    "Type": "List",
+                    "Items": [
+                      "CA",
+                      "GP",
+                      "BG",
+                      "CBP",
+                      "CGP",
+                      "PRO",
+                      "DA",
+                      "ADA",
+                      "RCL",
+                      "Autres",
+                      "CCM",
+                      "PSC",
+                      "ADP",
+                      "Mixte",
+                      "DCPP",
+                      "RC PRO",
+                      "CC PRIV",
+                      "CC PRO",
+                      "APP",
+                      "DIRCO",
+                      "DCA",
+                      "Délégué"
+                    ]
+                  }
+                ]
+              },
+              {
+                "Name": "Nombre conseiller",
+                "Type": "Text",
+                "TextType": "numeric"
+              },
+              {
+                "Name": "Fonction CRCM/PSC",
+                "Type": "List",
+                "Items": [
+                  "CCm junior",
+                  "CCm senior",
+                  "Adjoint RE",
+                  "RE",
+                  "RUO",
+                  "Directeur CRC",
+                  "Formateur",
+                  "Directeur PSC",
+                  "RDO",
+                  "RST",
+                  "Chargé de traitement Hdg",
+                  "Chargé de traitement Standard",
+                  "Agent PSC"
+                ]
+              },
+              {
+                "Name": "Lieu formation",
+                "Type": "List",
+                "Items": [
+                  "DR DE BORDEAUX",
+                  "DR DE LILLE",
+                  "DR DE LYON",
+                  "DR DE MARSEILLE",
+                  "DR DE RENNES",
+                  "DR DE STRASBOURG",
+                  "DR ILE DE FRANCE NORD",
+                  "DR ILE DE FRANCE SUD",
+                  "Val de Fontenay",
+                  "La défense",
+                  "BANQUE LAYDERNIER",
+                  "BANQUE COURTOIS",
+                  "BANQUE RHONES ALPES",
+                  "BANQUE TARNEAUD",
+                  "BANQUE KOLB",
+                  "BANQUE NUGER",
+                  "CDN - ILE DE FRANCE",
+                  "CDN - LES PROVINCES DU NORD",
+                  "CDN - REGIONS NORD METROPOLE",
+                  "CDN - REGIONS NORD OUEST",
+                  "SOCIETE MARSEILLAISE DE CREDIT"
+                ]
+              },
+              {
+                "Name": "Marché",
+                "Type": "List",
+                "Items": [
+                  "PRI/PART",
+                  "PRO",
+                  "ENT",
+                  "Mixte"
+                ]
+              },
+              {
+                "Name": "Thème",
+                "Type": "List",
+                "Items": [
+                  "Assurance Vie",
+                  "Protection",
+                  "ADE"
+                ]
+              },
+              {
+                "Name": "Sous thème",
+                "Type": "List",
+                "Items": [
+                  "Diversification",
+                  "Transmission",
+                  "Fiscalité",
+                  "Prévoyance",
+                  "IARD",
+                  "Champs libre"
+                ]
+              },
+              {
+                "Name": "Sujet",
+                "Type": "List",
+                "Items": [
+                  "Lancement produit",
+                  "Techniques commerciales",
+                  "Technique produit",
+                  "Actualité / Offre",
+                  "Chiffres / Suivi",
+                  "Atelier Manager",
+                  "Diag Protection",
+                  "Santé Co",
+                  "Retraite",
+                  "Collecte"
+                ]
+              },
+              {
+                "Name": "Commentaire ASSU",
+                "Type": "Text",
+                "TextType": "textarea"
+              },
+              {
+                "Name": "Thème CRCM/PSC",
+                "Type": "List",
+                "Items": [
+                  "IARD",
+                  "Prev",
+                  "Apporteurs + PJ / Certi",
+                  "Double écoute",
+                  "Produits",
+                  "Manager la protection"
+                ]
+              },
+              {
+                "Name": "Numéro vivier",
+                "Type": "Text",
+                "TextType": "numeric"
               }
             ]
           }

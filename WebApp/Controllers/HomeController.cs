@@ -16,13 +16,13 @@ namespace WebApp.Controllers
     public class HomeController : Controller
     {
         private IHostingEnvironment HostingEnv {get;set;}
-        private readonly Yuffie.WebApp.Models.AppContext _context;
+        // private readonly Yuffie.WebApp.Models.AppContext _context;
 
 
-        public HomeController(IHostingEnvironment hostingEnv, Yuffie.WebApp.Models.AppContext context)
+        public HomeController(IHostingEnvironment hostingEnv/*, Yuffie.WebApp.Models.AppContext context*/)
         {
             HostingEnv = hostingEnv;
-            _context = context;    
+            //_context = context;    
         }
 
         public IActionResult Index()
@@ -48,7 +48,9 @@ namespace WebApp.Controllers
         [HttpPost]
         public IActionResult PushData(string data)
         {
-            var parsed = JsonConvert.DeserializeObject<List<YuffieFrontValue>>(data);
+            // var parsed = JsonConvert.DeserializeObject<List<YuffieFrontValue>>(data);
+            var parsed = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
+            
             //TODO ALT object is here 
             
             return Redirect("/Home/Index");
