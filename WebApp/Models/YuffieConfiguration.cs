@@ -25,5 +25,6 @@ namespace Yuffie.WebApp.Models
         public List<string> Items {get;set;}
         public string TextType {get;set;}
         public string Default {get;set;}
+        public List<YCPSElement> Elements {get;set;}
     }
 }

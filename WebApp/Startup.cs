@@ -9,8 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Yuffie.WebApp.Models;
 
-using Microsoft.EntityFrameworkCore;
-
 namespace WebApp
 {
 
@@ -48,8 +46,6 @@ namespace WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddEntityFrameworkSqlite()
-                .AddDbContext<Yuffie.WebApp.Models.AppContext>(options => options.UseSqlite(Configuration["Data:DefaultConnection:DefaultDb"]));
             services.AddMvc();
 
         }

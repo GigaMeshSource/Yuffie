@@ -1,11 +1,5 @@
-@model Yuffie.WebApp.Models.YCPSElement
 
-@{
-    var elementId = Model.Name.Replace(" ", "_");
-}
-
-<div element id="con_@elementId">
-    @if(Model.Type == "Text")
+@if(Model.Type == "Text")
     {
         <label for="el_@elementId">@(Model.Name)</label>
         if(Model.TextType == "textarea") 
@@ -72,10 +66,5 @@
     @if(Model.Type == "SubElement")
     {
          <label>@(Model.Name)</label>
-         <div watch="@elementId" subElements>
-            @for(var e in Model.Elements) {
-                Html.RenderPartial("_Element", e);
-            }
-        </div>
+        <div class
     }
-</div>
