@@ -1,10 +1,10 @@
 {
     "Pages": [
       {
-        "Name": "Page 1",
+        "Name": "Intervention",
         "Sections": [
           {
-            "Name": "Section 1",
+            "Name": "Participants externes",
             "Elements": [
               {
                 "Name": "Animateur",
@@ -33,7 +33,12 @@
                   "Anne-Laure Trabon",
                   "Aurélien Sberro"
                 ]
-              },
+              }
+            ]
+          },
+          {
+            "Name": "Section 2",
+            "Elements": [
               {
                 "Name": "Service DCO",
                 "Type": "List",

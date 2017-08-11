@@ -84,21 +84,21 @@ $(function() {
             Key: key,
             Value: null
         }
-        if(watchElement.is("ul")) {
-            element.Value = []
-            var inp = $(watchElement.prev())
-            inp.keyup(function(e) {
-                if(e.keyCode == 13) { //enter
-                    watchElement.append("<li>" + inp.val() + "</li>")
-                    element.Value.push(inp.val())
-                    processChange()
-                    inp.val("")
-                }
-            })  
+        var parentId = null
+        var parent = watchElement.parents("[parent-element]")
+        if(parent.length > 0) {
+            parentId =$(parent[0]).attr("parent-element")
+            element.Value = [{}]
         }
         if(watchElement.is("input") || watchElement.is("select")) {
             watchElement.change(function() {
-                element.Value = watchElement.val()
+                if(parentId == null)
+                    element.Value = watchElement.val()
+                else {
+                    var parentElement = getElement(parentId);
+                    var e = parentElement.Value[parentElement.Value.length - 1]
+                    e[element.Key] = watchElement.val()
+                }
                 processChange()
             })
         }
@@ -106,6 +106,13 @@ $(function() {
         if(watchElement.is("[type=radio]")) {
             watchElement.change(function() {
                 if(watchElement.attr("checked")) {
+                    if(parentId == null)
+                        element.Value = watchElement.val()
+                    else {
+                        var parentElement = getElement(parentId);
+                        var e = parentElement.Value[parentElement.Value.length - 1]
+                        e[element.Key] = watchElement.val()
+                    }
                     element.Value = watchElement.val()
                     processChange()
                 }
@@ -114,7 +121,29 @@ $(function() {
 
         if(watchElement.is("[type=checkbox]")) {
             watchElement.change(function() {
-                element.Value = watchElement.prop("checked")
+                if(parentId == null)
+                    element.Value = watchElement.attr("checked")
+                else {
+                    var parentElement = getElement(parentId);
+                    var e = parentElement.Value[parentElement.Value.length - 1]
+                    e[element.Key] = watchElement.attr("checked")
+                }
+                processChange()
+            })
+        }
+
+        if(watchElement.is("[type=button]")) {
+            watchElement.click(function() {
+                var item = element.Value[element.Value.length - 1]
+                element.Value.push({})
+                var id = ""
+                for(var i in item) {
+                    id += i + ": " + item[i] + ", "
+                }
+                $("#con_" + element.Key + " ul").append("<li>" + id + "</li>")
+
+                $("#con_" + element.Key + " [parent-element] input[watch]").val("")
+
                 processChange()
             })
         }

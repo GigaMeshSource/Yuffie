@@ -72,10 +72,13 @@
     @if(Model.Type == "SubElement")
     {
          <label>@(Model.Name)</label>
-         <div watch="@elementId" subElements>
-            @for(var e in Model.Elements) {
+         <div parent-element="@(Model.Name)">
+            @foreach(var e in Model.Elements) {
                 Html.RenderPartial("_Element", e);
             }
         </div>
+        <input watch="@elementId" type="button" value="Ajouter un(e) @(Model.Name)" />        
+        <ul>
+        </ul>
     }
 </div>
