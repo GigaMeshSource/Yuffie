@@ -6,7 +6,7 @@
         }
     },
     "Conditions": [{
-        "Key": "Type d'animation",
+        "Key": "Type animation",
         "Value": "Co-animation",
     }],
     "Effect": {
@@ -23,6 +23,11 @@ $(function() {
         for(var i = 0; i < elements.length; ++i) {
             if(elements[i].Key == key) {
                 return elements[i]
+            }
+            else {
+                var r = getSubElement(elements[i].Key, key)
+                if(r != null)
+                    return r
             }
         }
         return null

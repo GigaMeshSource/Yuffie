@@ -7,38 +7,39 @@
             "Name": "Participants externes",
             "Elements": [
               {
-                "Name": "Animateur",
-                "Type": "List",
-                "Items": [
-                  "Kevin Briffaut",
-                  "Anne-Laure Trabon",
-                  "Aurélien Sberro"
+                "Name": "Intervenants",
+                "Type": "SubElement",
+                "Elements": [
+                  {
+                    "Name": "Animateur",
+                    "Type": "List",
+                    "Items": [
+                      "Kevin Briffaut",
+                      "Anne-Laure Trabon",
+                      "Aurélien Sberro"
+                    ]
+                  },
+                  {
+                    "Name": "Type animation",
+                    "Type": "List",
+                    "Items": [
+                      "Co-animation",
+                      "Observation",
+                      "Non"
+                    ],
+                    "Default":"Non"
+                  },
+                  {
+                    "Name": "Co-animateur",
+                    "Type": "List",
+                    "Items": [
+                      "Kevin Briffaut",
+                      "Anne-Laure Trabon",
+                      "Aurélien Sberro"
+                    ]
+                  } 
                 ]
               },
-              {
-                "Name": "Type d'animation",
-                "Type": "List",
-                "Items": [
-                  "Co-animation",
-                  "Observation",
-                  "Non"
-                ],
-                "Default":"Non"
-              },
-              {
-                "Name": "Co-animateur",
-                "Type": "List",
-                "Items": [
-                  "Kevin Briffaut",
-                  "Anne-Laure Trabon",
-                  "Aurélien Sberro"
-                ]
-              }
-            ]
-          },
-          {
-            "Name": "Section 2",
-            "Elements": [
               {
                 "Name": "Service DCO",
                 "Type": "List",
@@ -63,7 +64,12 @@
                   "ORADEA",
                   "IBFS"
                 ]
-              },
+              }
+            ]
+          },
+          {
+            "Name": "Section 2",
+            "Elements": [
               {
                 "Name": "CRCM",
                 "Type": "List",
