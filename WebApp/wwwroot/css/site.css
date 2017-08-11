@@ -1,37 +1,23 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
-}
+﻿  body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#3023ae+0,c76dd7+100 */
+    background: #3023ae; /* Old browsers */
+    background: -moz-linear-gradient(-45deg, #3023ae 0%, #c76dd7 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(-45deg, #3023ae 0%,#c76dd7 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(135deg, #3023ae 0%,#c76dd7 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3023ae', endColorstr='#c76dd7',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  }
 
-/* Wrapping element */
-/* Set some basic padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
-}
+  main {
+    flex: 1 0 auto;
+  }
 
-/* Set widths on the form inputs since otherwise they're 100% wide */
-input,
-select,
-textarea {
-    max-width: 280px;
-}
+  .fixed-action-btn {
+    bottom: 85px;
+  }
 
-/* Carousel */
-.carousel-caption p {
-    font-size: 20px;
-    line-height: 1.4;
-}
-
-/* Make .svg files in the carousel display properly in older browsers */
-.carousel-inner .item img[src$=".svg"] {
-    width: 100%;
-}
-
-/* Hide/rearrange for smaller screens */
-@media screen and (max-width: 767px) {
-    /* Hide captions */
-    .carousel-caption {
-        display: none;
-    }
-}
+  .collapsible-body {
+    background-color: whitesmoke;
+  }
