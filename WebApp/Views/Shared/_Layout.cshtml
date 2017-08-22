@@ -21,8 +21,8 @@
     <header>
         <nav>
             <div class="nav-wrapper">
-                <a href="#" class="brand-logo">Logo</a>
-                <a href="#" class="right">Logo</a>
+                <a href="#" class="brand-logo"><img src="~/images/logo-sg.png" class="logoSg"></a>
+                <a href="#" class="right"><img src="~/images/logo-GC.png" class="logoGc"></a>
             </div>
         </nav>
     </header>
@@ -31,25 +31,17 @@
             @RenderBody()
         </div>
         <div class="fixed-action-btn vertical">
-            <a class="btn-floating btn-large red">
-                <i class="large material-icons">more_vert</i>
+            <a class="btn-floating btn-large">
+                <i class="large material-icons white">more_vert</i>
             </a>
             <ul>
-                <li><a class="btn-floating red"><i class="material-icons">undo</i></a></li>
-                <li><a class="btn-floating yellow darken-1"><i class="material-icons">event</i></a></li>
-                <li><a class="btn-floating green"><i class="material-icons">supervisor_account</i></a></li>
+                <li><a class="btn-floating white" alt="se déconnecter"><i class="material-icons">undo</i></a></li>
+                <li><a class="btn-floating white" alt="mes événements"><i class="material-icons">event</i></a></li>
+                <li><a class="btn-floating white" alt="mon compte"><i class="material-icons">supervisor_account</i></a></li>
             </ul>
         </div>
         
     </main>
-    <footer class="page-footer">
-        <div class="footer-copyright">
-            <div class="container">
-                © 2014 Copyright Text
-                <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
-            </div>
-        </div>
-    </footer>
 
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

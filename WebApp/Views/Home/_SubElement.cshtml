@@ -4,7 +4,7 @@
         <label for="el_@elementId">@(Model.Name)</label>
         if(Model.TextType == "textarea") 
         {
-            <textarea watch="@elementId" type="@(Model.TextType)" value="@(Model.Default)" id="el_@elementId"></textarea>
+            <textarea watch="@elementId" type="@(Model.TextType)" value="@(Model.Default)" id="el_@elementId" class="materialize-textarea"></textarea>
         }
         else 
         {

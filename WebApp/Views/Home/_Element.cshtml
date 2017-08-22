@@ -96,7 +96,9 @@
                 Html.RenderPartial("_Element", e);
             }
         </div>
-        <input watch="@elementId" type="button" value="Ajouter un(e) @(Model.Name)" />        
+        <a class="waves-effect waves-light btn blue darken-1">
+            <input watch="@elementId" type="button" value="Ajouter un(e) @(Model.Name)" />  
+        </a>      
         <ul>
         </ul>
     }

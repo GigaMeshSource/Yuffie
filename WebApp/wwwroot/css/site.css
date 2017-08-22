@@ -14,10 +14,99 @@
     flex: 1 0 auto;
   }
 
-  .fixed-action-btn {
-    bottom: 85px;
-  }
-
   .collapsible-body {
     background-color: whitesmoke;
+  }
+
+  #yuffieNextButton {
+    margin-top:20px;
+    position: relative;
+  }
+
+  .page {
+    background-color:white;
+    padding: 60px 20px 20px 20px;
+    margin: 0.5rem 0 1rem 0;
+    background-color: #fff;
+    -webkit-transition: -webkit-box-shadow .25s;
+    transition: -webkit-box-shadow .25s;
+    transition: box-shadow .25s;
+    transition: box-shadow .25s, -webkit-box-shadow .25s;
+    border-radius: 2px;
+  }
+
+  .btn-floating i {
+    color:black;
+  }
+
+  nav {
+      background-color: white ;
+      color:black;
+  }
+
+  .logoSg {
+    width: 250px;
+    padding: 20px;
+  }
+
+  .logoGc {
+    width: 135px;
+    padding: 15px;
+  }
+
+  .specialCol {
+    padding:0px !important;
+  }
+
+  .helpingText {
+    text-align: center;
+    color: whitesmoke;
+    font-size: 24px;
+    margin: 30px;
+  }
+
+  .tabs {
+    height: 54px;
+  }
+
+  .tabs .tab a {
+    color:#1e88e5;
+  }
+
+  .tabs .tab a.active {
+    background-color: transparent;
+    color: #1e88e5;
+  }
+
+  .tabs .tab a:hover {
+    background-color: transparent;
+    color: #90caf9;
+  }
+
+  .tabs .indicator {
+    background-color: #1e88e5;
+  }
+
+  .tabs-icon {
+    font-size: 10px;
+    overflow: hidden;
+  }
+  .tabs-icon i {
+      display: block;
+      margin-top: 5px;
+      margin-bottom: -15px;
+      font-size: 24px;
+  }
+  .tabs-icon a.active {
+      background-color: #F3F3F3;
+  }
+  /* OVERWRITE MATERIAL CSS MIN WIDTH FOR MOBILE */
+  .tabs .tab {
+      min-width: 50px !important
+  }
+  .tabs .tab-hide {
+        display: none;
+  }
+  .no-pd {
+      padding: 0 !important
   }
