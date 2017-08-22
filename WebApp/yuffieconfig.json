@@ -2,6 +2,7 @@
     "Pages": [
       {
         "Name": "Intervention",
+        "Icon": "filter_drama",
         "Sections": [
           {
             "Name": "Participants externes",

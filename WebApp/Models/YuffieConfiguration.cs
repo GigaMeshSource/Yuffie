@@ -11,6 +11,7 @@ namespace Yuffie.WebApp.Models
     {
         public string Name {get;set;}
         public List<YCPSection> Sections {get;set;}
+        public string Icon {get;set;}
     }
     public class YCPSection 
     {
