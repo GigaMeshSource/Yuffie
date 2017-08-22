@@ -2,7 +2,7 @@
     "Pages": [
       {
         "Name": "Intervention",
-        "Icon": "filter_drama",
+        "Icon": "today",
         "Sections": [
           {
             "Name": "Participants externes",
@@ -221,6 +221,7 @@
       },
       {
         "Name": "Audience",
+        "Icon": "supervisor_account",
         "Sections": [
           {
             "Name": "Participants",
@@ -280,6 +281,7 @@
       },
       {
         "Name": "Discussion",
+        "Icon": "question_answer",
         "Sections": [
           {
             "Name": "Sujet de la discussion",
@@ -349,6 +351,7 @@
       },
       {
         "Name": "Recapitulatif",
+        "Icon": "history",
         "Sections": [
           {
             "Name": "Intervention",

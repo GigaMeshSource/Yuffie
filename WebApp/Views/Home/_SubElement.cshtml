@@ -39,7 +39,8 @@
     }
     @if(Model.Type == "Check")
     {
-        if(Model.Default != null && Model.Default.ToLower() == "true")
+        if(Model.Default != 
+        ll && Model.Default.ToLower() == "true")
         {
             <label><input checked watch="@elementId" type="checkbox" id="el_@elementId" value="@(Model.Name)" />@(Model.Name)</label>
         }

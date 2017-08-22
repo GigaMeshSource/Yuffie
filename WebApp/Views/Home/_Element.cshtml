@@ -55,7 +55,6 @@
     }
     @if(Model.Type == "Radio")
     {
-        <h4>@(Model.Name)</h4>
         @for(var itemIndex = 0; itemIndex < Model.Items.Count(); ++itemIndex)
         {
             var item = Model.Items[itemIndex];
@@ -81,7 +80,6 @@
     }
     @if(Model.Type == "Radio")
     {
-         <h4>@(Model.Name)</h4>
         @for(var itemIndex = 0; itemIndex < Model.Items.Count(); ++itemIndex)
         {
             var item = Model.Items[itemIndex];
@@ -97,15 +95,16 @@
     }
     @if(Model.Type == "SubElement")
     {
-         <h4>@(Model.Name)</h4>
          <div parent-element="@(Model.Name)">
             @foreach(var e in Model.Elements) {
                 Html.RenderPartial("_Element", e);
             }
         </div>
-        <a class="waves-effect waves-light btn blue darken-1">
-            <input watch="@elementId" type="button" value="Ajouter un(e) @(Model.Name)" />  
-        </a>      
+        <div class="col s12">
+            <a class="waves-effect waves-light btn blue darken-1 addButton">
+                <input watch="@elementId" type="button" value="Ajouter un(e) @(Model.Name)" />  
+            </a>      
+        </div>
         <ul>
         </ul>
     }

@@ -69,6 +69,10 @@
     height: 54px;
   }
 
+  .tabs .tab {
+    text-transform: none;
+  }
+
   .tabs .tab a {
     color:#1e88e5;
   }
@@ -109,4 +113,8 @@
   }
   .no-pd {
       padding: 0 !important
+  }
+
+  .addButton {
+    margin-top: 20px;
   }
