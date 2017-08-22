@@ -191,7 +191,12 @@
             "Name": "Date et heure de l'évenement",
             "Elements" : [
               {
-                "Name": "'laps''",
+                "Name": "Date",
+                "Type": "Text",
+                "TextType": "date"
+              },
+              {
+                "Name": "Laps",
                 "Type": "List",
                 "Items": [
                   "journée",
@@ -201,14 +206,14 @@
                 ]
               },
               {
-                "Name": "Date début",
+                "Name": "Heure début",
                 "Type": "Text",
-                "TextType": "date"
+                "TextType": "time"
               },
               {
-                "Name": "Date fin",
+                "Name": "Heure fin",
                 "Type": "Text",
-                "TextType": "date"
+                "TextType": "time"
               }
             ]
           }

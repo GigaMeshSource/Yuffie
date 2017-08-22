@@ -14,7 +14,42 @@
             "display": "block"
         }
     }
-}]
+}//,
+// {
+//     "Key": "Heure début",
+//     "StartingEffect": {
+//         "Css": {
+//             "display": "none"
+//         }
+//     },
+//     "Conditions": [{
+//         "Key": "Laps",
+//         "Value": "h spécifique",
+//     }],
+//     "Effect": {
+//         "Css": {
+//             "display": "block"
+//         }
+//     }
+// },
+// {
+//     "Key": "Heure fin",
+//     "StartingEffect": {
+//         "Css": {
+//             "display": "none"
+//         }
+//     },
+//     "Conditions": [{
+//         "Key": "Laps",
+//         "Value": "h spécifique",
+//     }],
+//     "Effect": {
+//         "Css": {
+//             "display": "block"
+//         }
+//     }
+// }
+]
 
 $(function() {
     var elements = []
@@ -119,11 +154,8 @@ $(function() {
 
         if(watchElement.is("input") || watchElement.is("select")) {
             watchElement.change(function() {
-                if(parentId == null)
-                    element.Value = watchElement.val()
-                else {
-                    getSubElement(parentId, key).Value = watchElement.val()
-                }
+                var e = getElement(element.Key)
+                e.Value = watchElement.val()
                 processChange()
             })
         }
@@ -131,12 +163,8 @@ $(function() {
         if(watchElement.is("[type=radio]")) {
             watchElement.change(function() {
                 if(watchElement.attr("checked")) {
-                    if(parentId == null)
-                        element.Value = watchElement.val()
-                    else {
-                        getSubElement(parentId, key).Value = watchElement.val()
-                    }
-                    element.Value = watchElement.val()
+                    var e = getElement(element.Key)
+                    e.Value = watchElement.val()
                     processChange()
                 }
             })
@@ -144,11 +172,8 @@ $(function() {
 
         if(watchElement.is("[type=checkbox]")) {
             watchElement.change(function() {
-                if(parentId == null)
-                    element.Value = watchElement.attr("checked")
-                else {
-                    getSubElement(parentId, key).Value = watchElement.attr("checked")
-                }
+                var e = getElement(element.Key)
+                e.Value = watchElement.attr("checked")
                 processChange()
             })
         }

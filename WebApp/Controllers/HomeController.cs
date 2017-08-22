@@ -30,6 +30,11 @@ namespace WebApp.Controllers
             return View("Index", YuffieApp.Config);
         }
 
+        public IActionResult Event()
+        {
+            return View("Event", YuffieApp.Config);
+        }
+
         public IActionResult Admin()
         {
             return View("Admin");
