@@ -20,15 +20,17 @@
                 {
                     var section = page.Sections[sectionIndex];
                     <li>
-                        <div class="collapsible-header active"><i class="material-icons">filter_drama</i>@(section.Name)</div>
+                        <div class="collapsible-header active">@(sectionIndex+1) - @(section.Name)</div>
                         <div class="collapsible-body" id="section@(sectionIndex)">
-                            @if(section.Elements != null)
-                            {
-                                foreach(var element in section.Elements)
-                                {   
-                                    Html.RenderPartial("_Element", element);
+                            <div class="row">
+                                @if(section.Elements != null)
+                                {
+                                    foreach(var element in section.Elements)
+                                    {   
+                                        Html.RenderPartial("_Element", element);
+                                    }
                                 }
-                            }
+                            </div>
                                 <a class="waves-effect waves-light btn" value="next" id="yuffieNextButton">Suivant</a>
                         </div>
                     </li>
