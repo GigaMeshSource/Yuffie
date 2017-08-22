@@ -8,32 +8,30 @@
     @if(Model.Type == "Text")
     {
         <div class="col s6">
-            <div class="row">
-                <div class="input-field col s6">
-                    @if(Model.TextType == "textarea") 
+            <div class="input-field">
+                @if(Model.TextType == "textarea") 
+                {
+                    <textarea watch="@elementId" type="@(Model.TextType)" value="@(Model.Default)" id="el_@elementId" class="materialize-textarea"></textarea>
+                }
+                else 
+                {
+                    var suplClass = "";
+                    var type = Model.TextType;
+                    if(Model.TextType == "date")
                     {
-                        <textarea watch="@elementId" type="@(Model.TextType)" value="@(Model.Default)" id="el_@elementId" class="materialize-textarea"></textarea>
+                        type = "text";
+                        suplClass = "newClass";
                     }
-                    else 
-                    {
-                        var suplClass = "";
-                        var type = Model.TextType;
-                        if(Model.TextType == "date")
-                        {
-                            type = "text";
-                            suplClass = "newClass";
-                        }
-                        <input watch="@elementId" type="@(type)" value="@(Model.Default)" id="el_@elementId" class="validate @(suplClass)"></input>
-                    }
-                    <label for="el_@elementId">@(Model.Name)</label>
-                </div>
+                    <input watch="@elementId" type="@(type)" value="@(Model.Default)" id="el_@elementId" class="validate @(suplClass)"></input>
+                }
+                <label for="el_@elementId">@(Model.Name)</label>
             </div>
         </div>
     }
     @if(Model.Type == "List")
     {
         <div class="col s6">
-            <div class="input-field col s12">
+            <div class="input-field">
                 <select watch="@elementId" id="el_@elementId">
                     @for(var itemIndex = 0; itemIndex < Model.Items.Count(); ++itemIndex)
                     {
