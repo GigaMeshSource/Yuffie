@@ -16,7 +16,12 @@
                     }
                     else 
                     {
-                        <input watch="@elementId" type="@(Model.TextType)" value="@(Model.Default)" id="el_@elementId" class="validate"></input>
+                        var suplClass = "";
+                        if(Model.TextType == "date")
+                        {
+                            suplClass = "newClass";
+                        }
+                        <input watch="@elementId" type="@(Model.TextType)" value="@(Model.Default)" id="el_@elementId" class="validate @(suplClass)"></input>
                     }
                     <label for="el_@elementId">@(Model.Name)</label>
                 </div>
