@@ -269,11 +269,6 @@
                   }
                 ]
               },
-              {
-                "Name": "Nombre conseiller",
-                "Type": "Text",
-                "TextType": "numeric"
-              }
             ]
           }
         ]
@@ -341,7 +336,7 @@
               {
                 "Name": "Numéro vivier",
                 "Type": "Text",
-                "TextType": "numeric"
+                "TextType": "number"
               }
             ]
           }
