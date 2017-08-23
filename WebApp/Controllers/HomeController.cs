@@ -30,6 +30,11 @@ namespace WebApp.Controllers
             return View("Index", YuffieApp.Config);
         }
 
+        public IActionResult Event()
+        {
+            return View("Event", YuffieApp.Config);
+        }
+
         public IActionResult Admin()
         {
             return View("Admin");
@@ -39,11 +44,10 @@ namespace WebApp.Controllers
         {
             var data = new List<Entity>(); //recup info
             
-            using(var context = new Yuffie.WebApp.Models.AppContext())
-            {
-                 data = context.Entity.ToList();
-            } 
-
+        
+                 data = _context.Entity.ToList();
+             
+            
             var fileName = DateTime.Now.ToString("yyyy-MM-dd HH:mm") + ".csv";            
             var fileData = UTF8Encoding.UTF8.GetBytes(data.ToCsv());
                 
@@ -55,8 +59,7 @@ namespace WebApp.Controllers
         {
             var parsed = JsonConvert.DeserializeObject<List<YuffieFrontValue>>(data);
             //TODO ALT object is here 
-            try { 
-
+           
                 if (parsed != null) {
                     var dataList = new List<Data>();
 
@@ -77,11 +80,7 @@ namespace WebApp.Controllers
                 _context.Add(entity);
                 _context.SaveChanges(); //await
                 }
-            }
-            catch (Exception ex)
-            {
-                return Redirect("/Home/Index");
-            }
+            
             return Redirect("/Home/Index");
         }
         

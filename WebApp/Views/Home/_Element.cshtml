@@ -7,34 +7,64 @@
 <div element id="con_@elementId">
     @if(Model.Type == "Text")
     {
-        <label for="el_@elementId">@(Model.Name)</label>
-        <input watch="@elementId" type="@(Model.TextType)" value="@(Model.Default)" id="el_@elementId"></input>
-    }
-    @if(Model.Type == "List")
-    {
-        <label for="el_@elementId">@(Model.Name)</label>
-        <select watch="@elementId" id="el_@elementId">
-            @for(var itemIndex = 0; itemIndex < Model.Items.Count(); ++itemIndex)
-            {
-                var item = Model.Items[itemIndex];
-                var selected = "";
-                if(Model.Default == item)
+        <div class="col s6">
+            <div class="input-field">
+                @if(Model.TextType == "textarea") 
                 {
-                    <option selected value="@(item)">@(item)</option>
+                    <textarea watch="@elementId" type="@(Model.TextType)" value="@(Model.Default)" id="el_@elementId" class="materialize-textarea"></textarea>
                 }
                 else 
                 {
-                    <option value="@(item)">@(item)</option>                    
+                    var suplClass = "";
+                    var type = Model.TextType;
+                    if(Model.TextType == "date")
+                    {
+                        type = "text";
+                        suplClass = "newClass";
+                    }
+                    <input watch="@elementId" type="@(type)" value="@(Model.Default)" id="el_@elementId" class="validate @(suplClass)"></input>
                 }
-            }
-        </select>
+                <label for="el_@elementId">@(Model.Name)</label>
+            </div>
+        </div>
     }
-    @if(Model.Type == "UpdateList")
+    @if(Model.Type == "List")
     {
-         <label>@(Model.Name)</label>
-         <input type="text" id="@elementId">
-         <ul watch="@elementId" id="ul_@elementId">
-        </ul>        
+        <div class="col s6">
+            <div class="input-field">
+                <select watch="@elementId" id="el_@elementId">
+                    @for(var itemIndex = 0; itemIndex < Model.Items.Count(); ++itemIndex)
+                    {
+                        var item = Model.Items[itemIndex];
+                        var selected = "";
+                        if(Model.Default == item)
+                        {
+                            <option selected value="@(item)">@(item)</option>
+                        }
+                        else 
+                        {
+                            <option value="@(item)">@(item)</option>                    
+                        }
+                    }
+                </select>
+                <label for="el_@elementId">@(Model.Name)</label>
+            </div>
+        </div>
+    }
+    @if(Model.Type == "Radio")
+    {
+        @for(var itemIndex = 0; itemIndex < Model.Items.Count(); ++itemIndex)
+        {
+            var item = Model.Items[itemIndex];
+            if(Model.Default == item)
+            {
+                <label><input type="radio" id="el_@(elementId)_@(item)" checked watch="@elementId" value="@(item)" name="@(elementId)" />@item</label>             
+            }
+            else 
+            {
+                <label><input type="radio" id="el_@(elementId)_@(item)" watch="@elementId" value="@(item)" name="@(elementId)" />@item</label>
+            }
+        } 
     }
     @if(Model.Type == "Check")
     {
@@ -48,7 +78,6 @@
     }
     @if(Model.Type == "Radio")
     {
-         <label>@(Model.Name)</label>
         @for(var itemIndex = 0; itemIndex < Model.Items.Count(); ++itemIndex)
         {
             var item = Model.Items[itemIndex];
@@ -61,5 +90,20 @@
                 <label><input type="radio" id="el_@(elementId)_@(item)" watch="@elementId" value="@(item)" name="@(elementId)" />@item</label>
             }
         } 
+    }
+    @if(Model.Type == "SubElement")
+    {
+         <div parent-element="@(Model.Name)">
+            @foreach(var e in Model.Elements) {
+                Html.RenderPartial("_Element", e);
+            }
+        </div>
+        <div class="col s12">
+            <a class="waves-effect waves-light btn blue darken-1 addButton">
+                <input watch="@elementId" type="button" value="Ajouter un(e) @(Model.Name)" />  
+            </a>      
+        </div>
+        <ul>
+        </ul>
     }
 </div>

@@ -11,6 +11,7 @@ namespace Yuffie.WebApp.Models
     {
         public string Name {get;set;}
         public List<YCPSection> Sections {get;set;}
+        public string Icon {get;set;}
     }
     public class YCPSection 
     {
@@ -25,5 +26,6 @@ namespace Yuffie.WebApp.Models
         public List<string> Items {get;set;}
         public string TextType {get;set;}
         public string Default {get;set;}
+        public List<YCPSElement> Elements {get;set;}
     }
 }

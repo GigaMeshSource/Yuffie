@@ -6,7 +6,7 @@
         }
     },
     "Conditions": [{
-        "Key": "Type d'animation",
+        "Key": "Type animation",
         "Value": "Co-animation",
     }],
     "Effect": {
@@ -14,7 +14,42 @@
             "display": "block"
         }
     }
-}]
+}//,
+// {
+//     "Key": "Heure début",
+//     "StartingEffect": {
+//         "Css": {
+//             "display": "none"
+//         }
+//     },
+//     "Conditions": [{
+//         "Key": "Laps",
+//         "Value": "h spécifique",
+//     }],
+//     "Effect": {
+//         "Css": {
+//             "display": "block"
+//         }
+//     }
+// },
+// {
+//     "Key": "Heure fin",
+//     "StartingEffect": {
+//         "Css": {
+//             "display": "none"
+//         }
+//     },
+//     "Conditions": [{
+//         "Key": "Laps",
+//         "Value": "h spécifique",
+//     }],
+//     "Effect": {
+//         "Css": {
+//             "display": "block"
+//         }
+//     }
+// }
+]
 
 $(function() {
     var elements = []
@@ -24,8 +59,29 @@ $(function() {
             if(elements[i].Key == key) {
                 return elements[i]
             }
+            else {
+                var r = getSubElement(elements[i].Key, key)
+                if(r != null)
+                    return r
+            }
         }
         return null
+    }
+
+    var getSubElement = function(parentKey, key) {
+        var parent = getElement(parentKey)
+        var elements = parent.Value[parent.Value.length - 1]
+        for(var i = 0; i < elements.length; ++i) {
+            if(elements[i].Key == key) {
+                return elements[i]
+            }
+        }
+        var add = {
+            Key: key,
+            Value: null
+        }
+        elements.push(add)
+        return add
     }
 
     var getRule = function(key){
@@ -80,25 +136,26 @@ $(function() {
     $("[watch]").each(function(index, watchElement) {
         watchElement = $(watchElement)
         var key = watchElement.attr("watch")
-        var element = {
-            Key: key,
-            Value: null
+
+        var parentId = null
+        var element = null
+        var parentElement = null
+        var parent = watchElement.parents("[parent-element]")
+        if(parent.length > 0) {
+            parentId = $(parent[0]).attr("parent-element")
         }
-        if(watchElement.is("ul")) {
-            element.Value = []
-            var inp = $(watchElement.prev())
-            inp.keyup(function(e) {
-                if(e.keyCode == 13) { //enter
-                    watchElement.append("<li>" + inp.val() + "</li>")
-                    element.Value.push(inp.val())
-                    processChange()
-                    inp.val("")
-                }
-            })  
+        else {
+            element = {
+                Key: key,
+                Value: null
+            }
+            elements.push(element);
         }
+
         if(watchElement.is("input") || watchElement.is("select")) {
             watchElement.change(function() {
-                element.Value = watchElement.val()
+                var e = getElement(element.Key)
+                e.Value = watchElement.val()
                 processChange()
             })
         }
@@ -106,7 +163,8 @@ $(function() {
         if(watchElement.is("[type=radio]")) {
             watchElement.change(function() {
                 if(watchElement.attr("checked")) {
-                    element.Value = watchElement.val()
+                    var e = getElement(element.Key)
+                    e.Value = watchElement.val()
                     processChange()
                 }
             })
@@ -114,12 +172,28 @@ $(function() {
 
         if(watchElement.is("[type=checkbox]")) {
             watchElement.change(function() {
-                element.Value = watchElement.prop("checked")
+                var e = getElement(element.Key)
+                e.Value = watchElement.attr("checked")
                 processChange()
             })
         }
 
-        elements.push(element);
+        if(watchElement.is("[type=button]")) {
+            element.Value = [[]]
+            watchElement.click(function() {
+                var item = element.Value[element.Value.length - 1]
+                element.Value.push([])
+                var id = ""
+                for(var i in item) {
+                    id += item[i].Key + ": " + item[i].Value + ", "
+                }
+                $("#con_" + element.Key + " ul").append("<li>" + id + "</li>")
+
+                $("#con_" + element.Key + " [parent-element] input[watch]").val("")
+
+                processChange()
+            })
+        }
     })
 
     initEffect()
@@ -129,12 +203,44 @@ $(function() {
         $.ajax({
             type: "POST",
             url: "/Home/PushData",
-            data: "data=" + JSON.stringify(elements),
+            data: "data=" + JSON.stringify(convertToDictionary(elements)),
             success: function() {
                 window.location = window.location.href
             }
         });
     })
 
- 
+
+    $('select').material_select();
+    $('.collapsible').collapsible();
+    $('.datepicker').pickadate({
+    selectMonths: true, // Creates a dropdown to control month
+    selectYears: 15, // Creates a dropdown of 15 years to control year,
+    today: 'Today',
+    clear: 'Clear',
+    close: 'Ok',
+    closeOnSelect: false // Close upon selecting a date,
+    });
+
+    var convertToDictionary = function(array) {
+        var dic = {}
+        for(var i in array) {
+            var e = array[i]
+            if(e.Value != null && e.Value.constructor === Array) {
+                dic[e.Key] = []
+                for(var j in e.Value) {
+                    dic[e.Key].push(convertToDictionary(e.Value[j]))
+                }
+            }
+            else {
+                dic[e.Key] = e.Value
+            }
+        }
+        return dic;
+    }
+    exceptions();
 })
+
+var exceptions = function() {
+    
+}
