@@ -238,5 +238,9 @@ $(function() {
         }
         return dic;
     }
-
+    exceptions();
 })
+
+var exceptions = function() {
+    
+}
