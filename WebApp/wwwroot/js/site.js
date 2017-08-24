@@ -223,6 +223,19 @@ $(function() {
     closeOnSelect: true // Close upon selecting a date,
     });
 
+    $(".yuffieNextButton").click(function(e) {
+        var parent = $($(e.target).parents("li"));
+        var next = parent.next();
+        if(next.is("li")) {
+            next.find(".collapsible-header").click();
+        }
+        else {
+            var id = parent.parents(".page").attr("id");
+            $("li.tab a[href='#" + id + "']").parents("li").next().find("a").click()
+        }
+    })
+
+
     var convertToDictionary = function(array) {
         var dic = {}
         for(var i in array) {
