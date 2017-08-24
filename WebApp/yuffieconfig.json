@@ -324,6 +324,11 @@
                 ]
               },
               {
+                "Name": "Commentaire ASSU",
+                "Type": "Text",
+                "TextType": "textarea"
+              },
+              {
                 "Name": "Thème CRCM/PSC",
                 "Type": "List",
                 "Items": [
@@ -339,11 +344,6 @@
                 "Name": "Numéro vivier",
                 "Type": "Text",
                 "TextType": "number"
-              },
-              {
-                "Name": "Commentaire ASSU",
-                "Type": "Text",
-                "TextType": "textarea"
               }
             ]
           }

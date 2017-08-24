@@ -20,9 +20,9 @@
                     if(Model.TextType == "date")
                     {
                         type = "text";
-                        suplClass = "newClass";
+                        suplClass = "datepicker";
                     }
-                    <input watch="@elementId" type="@(type)" value="@(Model.Default)" id="el_@elementId" class="validate @(suplClass)"></input>
+                    <input watch="@elementId" type="@(type)" value="@(Model.Default)" id="el_@elementId" class="@(suplClass)"></input>
                 }
                 <label for="el_@elementId">@(Model.Name)</label>
             </div>
@@ -33,11 +33,15 @@
         <div class="col s6">
             <div class="input-field">
                 <select watch="@elementId" id="el_@elementId">
+                    if(Model.Default == null)
+                    {
+                        <option value="" disabled selected></option>
+                    }
                     @for(var itemIndex = 0; itemIndex < Model.Items.Count(); ++itemIndex)
                     {
                         var item = Model.Items[itemIndex];
                         var selected = "";
-                        if(Model.Default == item)
+                        if(Model.Default != null && Model.Default == item)
                         {
                             <option selected value="@(item)">@(item)</option>
                         }
