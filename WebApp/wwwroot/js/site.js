@@ -1,4 +1,5 @@
-﻿var rules = [ {
+﻿ var rules = [ 
+{
     "Key": "Co-animateur",
     "StartingEffect": {
         "Css": {
@@ -14,41 +15,41 @@
             "display": "block"
         }
     }
-}//,
-// {
-//     "Key": "Heure début",
-//     "StartingEffect": {
-//         "Css": {
-//             "display": "none"
-//         }
-//     },
-//     "Conditions": [{
-//         "Key": "Laps",
-//         "Value": "h spécifique",
-//     }],
-//     "Effect": {
-//         "Css": {
-//             "display": "block"
-//         }
-//     }
-// },
-// {
-//     "Key": "Heure fin",
-//     "StartingEffect": {
-//         "Css": {
-//             "display": "none"
-//         }
-//     },
-//     "Conditions": [{
-//         "Key": "Laps",
-//         "Value": "h spécifique",
-//     }],
-//     "Effect": {
-//         "Css": {
-//             "display": "block"
-//         }
-//     }
-// }
+},
+{
+    "Key": "Heure début",
+    "StartingEffect": {
+        "Css": {
+            "display": "none"
+        }
+    },
+    "Conditions": [{
+        "Key": "Laps",
+        "Value": "h spécifique",
+    }],
+    "Effect": {
+        "Css": {
+            "display": "block"
+        }
+    }
+},
+{
+    "Key": "Heure fin",
+    "StartingEffect": {
+        "Css": {
+            "display": "none"
+        }
+    },
+    "Conditions": [{
+        "Key": "Laps",
+        "Value": "h spécifique",
+    }],
+    "Effect": {
+        "Css": {
+            "display": "block"
+        }
+    }
+}
 ]
 
 $(function() {
@@ -116,8 +117,8 @@ $(function() {
          for(var i = 0; i < rules.length; ++i) {
             var rule = rules[i]
             var result = true
-            for(var i = 0; i < rule.Conditions.length; ++i) {
-                var condition = rule.Conditions[i]
+            for(var j = 0; j < rule.Conditions.length; ++j) {
+                var condition = rule.Conditions[j]
                 var element = getElement(condition.Key)
                 if(element == null || element.Value != condition.Value) {
                     result = false
@@ -214,12 +215,24 @@ $(function() {
     $('select').material_select();
     $('.collapsible').collapsible();
     $('.datepicker').pickadate({
-    selectMonths: true, // Creates a dropdown to control month
-    selectYears: 15, // Creates a dropdown of 15 years to control year,
-    today: 'Today',
-    clear: 'Clear',
-    close: 'Ok',
-    closeOnSelect: false // Close upon selecting a date,
+        selectMonths: true, // Creates a dropdown to control month
+        selectYears: 15, // Creates a dropdown of 15 years to control year,
+        today: 'Today',
+        clear: 'Clear',
+        close: 'Ok',
+        closeOnSelect: false // Close upon selecting a date,
+    });
+
+    $(".yuffieNextButton").click(function(e) {
+        var parent = $($(e.target).parents("li"));
+        var next = parent.next();
+        if(next.is("li")) {
+            next.find(".collapsible-header").click();
+        }
+        else {
+            var id = parent.parents(".page").attr("id");
+            $("li.tab a[href='#" + id + "']").parents("li").next().find("a").click()
+        }
     });
 
     var convertToDictionary = function(array) {
