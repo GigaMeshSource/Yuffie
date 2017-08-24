@@ -18,6 +18,10 @@
     background-color:#fafafa;
   }
 
+  .collapsible-header {
+    font-weight: 500;
+  }
+
   #yuffieNextButton {
     margin-top:20px;
     position: relative;
@@ -104,6 +108,7 @@
   .tabs-icon a.active {
       background-color: #F3F3F3;
   }
+
   /* OVERWRITE MATERIAL CSS MIN WIDTH FOR MOBILE */
   .tabs .tab {
       min-width: 50px !important

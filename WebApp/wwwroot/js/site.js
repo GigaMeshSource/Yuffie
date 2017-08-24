@@ -215,24 +215,12 @@ $(function() {
     $('select').material_select();
     $('.collapsible').collapsible();
     $('.datepicker').pickadate({
-        selectMonths: true, // Creates a dropdown to control month
-        selectYears: 15, // Creates a dropdown of 15 years to control year,
-        today: 'Today',
-        clear: 'Clear',
-        close: 'Ok',
-        closeOnSelect: false // Close upon selecting a date,
-    });
-
-    $(".yuffieNextButton").click(function(e) {
-        var parent = $($(e.target).parents("li"));
-        var next = parent.next();
-        if(next.is("li")) {
-            next.find(".collapsible-header").click();
-        }
-        else {
-            var id = parent.parents(".page").attr("id");
-            $("li.tab a[href='#" + id + "']").parents("li").next().find("a").click()
-        }
+    selectMonths: false, // Creates a dropdown to control month
+    selectYears: 15, // Creates a dropdown of 15 years to control year,
+    today: 'Today',
+    clear: 'Clear',
+    close: 'Ok',
+    closeOnSelect: true // Close upon selecting a date,
     });
 
     var convertToDictionary = function(array) {
