@@ -134,6 +134,10 @@ $(function() {
         }
     }
 
+    var copySummary = function(element) {
+        $("[summary=@element.Key]").html(element.Value)
+    }
+
     $("[watch]").each(function(index, watchElement) {
         watchElement = $(watchElement)
         var key = watchElement.attr("watch")
@@ -155,27 +159,30 @@ $(function() {
 
         if(watchElement.is("input") || watchElement.is("select")) {
             watchElement.change(function() {
-                var e = getElement(element.Key)
+                var e = getElement(watchElement.attr("watch"))
                 e.Value = watchElement.val()
                 processChange()
+                copySummary(e)
             })
         }
 
         if(watchElement.is("[type=radio]")) {
             watchElement.change(function() {
                 if(watchElement.attr("checked")) {
-                    var e = getElement(element.Key)
+                    var e = getElement(watchElement.attr("watch"))
                     e.Value = watchElement.val()
                     processChange()
+                    copySummary(e)
                 }
             })
         }
 
         if(watchElement.is("[type=checkbox]")) {
             watchElement.change(function() {
-                var e = getElement(element.Key)
+                var e = getElement(watchElement.attr("watch"))
                 e.Value = watchElement.attr("checked")
                 processChange()
+                copySummary(e)
             })
         }
 
@@ -193,6 +200,7 @@ $(function() {
                 $("#con_" + element.Key + " [parent-element] input[watch]").val("")
 
                 processChange()
+                copySummary(e)
             })
         }
     })
