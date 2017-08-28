@@ -10,8 +10,8 @@ public class AppContext : DbContext
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=MyDatabase;Trusted_Connection=True;");
-            optionsBuilder.UseSqlite("Filename=./confWebApp.db");
+            optionsBuilder.UseSqlServer(@"Server=tcp:anime-co-db.database.windows.net,1433;Initial Catalog=yuffie-anim;Persist Security Info=False;User ID=azureworker;Password=Tennis94;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30");
+            // optionsBuilder.UseSqlite("Filename=./confWebApp.db");
         }
 
 
