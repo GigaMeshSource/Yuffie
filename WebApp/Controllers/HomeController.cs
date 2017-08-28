@@ -43,11 +43,9 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Download()
         {
             var data = new List<Entity>(); //recup info
+            data = _context.Entity.ToList();
             
-        
-                 data = _context.Entity.ToList();
-             
-            
+             //write in csv file            
             var fileName = DateTime.Now.ToString("yyyy-MM-dd HH:mm") + ".csv";            
             var fileData = UTF8Encoding.UTF8.GetBytes(data.ToCsv());
                 
