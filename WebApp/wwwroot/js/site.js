@@ -207,7 +207,7 @@ $(function() {
 
     initEffect()
     
-    $("#yuffieValidate").click(function(){
+    $("[validate-form]").click(function(){
         console.log(elements)
         $.ajax({
             type: "POST",
