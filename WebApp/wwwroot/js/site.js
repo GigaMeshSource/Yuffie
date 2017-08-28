@@ -1,7 +1,28 @@
-﻿ var rules = [ 
+﻿ var rules = [    
 {
-    "Key": "ServiceDCO - SG",
-    "Impacted": ["CRCM", "PSC", "ASSU"],
+    "Key": "Service DCO - IP",
+    "Impacted": [   "CDN BANQUE", "CDN REGION", "CDN GROUPE", "CDN Agence", "CDN Code Agence", 
+                    "SG DR", "SG DEC", "SG UC", "SG Agence", "SG Code Agence", 
+                    "CRCM", "PSC", 
+                    "ASSU", "Type d'intervention", "Intervention IP", "Formation", "Type d'intervention 2"],
+    "StartingEffect": {
+        "Css": {
+            "display": "none"
+        }
+    },
+    "Conditions": [{
+        "Key": "Service DCO",
+        "Value": "IP",
+    }],
+    "Effect": {
+        "Css": {
+            "display": "block"
+        }
+    }
+},
+{
+    "Key": "Service DCO - SG",
+    "Impacted": ["SG DR", "SG DEC", "SG UC", "SG Agence", "SG Code Agence", "CRCM", "PSC"],
     "StartingEffect": {
         "Css": {
             "display": "none"
@@ -10,6 +31,42 @@
     "Conditions": [{
         "Key": "Service DCO",
         "Value": "ANI SG",
+    }],
+    "Effect": {
+        "Css": {
+            "display": "block"
+        }
+    }
+},
+{
+    "Key": "Service DCO - CDN",
+    "Impacted": ["CDN BANQUE", "CDN REGION", "CDN GROUPE", "CDN AGENCES", "CDN Code AGENCES"],
+    "StartingEffect": {
+        "Css": {
+            "display": "none"
+        }
+    },
+    "Conditions": [{
+        "Key": "Service DCO",
+        "Value": "ANI CDN",
+    }],
+    "Effect": {
+        "Css": {
+            "display": "block"
+        }
+    }
+},
+{
+    "Key": "Service DCO - FOR",
+    "Impacted": ["ASSU", "Type d'intervention", "Intervention IP", "Formation", "Type d'intervention 2"],
+    "StartingEffect": {
+        "Css": {
+            "display": "none"
+        }
+    },
+    "Conditions": [{
+        "Key": "Service DCO",
+        "Value": "FOR",
     }],
     "Effect": {
         "Css": {
@@ -27,7 +84,7 @@
     },
     "Conditions": [{
         "Key": "Laps",
-        "Value": "h spécifique",
+        "Value": "Heure spécifique",
     }],
     "Effect": {
         "Css": {
@@ -39,8 +96,12 @@
 
 $(function() {
     var elements = []
+
+    var formatKey = function(key) {
+        return key.replace(/ /ig, "_").replace(/\'/ig, "")
+    }
     var getElement = function(key){
-        key = key.replace(/ /ig, "_")
+        key = formatKey(key)
         for(var i = 0; i < elements.length; ++i) {
             if(elements[i].Key == key) {
                 return elements[i]
@@ -74,6 +135,7 @@ $(function() {
         if(effect.Css != undefined && effect.Css != null) {
             for(var i = 0; i < impacted.length; ++i) {
                 key = impacted[i];
+                key = formatKey(key)
                 var element = getElement(key)
                 var block = $("#con_" + element.Key)
                 for(var property in effect.Css) {
@@ -106,6 +168,7 @@ $(function() {
             }
             if(result) {
                 processEffect(rule.Impacted, rule.Effect)
+                break
             }
             else if(rule.StartingEffect != undefined) {
                 processEffect(rule.Impacted, rule.StartingEffect)
