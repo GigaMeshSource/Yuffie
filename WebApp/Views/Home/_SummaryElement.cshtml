@@ -1,0 +1,35 @@
+@model Yuffie.WebApp.Models.YCPSElement
+
+@{
+    var elementId = Model.Name.Replace(" ", "_");
+}
+
+<div element id="con_@elementId">
+    @if(Model.Type == "Text" || Model.Type == "List" || Model.Type == "Radio")
+    {
+        <div class="col s6">
+            <label for="el_@elementId">@(Model.Name)
+                <p summary="@(elementId)"></p>
+            </label>
+        </div>
+    }
+    @if(Model.Type == "Check")
+    {
+        if(Model.Default != null && Model.Default.ToLower() == "true")
+        {
+            <p summary="@(elementId)">True</p>
+        }
+        else {
+            <p summary="@(elementId)">False</p>            
+        }
+    }
+
+    @if(Model.Type == "SubElement")
+    {
+         <div parent-element="@(Model.Name)">
+            @foreach(var e in Model.Elements) {
+                Html.RenderPartial("_SummaryElement", e);
+            }
+        </div>
+    }
+</div>
