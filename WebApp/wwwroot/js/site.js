@@ -1,14 +1,15 @@
 ﻿ var rules = [ 
 {
-    "Key": "Co-animateur",
+    "Key": "ServiceDCO - SG",
+    "Impacted": ["CRCM", "PSC", "ASSU"],
     "StartingEffect": {
         "Css": {
             "display": "none"
         }
     },
     "Conditions": [{
-        "Key": "Type animation",
-        "Value": "Co-animation",
+        "Key": "Service DCO",
+        "Value": "ANI SG",
     }],
     "Effect": {
         "Css": {
@@ -17,24 +18,8 @@
     }
 },
 {
-    "Key": "Heure début",
-    "StartingEffect": {
-        "Css": {
-            "display": "none"
-        }
-    },
-    "Conditions": [{
-        "Key": "Laps",
-        "Value": "h spécifique",
-    }],
-    "Effect": {
-        "Css": {
-            "display": "block"
-        }
-    }
-},
-{
-    "Key": "Heure fin",
+    "Key": "Laps - heure spécifique",
+    "Impacted": ["Heure début", "Heure fin"],
     "StartingEffect": {
         "Css": {
             "display": "none"
@@ -85,21 +70,15 @@ $(function() {
         return add
     }
 
-    var getRule = function(key){
-        for(var i = 0; i < rules.length; ++i) {
-            if(rules[i].Key == key) {
-                return rules[i]
-            }
-        }
-        return null
-    }
-
-    var processEffect = function(key, effect) {
+    var processEffect = function(impacted, effect) {
         if(effect.Css != undefined && effect.Css != null) {
-            var element = getElement(key)
-            var block = $("#con_" + element.Key)
-            for(var property in effect.Css) {
-                block.css(property, effect.Css[property])
+            for(var i = 0; i < impacted.length; ++i) {
+                key = impacted[i];
+                var element = getElement(key)
+                var block = $("#con_" + element.Key)
+                for(var property in effect.Css) {
+                    block.css(property, effect.Css[property])
+                }
             }
         }
     }
@@ -108,7 +87,7 @@ $(function() {
         for(var i = 0; i < rules.length; ++i) {
             var rule = rules[i]
             if(rule.StartingEffect != undefined && rule.StartingEffect != null) {
-                processEffect(rule.Key, rule.StartingEffect)
+                processEffect(rule.Impacted, rule.StartingEffect)
             }
         }
     }
@@ -126,10 +105,10 @@ $(function() {
                 }
             }
             if(result) {
-                processEffect(rule.Key, rule.Effect)
+                processEffect(rule.Impacted, rule.Effect)
             }
             else if(rule.StartingEffect != undefined) {
-                processEffect(rule.Key, rule.StartingEffect)
+                processEffect(rule.Impacted, rule.StartingEffect)
             }
         }
     }
