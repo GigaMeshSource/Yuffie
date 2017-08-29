@@ -5,7 +5,7 @@
         "Icon": "today",
         "Sections": [
           {
-            "Name": "Participants externes",
+            "Name": "Intervenant ASSU",
             "Elements" : [
               {
                 "Name": "Animateur",
@@ -17,14 +17,13 @@
                 ]
               },
               {
-                "Name": "Type animation",
+                "Name": "Role intervenant",
                 "Type": "List",
                 "Items": [
                   "Co-animation",
                   "Observation",
-                  "Non"
-                ],
-                "Default":"Non"
+                  "Intervenant Principal"
+                ]
               },
               {
                 "Name": "Co-animateur",
@@ -6765,7 +6764,7 @@
                 "TextType": "date"
               },
               {
-                "Name": "Laps",
+                "Name": "Durée",
                 "Type": "List",
                 "Items": [
                   "journée",
@@ -6789,7 +6788,7 @@
         ]
       },
       {
-        "Name": "Audience",
+        "Name": "Participants",
         "Icon": "supervisor_account",
         "Sections": [
           {
@@ -6895,11 +6894,11 @@
         ]
       },
       {
-        "Name": "Discussion",
+        "Name": "Thème",
         "Icon": "question_answer",
         "Sections": [
           {
-            "Name": "Sujet de la discussion",
+            "Name": "Thème de l’intervention",
             "Elements" : [
               {
                 "Name": "Thème",
