@@ -41,30 +41,30 @@
     }
     @{
         <div class="page" id="page@(Model.Pages.Count() - 1)" class="col s12">
+            <ul class="collapsible popout " data-collapsible="accordion">
             @for(var pageIndex = 0; pageIndex < Model.Pages.Count() - 1; ++pageIndex)
             {
                 var page = Model.Pages[pageIndex];
-                <ul class="collapsible popout " data-collapsible="accordion">
-                    @for(var sectionIndex = 0; page.Sections != null && sectionIndex < page.Sections.Count(); ++sectionIndex)
-                    {
-                        var section = page.Sections[sectionIndex];
-                        <li>
-                            <div class="collapsible-header active"><b>@(page.Name)- </b> @(section.Name)</div>
-                            <div class="collapsible-body" id="page@(pageIndex)_section@(sectionIndex)">
-                                <div class="row">
-                                    @if(section.Elements != null)
-                                    {
-                                        foreach(var element in section.Elements)
-                                        {  
-                                            Html.RenderPartial("_SummaryElement", element);                                            
-                                        }
+                @for(var sectionIndex = 0; page.Sections != null && sectionIndex < page.Sections.Count(); ++sectionIndex)
+                {
+                    var section = page.Sections[sectionIndex];
+                    <li>
+                        <div class="collapsible-header active"><b>@(page.Name)- </b> @(section.Name)</div>
+                        <div class="collapsible-body" id="page@(pageIndex)_section@(sectionIndex)">
+                            <div class="row">
+                                @if(section.Elements != null)
+                                {
+                                    foreach(var element in section.Elements)
+                                    {  
+                                        Html.RenderPartial("_SummaryElement", element);                                            
                                     }
-                                </div>
+                                }
                             </div>
-                        </li>
-                    }
-                </ul>
+                        </div>
+                    </li>
+                }
             }
+            </ul>
              <a validate-form class="waves-effect waves-light btn yuffieNextButton" value="valider">Valider</a>
         </div>
     }

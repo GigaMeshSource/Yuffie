@@ -1,7 +1,7 @@
 @model Yuffie.WebApp.Models.YCPSElement
 
 @{
-    var elementId = Model.Name.Replace(" ", "_").Replace("'", "");
+    var elementId = Model.Name.Replace(" ", "_").Replace("'", "").Replace("/", "_");
 }
 
 <div element id="con_@elementId">

@@ -4,7 +4,9 @@
     "Impacted": [   "CDN BANQUE", "CDN REGION", "CDN GROUPE", "CDN AGENCES", "CDN Code AGENCES", 
                     "SG DR", "SG DEC", "SG UC", "SG Agence", "SG Code Agence", 
                     "CRCM", "PSC", 
-                    "ASSU", "Type d'intervention", "Intervention IP", "Formation", "Type d'intervention 2"],
+                    "ASSU", "Type d'intervention", "Intervention IP", "Formation", "Type d'intervention 2",
+                    "Code Agence", "Numéro vivier", "Fonction CRCM/PSC"
+                ],
     "StartingEffect": {
         "Css": {
             "display": "none"
@@ -91,6 +93,42 @@
             "display": "block"
         }
     }
+},
+{
+    "Key": "Distriuteur - PSC",
+    "Impacted": ["Fonction CRCM/PSC"],
+    "StartingEffect": {
+        "Css": {
+            "display": "none"
+        }
+    },
+    "Conditions": [{
+        "Key": "Distributeur",
+        "Value": "CRCM",
+    }],
+    "Effect": {
+        "Css": {
+            "display": "block"
+        }
+    }
+},
+{
+    "Key": "Distriuteur - PSC",
+    "Impacted": ["Fonction CRCM/PSC"],
+    "StartingEffect": {
+        "Css": {
+            "display": "none"
+        }
+    },
+    "Conditions": [{
+        "Key": "Distributeur",
+        "Value": "PSC",
+    }],
+    "Effect": {
+        "Css": {
+            "display": "block"
+        }
+    }
 }
 ]
 
@@ -98,7 +136,7 @@ $(function() {
     var elements = []
 
     var formatKey = function(key) {
-        return key.replace(/ /ig, "_").replace(/\'/ig, "")
+        return key.replace(/ /ig, "_").replace(/\'/ig, "").replace(/\//ig, "_")
     }
     var getElement = function(key){
         key = formatKey(key)
