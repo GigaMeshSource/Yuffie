@@ -1,14 +1,18 @@
-﻿ var rules = [ 
+﻿ var rules = [    
 {
-    "Key": "Co-animateur",
+    "Key": "Service DCO - IP",
+    "Impacted": [   "CDN BANQUE", "CDN REGION", "CDN GROUPE", "CDN Agence", "CDN Code Agence", 
+                    "SG DR", "SG DEC", "SG UC", "SG Agence", "SG Code Agence", 
+                    "CRCM", "PSC", 
+                    "ASSU", "Type d'intervention", "Intervention IP", "Formation", "Type d'intervention 2"],
     "StartingEffect": {
         "Css": {
             "display": "none"
         }
     },
     "Conditions": [{
-        "Key": "Type animation",
-        "Value": "Co-animation",
+        "Key": "Service DCO",
+        "Value": "IP",
     }],
     "Effect": {
         "Css": {
@@ -17,15 +21,16 @@
     }
 },
 {
-    "Key": "Heure début",
+    "Key": "Service DCO - SG",
+    "Impacted": ["SG DR", "SG DEC", "SG UC", "SG Agence", "SG Code Agence", "CRCM", "PSC"],
     "StartingEffect": {
         "Css": {
             "display": "none"
         }
     },
     "Conditions": [{
-        "Key": "Laps",
-        "Value": "h spécifique",
+        "Key": "Service DCO",
+        "Value": "ANI SG",
     }],
     "Effect": {
         "Css": {
@@ -34,7 +39,44 @@
     }
 },
 {
-    "Key": "Heure fin",
+    "Key": "Service DCO - CDN",
+    "Impacted": ["CDN BANQUE", "CDN REGION", "CDN GROUPE", "CDN AGENCES", "CDN Code AGENCES"],
+    "StartingEffect": {
+        "Css": {
+            "display": "none"
+        }
+    },
+    "Conditions": [{
+        "Key": "Service DCO",
+        "Value": "ANI CDN",
+    }],
+    "Effect": {
+        "Css": {
+            "display": "block"
+        }
+    }
+},
+{
+    "Key": "Service DCO - FOR",
+    "Impacted": ["ASSU", "Type d'intervention", "Intervention IP", "Formation", "Type d'intervention 2"],
+    "StartingEffect": {
+        "Css": {
+            "display": "none"
+        }
+    },
+    "Conditions": [{
+        "Key": "Service DCO",
+        "Value": "FOR",
+    }],
+    "Effect": {
+        "Css": {
+            "display": "block"
+        }
+    }
+},
+{
+    "Key": "Laps - heure spécifique",
+    "Impacted": ["Heure début", "Heure fin"],
     "StartingEffect": {
         "Css": {
             "display": "none"
@@ -42,7 +84,7 @@
     },
     "Conditions": [{
         "Key": "Laps",
-        "Value": "h spécifique",
+        "Value": "Heure spécifique",
     }],
     "Effect": {
         "Css": {
@@ -54,16 +96,20 @@
 
 $(function() {
     var elements = []
+
+    var formatKey = function(key) {
+        return key.replace(/ /ig, "_").replace(/\'/ig, "")
+    }
     var getElement = function(key){
-        key = key.replace(/ /ig, "_")
+        key = formatKey(key)
         for(var i = 0; i < elements.length; ++i) {
             if(elements[i].Key == key) {
                 return elements[i]
             }
-            else {
-                var r = getSubElement(elements[i].Key, key)
-                if(r != null)
-                    return r
+            if(element[i].Value.constructor === Array)
+            {
+                var r = getSubElement(element[i].Key, key);
+                if(r != null) return r  
             }
         }
         return null
@@ -71,35 +117,25 @@ $(function() {
 
     var getSubElement = function(parentKey, key) {
         var parent = getElement(parentKey)
-        var elements = parent.Value[parent.Value.length - 1]
-        for(var i = 0; i < elements.length; ++i) {
-            if(elements[i].Key == key) {
-                return elements[i]
-            }
-        }
-        var add = {
-            Key: key,
-            Value: null
-        }
-        elements.push(add)
-        return add
-    }
-
-    var getRule = function(key){
-        for(var i = 0; i < rules.length; ++i) {
-            if(rules[i].Key == key) {
-                return rules[i]
+        var subelements = parent.Value[parent.Value.length - 1]
+        for(var i = 0; i < subelements.length; ++i) {
+            if(subelements[i].Key == key) {
+                return subelements[i]
             }
         }
         return null
     }
 
-    var processEffect = function(key, effect) {
+    var processEffect = function(impacted, effect) {
         if(effect.Css != undefined && effect.Css != null) {
-            var element = getElement(key)
-            var block = $("#con_" + element.Key)
-            for(var property in effect.Css) {
-                block.css(property, effect.Css[property])
+            for(var i = 0; i < impacted.length; ++i) {
+                key = impacted[i];
+                key = formatKey(key)
+                var element = getElement(key)
+                var block = $("#con_" + element.Key)
+                for(var property in effect.Css) {
+                    block.css(property, effect.Css[property])
+                }
             }
         }
     }
@@ -108,7 +144,7 @@ $(function() {
         for(var i = 0; i < rules.length; ++i) {
             var rule = rules[i]
             if(rule.StartingEffect != undefined && rule.StartingEffect != null) {
-                processEffect(rule.Key, rule.StartingEffect)
+                processEffect(rule.Impacted, rule.StartingEffect)
             }
         }
     }
@@ -126,16 +162,17 @@ $(function() {
                 }
             }
             if(result) {
-                processEffect(rule.Key, rule.Effect)
+                processEffect(rule.Impacted, rule.Effect)
+                break
             }
             else if(rule.StartingEffect != undefined) {
-                processEffect(rule.Key, rule.StartingEffect)
+                processEffect(rule.Impacted, rule.StartingEffect)
             }
         }
     }
 
     var copySummary = function(element) {
-        $("[summary=@element.Key]").html(element.Value)
+        $("[summary=" + element.Key + "]").html(element.Value)
     }
 
     $("[watch]").each(function(index, watchElement) {
@@ -144,7 +181,6 @@ $(function() {
 
         var parentId = null
         var element = null
-        var parentElement = null
         var parent = watchElement.parents("[parent-element]")
         if(parent.length > 0) {
             parentId = $(parent[0]).attr("parent-element")
@@ -189,15 +225,18 @@ $(function() {
         if(watchElement.is("[type=button]")) {
             element.Value = [[]]
             watchElement.click(function() {
-                var item = element.Value[element.Value.length - 1]
-                element.Value.push([])
+                var e = getElement(watchElement.attr("watch"))
+                var item = e.Value[element.Value.length - 1]
+                e.Value.push([])
                 var id = ""
                 for(var i in item) {
                     id += item[i].Key + ": " + item[i].Value + ", "
+                    if(i >= 2) break;
                 }
-                $("#con_" + element.Key + " ul").append("<li>" + id + "</li>")
+                
+                $("#con_" + e.Key + " [watch-list]").append("<li><div class='chip'>" + id + "</div></li>")
 
-                $("#con_" + element.Key + " [parent-element] input[watch]").val("")
+                $("#con_" + e.Key + " [parent-element] input[watch]").val("")
 
                 processChange()
                 copySummary(e)

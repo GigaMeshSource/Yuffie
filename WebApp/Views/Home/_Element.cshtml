@@ -1,7 +1,7 @@
 @model Yuffie.WebApp.Models.YCPSElement
 
 @{
-    var elementId = Model.Name.Replace(" ", "_");
+    var elementId = Model.Name.Replace(" ", "_").Replace("'", "");
 }
 
 <div element id="con_@elementId">
@@ -107,7 +107,7 @@
                 <input watch="@elementId" type="button" value="Ajouter un(e) @(Model.Name)" />  
             </a>      
         </div>
-        <ul>
+        <ul watch-list>
         </ul>
     }
 </div>
