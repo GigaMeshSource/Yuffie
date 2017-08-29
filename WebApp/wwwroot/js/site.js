@@ -106,10 +106,10 @@ $(function() {
             if(elements[i].Key == key) {
                 return elements[i]
             }
-            else {
-                var r = getSubElement(elements[i].Key, key)
-                if(r != null)
-                    return r
+            if(element[i].Value.constructor === Array)
+            {
+                var r = getSubElement(element[i].Key, key);
+                if(r != null) return r  
             }
         }
         return null
@@ -117,18 +117,13 @@ $(function() {
 
     var getSubElement = function(parentKey, key) {
         var parent = getElement(parentKey)
-        var elements = parent.Value[parent.Value.length - 1]
-        for(var i = 0; i < elements.length; ++i) {
-            if(elements[i].Key == key) {
-                return elements[i]
+        var subelements = parent.Value[parent.Value.length - 1]
+        for(var i = 0; i < subelements.length; ++i) {
+            if(subelements[i].Key == key) {
+                return subelements[i]
             }
         }
-        var add = {
-            Key: key,
-            Value: null
-        }
-        elements.push(add)
-        return add
+        return null
     }
 
     var processEffect = function(impacted, effect) {
@@ -177,7 +172,7 @@ $(function() {
     }
 
     var copySummary = function(element) {
-        $("[summary=@element.Key]").html(element.Value)
+        $("[summary=" + element.Key + "]").html(element.Value)
     }
 
     $("[watch]").each(function(index, watchElement) {
@@ -186,7 +181,6 @@ $(function() {
 
         var parentId = null
         var element = null
-        var parentElement = null
         var parent = watchElement.parents("[parent-element]")
         if(parent.length > 0) {
             parentId = $(parent[0]).attr("parent-element")
@@ -231,15 +225,18 @@ $(function() {
         if(watchElement.is("[type=button]")) {
             element.Value = [[]]
             watchElement.click(function() {
-                var item = element.Value[element.Value.length - 1]
-                element.Value.push([])
+                var e = getElement(watchElement.attr("watch"))
+                var item = e.Value[element.Value.length - 1]
+                e.Value.push([])
                 var id = ""
                 for(var i in item) {
                     id += item[i].Key + ": " + item[i].Value + ", "
+                    if(i >= 2) break;
                 }
-                $("#con_" + element.Key + " ul").append("<li>" + id + "</li>")
+                
+                $("#con_" + e.Key + " [watch-list]").append("<li><div class='chip'>" + id + "</div></li>")
 
-                $("#con_" + element.Key + " [parent-element] input[watch]").val("")
+                $("#con_" + e.Key + " [parent-element] input[watch]").val("")
 
                 processChange()
                 copySummary(e)
