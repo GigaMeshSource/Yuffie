@@ -5,34 +5,89 @@
         "Icon": "today",
         "Sections": [
           {
-            "Name": "Participants externes",
+            "Name": "Intervenant ASSU",
             "Elements" : [
               {
                 "Name": "Animateur",
                 "Type": "List",
                 "Items": [
-                  "Kevin Briffaut",
-                  "Anne-Laure Trabon",
-                  "Aurélien Sberro"
+                  "ALLERMOZ	Jean",
+                  "ASSEKOUR	Sliman",
+                  "AYDI	Houyame",
+                  "BAGUET	Laurent",
+                  "BAK	Florent",
+                  "BARD	Marilyne",
+                  "BIEDINGER	Raphaëlle ",
+                  "BOUDRINGHIN	Arnould",
+                  "CAILLARD	Mathieu",
+                  "CAPDEVILLE	Daniel ",
+                  "CHARTRAIRE	Denis",
+                  "CLAVEILLE	Emilie",
+                  "COPPENS	Stéphane",
+                  "DE BECO	Barthélemy ",
+                  "DEVIERS	Sandrine",
+                  "DUJARRIER	Aurélie",
+                  "FRAIGNEAU	Vincent",
+                  "GAUTHIER	Gilles",
+                  "GRATTEPANCHE	Jean-Charles",
+                  "HUCHEZ	Quentin ",
+                  "LE BRAS	Julien",
+                  "LEMBEZAT	Barbara",
+                  "MARTIN	Karine",
+                  "MORET	Olivier",
+                  "NICOLAS	Florence",
+                  "PATEL	Serge",
+                  "RITAINE	Norbert",
+                  "RODRIGUES	Christophe",
+                  "SABATIER	Jean Baptiste",
+                  "SAHIL	Khalid",
+                  "TORAILLE	Aude"
                 ]
               },
               {
-                "Name": "Type animation",
+                "Name": "Role intervenant",
                 "Type": "List",
                 "Items": [
                   "Co-animation",
                   "Observation",
-                  "Non"
-                ],
-                "Default":"Non"
+                  "Intervenant Principal"
+                ]
               },
               {
                 "Name": "Co-animateur",
                 "Type": "List",
                 "Items": [
-                  "Kevin Briffaut",
-                  "Anne-Laure Trabon",
-                  "Aurélien Sberro"
+                  "ALLERMOZ	Jean",
+                  "ASSEKOUR	Sliman",
+                  "AYDI	Houyame",
+                  "BAGUET	Laurent",
+                  "BAK	Florent",
+                  "BARD	Marilyne",
+                  "BIEDINGER	Raphaëlle ",
+                  "BOUDRINGHIN	Arnould",
+                  "CAILLARD	Mathieu",
+                  "CAPDEVILLE	Daniel ",
+                  "CHARTRAIRE	Denis",
+                  "CLAVEILLE	Emilie",
+                  "COPPENS	Stéphane",
+                  "DE BECO	Barthélemy ",
+                  "DEVIERS	Sandrine",
+                  "DUJARRIER	Aurélie",
+                  "FRAIGNEAU	Vincent",
+                  "GAUTHIER	Gilles",
+                  "GRATTEPANCHE	Jean-Charles",
+                  "HUCHEZ	Quentin ",
+                  "LE BRAS	Julien",
+                  "LEMBEZAT	Barbara",
+                  "MARTIN	Karine",
+                  "MORET	Olivier",
+                  "NICOLAS	Florence",
+                  "PATEL	Serge",
+                  "RITAINE	Norbert",
+                  "RODRIGUES	Christophe",
+                  "SABATIER	Jean Baptiste",
+                  "SAHIL	Khalid",
+                  "TORAILLE	Aude"
                 ]
               }
             ]
@@ -6765,7 +6820,7 @@
                 "TextType": "date"
               },
               {
-                "Name": "Laps",
+                "Name": "Durée",
                 "Type": "List",
                 "Items": [
                   "journée",
@@ -6789,7 +6844,7 @@
         ]
       },
       {
-        "Name": "Audience",
+        "Name": "Participants",
         "Icon": "supervisor_account",
         "Sections": [
           {
@@ -6813,6 +6868,11 @@
                     "Name": "Matricule conseiller",
                     "Type": "Text",
                     "TextType": "text"
+                  },
+                  {
+                    "Name": "Code Agence",
+                    "Type": "Text",
+                    "TextType": "number"
                   },
                   {
                     "Name": "Fonction conseiller",
@@ -6841,26 +6901,26 @@
                       "DCA",
                       "Délégué"
                     ]
+                  },
+                  {
+                    "Name": "Fonction CRCM/PSC",
+                    "Type": "List",
+                    "Items": [
+                      "CCm junior",
+                      "CCm senior",
+                      "Adjoint RE",
+                      "RE",
+                      "RUO",
+                      "Directeur CRC",
+                      "Formateur",
+                      "Directeur PSC",
+                      "RDO",
+                      "RST",
+                      "Chargé de traitement Hdg",
+                      "Chargé de traitement Standard",
+                      "Agent PSC"
+                    ]
                   }
-                ]
-              },
-              {
-                "Name": "Fonction CRCM/PSC",
-                "Type": "List",
-                "Items": [
-                  "CCm junior",
-                  "CCm senior",
-                  "Adjoint RE",
-                  "RE",
-                  "RUO",
-                  "Directeur CRC",
-                  "Formateur",
-                  "Directeur PSC",
-                  "RDO",
-                  "RST",
-                  "Chargé de traitement Hdg",
-                  "Chargé de traitement Standard",
-                  "Agent PSC"
                 ]
               },
               {
@@ -6895,11 +6955,11 @@
         ]
       },
       {
-        "Name": "Discussion",
+        "Name": "Thème",
         "Icon": "question_answer",
         "Sections": [
           {
-            "Name": "Sujet de la discussion",
+            "Name": "Thème de l’intervention",
             "Elements" : [
               {
                 "Name": "Thème",
