@@ -55,29 +55,34 @@ namespace WebApp.Controllers
         [HttpPost]
         public IActionResult PushData(string data)
         {
-            var parsed = JsonConvert.DeserializeObject<List<YuffieFrontValue>>(data);
+            var test = "{\"Service_DCO\":null,\"Distributeur\":null,\"CRCM\":null,\"PSC\":null,\"ASSU\":null,\"Type_d'intervention\":null,\"Intervention_IP\":null,\"Formation\":null,\"Type_d'intervention_2\":null,\"Date\":null,\"Laps\":null,\"Heure_début\":null,\"Heure_fin\":null,\"Thème\":null,\"Sous_thème\":null,\"Sujet\":null,\"Commentaire_ASSU\":null,\"Thème_CRCM/PSC\":null,\"Numéro_vivier\":null}";
+            var parsed = JsonConvert.DeserializeObject<Intervenants>(data);
             //TODO ALT object is here 
-           
-                if (parsed != null) {
-                    var dataList = new List<Data>();
+            
+            if (parsed != null) 
+            {    
+                var dataList = new List<Data>();
 
-                foreach (var item in parsed)
-                {
-                    if (item.Key != null && item.Value != null) {
-
-                        dataList.Add (new Data {
-                        Key = item.Key,
-                        Value = item.Value.ToString()
-                        });
-                    }
-                }
+                // foreach (var item in parsed.KeyValue)
+                // {
+                //     //boucle sur keyx et values en meme temps pour inserer les bonnes valeurs
+                //     // verifier que le model est bon
+                //     foreach(var idx in item.Keys)
+                //     {
+                //             dataList.Add (new Data {
+                //             Key = item.Key,
+                //             Value = item.Value
+                //             });
+                        
+                //     }
+                // }
 
                 var entity = new Entity {
                     Data = dataList                
                 };
                 _context.Add(entity);
                 _context.SaveChanges(); //await
-                }
+            }
             
             return Redirect("/Home/Index");
         }
@@ -91,6 +96,11 @@ namespace WebApp.Controllers
         {
             public string Key {get;set;}
             public object Value {get;set;}
-        } 
+        }
+
+        public class Intervenants {
+           public  Dictionary<string,object>[] intervenants {get;set;}
+            public Dictionary<object, object> rest {get;set;}
+        }
     }
 }
