@@ -1,7 +1,7 @@
 ﻿ var rules = [    
 {
     "Key": "Service DCO - IP",
-    "Impacted": [   "CDN BANQUE", "CDN REGION", "CDN GROUPE", "CDN Agence", "CDN Code Agence", 
+    "Impacted": [   "CDN BANQUE", "CDN REGION", "CDN GROUPE", "CDN AGENCES", "CDN Code AGENCES", 
                     "SG DR", "SG DEC", "SG UC", "SG Agence", "SG Code Agence", 
                     "CRCM", "PSC", 
                     "ASSU", "Type d'intervention", "Intervention IP", "Formation", "Type d'intervention 2"],
@@ -102,25 +102,10 @@ $(function() {
     }
     var getElement = function(key){
         key = formatKey(key)
+
         for(var i = 0; i < elements.length; ++i) {
             if(elements[i].Key == key) {
                 return elements[i]
-            }
-            if(element[i].Value.constructor === Array)
-            {
-                var r = getSubElement(element[i].Key, key);
-                if(r != null) return r  
-            }
-        }
-        return null
-    }
-
-    var getSubElement = function(parentKey, key) {
-        var parent = getElement(parentKey)
-        var subelements = parent.Value[parent.Value.length - 1]
-        for(var i = 0; i < subelements.length; ++i) {
-            if(subelements[i].Key == key) {
-                return subelements[i]
             }
         }
         return null
@@ -178,24 +163,36 @@ $(function() {
     $("[watch]").each(function(index, watchElement) {
         watchElement = $(watchElement)
         var key = watchElement.attr("watch")
-
+        var rawKey = ""+key
         var parentId = null
         var element = null
+        var parentElement = null
         var parent = watchElement.parents("[parent-element]")
+        element = {
+            Key: key,
+            Value: null,
+            Parent: null
+        }
         if(parent.length > 0) {
             parentId = $(parent[0]).attr("parent-element")
+            element.Parent = parentId
         }
-        else {
-            element = {
-                Key: key,
-                Value: null
-            }
-            elements.push(element);
-        }
+        elements.push(element);
 
         if(watchElement.is("input") || watchElement.is("select")) {
             watchElement.change(function() {
                 var e = getElement(watchElement.attr("watch"))
+                if(e == null && parentId != null) {
+                    e = {
+                        Key: watchElement.attr("watch"),
+                        Value : null
+                    }
+                    var parent = getElement(parentId)
+                    if(parent.Value == null) {
+                        parent.Value = [[]]
+                    }
+                    parent.Value.push(e)
+                }
                 e.Value = watchElement.val()
                 processChange()
                 copySummary(e)
@@ -206,6 +203,17 @@ $(function() {
             watchElement.change(function() {
                 if(watchElement.attr("checked")) {
                     var e = getElement(watchElement.attr("watch"))
+                    if(e == null && parentId != null) {
+                        e = {
+                            Key: watchElement.attr("watch"),
+                            Value : null
+                        }
+                        var parent = getElement(parentId)
+                        if(parent.Value == null) {
+                            parent.Value = [[]]
+                        }
+                        parent.Value.push(e)
+                    }
                     e.Value = watchElement.val()
                     processChange()
                     copySummary(e)
@@ -216,6 +224,17 @@ $(function() {
         if(watchElement.is("[type=checkbox]")) {
             watchElement.change(function() {
                 var e = getElement(watchElement.attr("watch"))
+                if(e == null && parentId != null) {
+                    e = {
+                        Key: watchElement.attr("watch"),
+                        Value : null
+                    }
+                    var parent = getElement(parentId)
+                    if(parent.Value == null) {
+                        parent.Value = [[]]
+                    }
+                    parent.Value.push(e)
+                }
                 e.Value = watchElement.attr("checked")
                 processChange()
                 copySummary(e)
@@ -223,20 +242,31 @@ $(function() {
         }
 
         if(watchElement.is("[type=button]")) {
-            element.Value = [[]]
             watchElement.click(function() {
                 var e = getElement(watchElement.attr("watch"))
-                var item = e.Value[element.Value.length - 1]
-                e.Value.push([])
+
+                var obj = {}
                 var id = ""
-                for(var i in item) {
-                    id += item[i].Key + ": " + item[i].Value + ", "
-                    if(i >= 2) break;
-                }
+                $("[parent-element=" + e.Key + "] [watch]").each(function(i, wEl){
+                    var wKey = $(wEl).attr("watch")
+                    var wE = getElement(wKey)
+                    
+                    if(wE.Value == null || wE.Value == "") return;
+
+                    obj[wKey] = wE.Value
+                    if(i < 2) {
+                        id = id + " " + obj[wKey]
+                    }
+                    $(wEl).val(null);
+                    wE.Value = null
+                });
+                if(obj.length == 0) return;
+
+                if(e.Value == null) e.Value = []
+
+                e.Value.push(obj)
                 
                 $("#con_" + e.Key + " [watch-list]").append("<li><div class='chip'>" + id + "</div></li>")
-
-                $("#con_" + e.Key + " [parent-element] input[watch]").val("")
 
                 processChange()
                 copySummary(e)
@@ -247,11 +277,18 @@ $(function() {
     initEffect()
     
     $("[validate-form]").click(function(){
-        console.log(elements)
+        var toSend = []
+        for(var i in elements) {
+            var e = elements[i]
+            if(e.Value != null && e.Parent == null) {
+                toSend.push(e)
+            }
+        }
+        console.log(toSend)
         $.ajax({
             type: "POST",
             url: "/Home/PushData",
-            data: "data=" + JSON.stringify(convertToDictionary(elements)),
+            data: "data=" + JSON.stringify(convertToDictionary(toSend)),
             success: function() {
                 window.location = window.location.href
             }
@@ -287,15 +324,7 @@ $(function() {
         var dic = {}
         for(var i in array) {
             var e = array[i]
-            if(e.Value != null && e.Value.constructor === Array) {
-                dic[e.Key] = []
-                for(var j in e.Value) {
-                    dic[e.Key].push(convertToDictionary(e.Value[j]))
-                }
-            }
-            else {
-                dic[e.Key] = e.Value
-            }
+            dic[e.Key] = e.Value
         }
         return dic;
     }
