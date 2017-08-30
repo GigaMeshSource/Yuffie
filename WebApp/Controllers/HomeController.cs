@@ -43,7 +43,8 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Download()
         {
-            string data = "";
+           var entity = new Entity();
+
             try {
                 using (var connection = new SqlConnection(@"Server=tcp:anime-co-db.database.windows.net,1433;Initial Catalog=yuffie-anim;Persist Security Info=False;User ID=azureworker;Password=Tennis94;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30"))
                 {
@@ -52,14 +53,11 @@ namespace WebApp.Controllers
                     {
                       using (var reader = await sqlCommand.ExecuteReaderAsync())
                         {
-                            var nb = reader.FieldCount;
-                            var res = reader.HasRows;
-
                             while (reader.Read())
                             {                           
-                                int id = reader.GetInt32(0);
-                                DateTime date = reader.GetDateTime(1);
-                                data = reader.GetString(2);
+                                entity.Id = reader.GetInt32(0);
+                                entity.Date = reader.GetDateTime(1);
+                                entity.Value = reader.GetString(2);
                             }
                         }
                     }
@@ -73,22 +71,14 @@ namespace WebApp.Controllers
             
              //write in csv file            
             var fileName = DateTime.Now.ToString("yyyy-MM-dd HH:mm") + ".csv";            
-            var fileData = UTF8Encoding.UTF8.GetBytes(data.ToCsv());
+            var fileData = UTF8Encoding.UTF8.GetBytes(entity.Value.ToCsv());
                 
             return File(fileData, "text/plain", fileName);
-        }
-
-
-        public string[] GetConseiller(object value)
-        {
-
-            return null;
         }
 
         [HttpPost]
         public async Task<IActionResult> PushData(string data)
         {
-            //var test = "{\"Service_DCO\":null,\"Distributeur\":null,\"CRCM\":null,\"PSC\":null,\"ASSU\":null,\"Type_d'intervention\":null,\"Intervention_IP\":null,\"Formation\":null,\"Type_d'intervention_2\":null,\"Date\":null,\"Laps\":null,\"Heure_début\":null,\"Heure_fin\":null,\"Conseiller\":[{}],\"Thème\":null,\"Sous_thème\":null,\"Sujet\":null,\"Commentaire_ASSU\":null,\"Thème_CRCM/PSC\":null,\"Numéro_vivier\":null}";
             try {
                 using (var connection = new SqlConnection(@"Server=tcp:anime-co-db.database.windows.net,1433;Initial Catalog=yuffie-anim;Persist Security Info=False;User ID=azureworker;Password=Tennis94;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30"))
                 {
