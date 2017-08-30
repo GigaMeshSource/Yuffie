@@ -88,9 +88,8 @@ namespace WebApp.Controllers
                         sqlCommand.Parameters.Add(new SqlParameter("Date", DateTime.UtcNow));
                         sqlCommand.Parameters.Add(new SqlParameter("Json", data));
 
-                        await sqlCommand.ExecuteNonQueryAsync();
-                    }
-                    connection.Close();
+                         sqlCommand.ExecuteNonQuery();
+                    }   
                 }
             }
             catch (Exception ex)
