@@ -43,8 +43,33 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Download()
         {
-            var data = new List<Entity>(); //recup info
-            data = _context.Entity.ToList();
+            string data = "";
+            try {
+                using (var connection = new SqlConnection(@"Server=tcp:anime-co-db.database.windows.net,1433;Initial Catalog=yuffie-anim;Persist Security Info=False;User ID=azureworker;Password=Tennis94;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30"))
+                {
+                    connection.Open();
+                    using (var sqlCommand = new SqlCommand("SELECT * FROM JsonFile" , connection))
+                    {
+                      using (var reader = await sqlCommand.ExecuteReaderAsync())
+                        {
+                            var nb = reader.FieldCount;
+                            var res = reader.HasRows;
+
+                            while (reader.Read())
+                            {                           
+                                int id = reader.GetInt32(0);
+                                DateTime date = reader.GetDateTime(1);
+                                data = reader.GetString(2);
+                            }
+                        }
+                    }
+                    connection.Close();  
+                }
+            }
+            catch(Exception ex)
+            {
+                var res  = ex.Message;
+            }
             
              //write in csv file            
             var fileName = DateTime.Now.ToString("yyyy-MM-dd HH:mm") + ".csv";            
@@ -60,52 +85,27 @@ namespace WebApp.Controllers
             return null;
         }
 
-        // [HttpPost]
-        // public IActionResult PushData(string data)
-        // {
-        //    // var test = "{\"Service_DCO\":null,\"Distributeur\":null,\"CRCM\":null,\"PSC\":null,\"ASSU\":null,\"Type_d'intervention\":null,\"Intervention_IP\":null,\"Formation\":null,\"Type_d'intervention_2\":null,\"Date\":null,\"Laps\":null,\"Heure_début\":null,\"Heure_fin\":null,\"Thème\":null,\"Sous_thème\":null,\"Sujet\":null,\"Commentaire_ASSU\":null,\"Thème_CRCM/PSC\":null,\"Numéro_vivier\":null}";
-        //     var test = "{\"Service_DCO\":null,\"Distributeur\":null,\"CRCM\":null,\"PSC\":null,\"ASSU\":null,\"Type_d'intervention\":null,\"Intervention_IP\":null,\"Formation\":null,\"Type_d'intervention_2\":null,\"Date\":null,\"Laps\":null,\"Heure_début\":null,\"Heure_fin\":null,\"Conseiller\":[{}],\"Thème\":null,\"Sous_thème\":null,\"Sujet\":null,\"Commentaire_ASSU\":null,\"Thème_CRCM/PSC\":null,\"Numéro_vivier\":null}";
-        //     var parsed = JsonConvert.DeserializeObject<Dictionary<object, object>>(test);
-        //     //TODO ALT object is here 
-        //     if ((object)parsed != "null")
-        //     {    
-        //         var dataList = new List<Data>();
-        //         var entity = new Entity();
-
-        //         foreach (var item in parsed)
-        //         {
-        //             //boucle sur keyx et values en meme temps pour inserer les bonnes valeurs
-        //             // verifier que le model est bon
-        //             if (item.Key.ToString() == "Conseiller")
-        //             {
-        //                 entity.Conseiller = GetConseiller(item.Value);
-        //                 continue;
-        //             }
-        //             dataList.Add (new Data {
-        //                 Key = item.Key.ToString(),
-        //                 Value = item.Value == null ? null : 
-        //             });
-        //         }
-
-        //         entity.Data = dataList;               
-
-        //         _context.Add(entity);
-        //         _context.SaveChanges(); //await
-        //     }
-            
-        //     return Redirect("/Home/Index");
-        // }
-
-        public IActionResult PushData(string data)
+        [HttpPost]
+        public async Task<IActionResult> PushData(string data)
         {
-            var test = "{\"Service_DCO\":null,\"Distributeur\":null,\"CRCM\":null,\"PSC\":null,\"ASSU\":null,\"Type_d'intervention\":null,\"Intervention_IP\":null,\"Formation\":null,\"Type_d'intervention_2\":null,\"Date\":null,\"Laps\":null,\"Heure_début\":null,\"Heure_fin\":null,\"Conseiller\":[{}],\"Thème\":null,\"Sous_thème\":null,\"Sujet\":null,\"Commentaire_ASSU\":null,\"Thème_CRCM/PSC\":null,\"Numéro_vivier\":null}";
-            using (var connection = new SqlConnection(@"Server=tcp:anime-co-db.database.windows.net,1433;Initial Catalog=yuffie-anim;Persist Security Info=False;User ID=azureworker;Password=Tennis94;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30"))
-            {
-                using (var sqlCommand = new SqlCommand("INSERT INTO maTable VALUES(@date, @json)" , connection))
+            //var test = "{\"Service_DCO\":null,\"Distributeur\":null,\"CRCM\":null,\"PSC\":null,\"ASSU\":null,\"Type_d'intervention\":null,\"Intervention_IP\":null,\"Formation\":null,\"Type_d'intervention_2\":null,\"Date\":null,\"Laps\":null,\"Heure_début\":null,\"Heure_fin\":null,\"Conseiller\":[{}],\"Thème\":null,\"Sous_thème\":null,\"Sujet\":null,\"Commentaire_ASSU\":null,\"Thème_CRCM/PSC\":null,\"Numéro_vivier\":null}";
+            try {
+                using (var connection = new SqlConnection(@"Server=tcp:anime-co-db.database.windows.net,1433;Initial Catalog=yuffie-anim;Persist Security Info=False;User ID=azureworker;Password=Tennis94;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30"))
                 {
-                    sqlCommand.Parameters.Add(new SqlParameter("date", DateTime.UtcNow));
-                    sqlCommand.Parameters.Add(new SqlParameter("json", data));
+                    connection.Open();
+                    using (var sqlCommand = new SqlCommand("INSERT INTO JsonFile VALUES(@Date, @Json)" , connection))
+                    {
+                        sqlCommand.Parameters.Add(new SqlParameter("Date", DateTime.UtcNow));
+                        sqlCommand.Parameters.Add(new SqlParameter("Json", data));
+
+                        await sqlCommand.ExecuteNonQueryAsync();
+                    }
+                    connection.Close();
                 }
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
             }
             return Redirect("/Home/Index");
         }
