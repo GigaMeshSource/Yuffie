@@ -1,11 +1,47 @@
-﻿ var rules = [    
+﻿var rules = [
+{
+    "Key": "Service DCO - FOR - NO IP",
+    "Impacted": ["Intervention IP", "Thème", "Sous thème", "Sujet", "Thème CRC/PSC"],
+    "StartingEffect": {
+        "Css": {
+            "display": "block"
+        }
+    },
+    "Conditions": [{
+        "Key": "Service DCO",
+        "Value": "FOR",
+    }],
+    "Effect": {
+        "Css": {
+            "display": "none"
+        }
+    }
+},
+{
+    "Key": "Type d'intervention - Animation - NO Lieu formation",
+    "Impacted": ["Lieu formation"],
+    "StartingEffect": {
+        "Css": {
+            "display": "block"
+        }
+    },
+    "Conditions": [{
+        "Key": "Type d'intervention",
+        "Value": "Animation",
+    }],
+    "Effect": {
+        "Css": {
+            "display": "none"
+        }
+    }
+},
 {
     "Key": "Service DCO - IP",
     "Impacted": [   "CDN BANQUE", "CDN REGION", "CDN GROUPE", "CDN AGENCES", "CDN Code AGENCES", 
                     "SG DR", "SG DEC", "SG UC", "SG Agence", "SG Code Agence", 
-                    "CRCM", "PSC", 
+                    "CRC", "PSC", 
                     "ASSU", "Type d'intervention", "Intervention IP", "Formation", "Type d'intervention 2",
-                    "Code Agence", "Numéro vivier", "Fonction CRCM/PSC"
+                    "Code Agence", "Numéro vivier", "Fonction CRC/PSC"
                 ],
     "StartingEffect": {
         "Css": {
@@ -23,8 +59,52 @@
     }
 },
 {
+    "Key": "Service DCO - IP ET Distrib SG",
+    "Impacted": ["SG UC", "SG Agence", "SG Code Agence"],
+    "StartingEffect": {
+        "Css": {
+            "display": "block"
+        }
+    },
+    "Conditions": [{
+        "Key": "Service DCO",
+        "Value": "IP",
+    },
+    {
+        "Key": "Distributeur",
+        "Value": "SG",
+    }],
+    "Effect": {
+        "Css": {
+            "display": "none"
+        }
+    }
+},
+{
+    "Key": "Service DCO - IP ET Distrib CDN",
+    "Impacted": ["CDN GROUPE", "CDN AGENCES", "CDN Code AGENCES"],
+    "StartingEffect": {
+        "Css": {
+            "display": "block"
+        }
+    },
+    "Conditions": [{
+        "Key": "Service DCO",
+        "Value": "IP",
+    },
+    {
+        "Key": "Distributeur",
+        "Value": "CDN",
+    }],
+    "Effect": {
+        "Css": {
+            "display": "none"
+        }
+    }
+},
+{
     "Key": "Service DCO - SG",
-    "Impacted": ["SG DR", "SG DEC", "SG UC", "SG Agence", "SG Code Agence", "CRCM", "PSC"],
+    "Impacted": ["SG DR", "SG DEC", "SG UC", "SG Agence", "SG Code Agence", "CRC", "PSC"],
     "StartingEffect": {
         "Css": {
             "display": "none"
@@ -77,15 +157,15 @@
     }
 },
 {
-    "Key": "Laps - heure spécifique",
-    "Impacted": ["Heure début", "Heure fin"],
+    "Key": "Durée - heure spécifique",
+    "Impacted": ["Date de fin", "Heure début", "Heure fin"],
     "StartingEffect": {
         "Css": {
             "display": "none"
         }
     },
     "Conditions": [{
-        "Key": "Laps",
+        "Key": "Durée",
         "Value": "Heure spécifique",
     }],
     "Effect": {
@@ -95,8 +175,8 @@
     }
 },
 {
-    "Key": "Distriuteur - PSC",
-    "Impacted": ["Fonction CRCM/PSC"],
+    "Key": "Distributeur - PSC/CRC",
+    "Impacted": ["Fonction CRC/PSC"],
     "StartingEffect": {
         "Css": {
             "display": "none"
@@ -104,25 +184,7 @@
     },
     "Conditions": [{
         "Key": "Distributeur",
-        "Value": "CRCM",
-    }],
-    "Effect": {
-        "Css": {
-            "display": "block"
-        }
-    }
-},
-{
-    "Key": "Distriuteur - PSC",
-    "Impacted": ["Fonction CRCM/PSC"],
-    "StartingEffect": {
-        "Css": {
-            "display": "none"
-        }
-    },
-    "Conditions": [{
-        "Key": "Distributeur",
-        "Value": "PSC",
+        "Value": ["PSC", "CRC"],
     }],
     "Effect": {
         "Css": {
@@ -173,24 +235,42 @@ $(function() {
     }
 
     var processChange = function() {
+        initEffect();
          for(var i = 0; i < rules.length; ++i) {
             var rule = rules[i]
+            console.log("Testing rule : " + rule.Key)
             var result = true
             for(var j = 0; j < rule.Conditions.length; ++j) {
                 var condition = rule.Conditions[j]
+                console.log("Condition : " + condition.Key);
                 var element = getElement(condition.Key)
-                if(element == null || element.Value != condition.Value) {
+                if(condition.Value.constructor === Array) {
                     result = false
-                    break
+                    for(var k in condition.Value) {
+                        var item = condition.Value[k];
+                        if(element != null && item == element.Value) {
+                            result = true
+                            break
+                        }
+                    }
+                    if(!result) break
                 }
+                else {
+                    if(element == null || element.Value != condition.Value) {
+                        result = false
+                        break
+                    }
+                }
+                console.log("Success")
             }
             if(result) {
+                console.log("Execute rule")
                 processEffect(rule.Impacted, rule.Effect)
-                break
             }
-            else if(rule.StartingEffect != undefined) {
-                processEffect(rule.Impacted, rule.StartingEffect)
-            }
+            // else if(rule.StartingEffect != undefined) {
+            //     console.log("Rollback rule")
+            //     processEffect(rule.Impacted, rule.StartingEffect)
+            // }
         }
     }
 
@@ -309,6 +389,30 @@ $(function() {
                 processChange()
                 copySummary(e)
             })
+        }
+    })
+
+    $("[tree-select]").click(function(evt) {
+        var target = $(evt.target)
+        var bindings = target.parents("[bind-to]")
+        for(var i in bindings) {
+            var binding =$(bindings[i])
+            var bindTo = binding.attr("bind-to")
+            var e = getElement(bindTo)
+            if(e == null) {
+                e = {
+                    Key: bindTo,
+                    Value: null
+                }
+            }
+            elements.push(e)
+            if(binding.find("span a").length == 1) {
+                e.Value = target.html()
+            }
+            else {
+                e.Value = binding.find(".collapsible-header").html()
+            }
+            copySummary(e)
         }
     })
 

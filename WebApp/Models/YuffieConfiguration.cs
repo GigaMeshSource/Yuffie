@@ -27,5 +27,14 @@ namespace Yuffie.WebApp.Models
         public string TextType {get;set;}
         public string Default {get;set;}
         public List<YCPSElement> Elements {get;set;}
+        public List<TreeData> Tree {get;set;}
+        public List<string> Levels {get;set;}
+    }
+
+    public class TreeData 
+    {
+        public string Name {get;set;}
+        public List<TreeData> Tree {get;set;}
+        public string BindTo {get;set;}
     }
 }
