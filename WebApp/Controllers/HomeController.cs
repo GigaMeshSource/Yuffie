@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using ServiceStack;
 using Yuffie.WebApp;
 using Yuffie.WebApp.Models;
+using System.Data.SqlClient;
 
 namespace WebApp.Controllers
 {
@@ -52,38 +53,60 @@ namespace WebApp.Controllers
             return File(fileData, "text/plain", fileName);
         }
 
-        [HttpPost]
+
+        public string[] GetConseiller(object value)
+        {
+
+            return null;
+        }
+
+        // [HttpPost]
+        // public IActionResult PushData(string data)
+        // {
+        //    // var test = "{\"Service_DCO\":null,\"Distributeur\":null,\"CRCM\":null,\"PSC\":null,\"ASSU\":null,\"Type_d'intervention\":null,\"Intervention_IP\":null,\"Formation\":null,\"Type_d'intervention_2\":null,\"Date\":null,\"Laps\":null,\"Heure_début\":null,\"Heure_fin\":null,\"Thème\":null,\"Sous_thème\":null,\"Sujet\":null,\"Commentaire_ASSU\":null,\"Thème_CRCM/PSC\":null,\"Numéro_vivier\":null}";
+        //     var test = "{\"Service_DCO\":null,\"Distributeur\":null,\"CRCM\":null,\"PSC\":null,\"ASSU\":null,\"Type_d'intervention\":null,\"Intervention_IP\":null,\"Formation\":null,\"Type_d'intervention_2\":null,\"Date\":null,\"Laps\":null,\"Heure_début\":null,\"Heure_fin\":null,\"Conseiller\":[{}],\"Thème\":null,\"Sous_thème\":null,\"Sujet\":null,\"Commentaire_ASSU\":null,\"Thème_CRCM/PSC\":null,\"Numéro_vivier\":null}";
+        //     var parsed = JsonConvert.DeserializeObject<Dictionary<object, object>>(test);
+        //     //TODO ALT object is here 
+        //     if ((object)parsed != "null")
+        //     {    
+        //         var dataList = new List<Data>();
+        //         var entity = new Entity();
+
+        //         foreach (var item in parsed)
+        //         {
+        //             //boucle sur keyx et values en meme temps pour inserer les bonnes valeurs
+        //             // verifier que le model est bon
+        //             if (item.Key.ToString() == "Conseiller")
+        //             {
+        //                 entity.Conseiller = GetConseiller(item.Value);
+        //                 continue;
+        //             }
+        //             dataList.Add (new Data {
+        //                 Key = item.Key.ToString(),
+        //                 Value = item.Value == null ? null : 
+        //             });
+        //         }
+
+        //         entity.Data = dataList;               
+
+        //         _context.Add(entity);
+        //         _context.SaveChanges(); //await
+        //     }
+            
+        //     return Redirect("/Home/Index");
+        // }
+
         public IActionResult PushData(string data)
         {
-            var test = "{\"Service_DCO\":null,\"Distributeur\":null,\"CRCM\":null,\"PSC\":null,\"ASSU\":null,\"Type_d'intervention\":null,\"Intervention_IP\":null,\"Formation\":null,\"Type_d'intervention_2\":null,\"Date\":null,\"Laps\":null,\"Heure_début\":null,\"Heure_fin\":null,\"Thème\":null,\"Sous_thème\":null,\"Sujet\":null,\"Commentaire_ASSU\":null,\"Thème_CRCM/PSC\":null,\"Numéro_vivier\":null}";
-            var parsed = JsonConvert.DeserializeObject<Intervenants>(data);
-            //TODO ALT object is here 
-            
-            if (parsed != null) 
-            {    
-                var dataList = new List<Data>();
-
-                // foreach (var item in parsed.KeyValue)
-                // {
-                //     //boucle sur keyx et values en meme temps pour inserer les bonnes valeurs
-                //     // verifier que le model est bon
-                //     foreach(var idx in item.Keys)
-                //     {
-                //             dataList.Add (new Data {
-                //             Key = item.Key,
-                //             Value = item.Value
-                //             });
-                        
-                //     }
-                // }
-
-                var entity = new Entity {
-                    Data = dataList                
-                };
-                _context.Add(entity);
-                _context.SaveChanges(); //await
+            var test = "{\"Service_DCO\":null,\"Distributeur\":null,\"CRCM\":null,\"PSC\":null,\"ASSU\":null,\"Type_d'intervention\":null,\"Intervention_IP\":null,\"Formation\":null,\"Type_d'intervention_2\":null,\"Date\":null,\"Laps\":null,\"Heure_début\":null,\"Heure_fin\":null,\"Conseiller\":[{}],\"Thème\":null,\"Sous_thème\":null,\"Sujet\":null,\"Commentaire_ASSU\":null,\"Thème_CRCM/PSC\":null,\"Numéro_vivier\":null}";
+            using (var connection = new SqlConnection(@"Server=tcp:anime-co-db.database.windows.net,1433;Initial Catalog=yuffie-anim;Persist Security Info=False;User ID=azureworker;Password=Tennis94;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30"))
+            {
+                using (var sqlCommand = new SqlCommand("INSERT INTO maTable VALUES(@date, @json)" , connection))
+                {
+                    sqlCommand.Parameters.Add(new SqlParameter("date", DateTime.UtcNow));
+                    sqlCommand.Parameters.Add(new SqlParameter("json", data));
+                }
             }
-            
             return Redirect("/Home/Index");
         }
         
@@ -98,9 +121,14 @@ namespace WebApp.Controllers
             public object Value {get;set;}
         }
 
+        public class Conseiller {
+            public Dictionary<string, object>[] dico {get;set;}
+        }
+        
         public class Intervenants {
-           public  Dictionary<string,object>[] intervenants {get;set;}
-            public Dictionary<object, object> rest {get;set;}
+            // public  Dictionary<object,object> intervenants {get;set;}
+            // public Conseiller conseiller {get;set;}
+            public List<YuffieFrontValue> values {get;set;}
         }
     }
 }
