@@ -1,14 +1,14 @@
 @model Yuffie.WebApp.Models.YCPSElement
 
 @{
-    var elementId = Model.Name.Replace(" ", "_");
+    var elementId = Model.Name.Replace(" ", "_").Replace("'", "").Replace("/", "_");
 }
 
 <div element id="con_@elementId">
     @if(Model.Type == "Text" || Model.Type == "List" || Model.Type == "Radio")
     {
         <div class="col s6">
-            <label for="el_@elementId">@(Model.Name)
+            <label for="el_@(elementId)">@(Model.Name)
                 <p summary="@(elementId)"></p>
             </label>
         </div>
@@ -31,5 +31,17 @@
                 Html.RenderPartial("_SummaryElement", e);
             }
         </div>
+    }
+    @if(Model.Type == "Tree") 
+    {
+        foreach(var level in Model.Levels)
+        {
+            var levelId = level.Replace(" ", "_").Replace("'", "").Replace("/", "_");
+            <div class="col s6">
+                <label for="el_@(levelId)">@(level)
+                    <p summary="@(levelId)"></p>
+                </label>
+            </div>
+        }
     }
 </div>

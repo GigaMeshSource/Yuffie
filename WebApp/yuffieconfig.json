@@ -5,6 +5,102 @@
         "Icon": "today",
         "Sections": [
           {
+            "Name": "Test section",
+            "Elements": [
+              {
+                "Name": "TestTree",
+                "Type": "Tree",
+                "Levels": [ "ValueCol1", "ValueCol2", "ValueCol3" ],
+                "Tree": [
+                  {
+                    "Name": "Level1",
+                    "BindTo": "ValueCol1",
+                    "Tree": [
+                      {
+                        "Name": "Level1_1",
+                        "BindTo": "ValueCol2",
+                        "Tree": [
+                          {
+                            "Name":"Level1_1_1",
+                            "BindTo": "ValueCol3"
+                          },
+                          {
+                            "Name":"Level1_1_2",
+                            "BindTo": "ValueCol3"
+                          },
+                          {
+                            "Name":"Level1_1_3",
+                            "BindTo": "ValueCol3"                          
+                          }
+                        ]
+                      },
+                      {
+                        "Name": "Level1_2",
+                        "BindTo": "ValueCol2",
+                        "Tree": [
+                          {
+                            "Name":"Level1_2_1"                          ,
+                            "BindTo": "ValueCol3"
+                          },
+                          {
+                            "Name":"Level1_2_2"  ,
+                            "BindTo": "ValueCol3"                        
+                          },
+                          {
+                            "Name":"Level1_2_3"  ,
+                            "BindTo": "ValueCol3"                        
+                          }
+                        ]
+                      }
+                    ] 
+                  },
+                  {
+                    "Name": "Level2",
+                    "BindTo": "ValueCol1",
+                    "Tree": [
+                      {
+                        "Name": "Level2_1",
+                        "BindTo": "ValueCol2",
+                        "Tree": [
+                          {
+                            "Name":"Level2_1_1",
+                            "BindTo": "ValueCol3"                          
+                          },
+                          {
+                            "Name":"Level2_1_2",
+                            "BindTo": "ValueCol3"                          
+                          },
+                          {
+                            "Name":"Level2_1_3",
+                            "BindTo": "ValueCol3"                          
+                          }
+                        ]
+                      },
+                      {
+                        "Name": "Level2_2",
+                        "BindTo": "ValueCol2",
+                        "Tree": [
+                          {
+                            "Name":"Level2_2_1"                          ,
+                            "BindTo": "ValueCol3"
+                          },
+                          {
+                            "Name":"Level2_2_2"  ,
+                            "BindTo": "ValueCol3"                        
+                          },
+                          {
+                            "Name":"Level2_2_3"  ,
+                            "BindTo": "ValueCol3"                        
+                          }
+                        ]
+                      }
+                    ] 
+                  }
+                ]
+              }
+            ]
+          },
+          {
             "Name": "Intervenant ASSU",
             "Elements" : [
               {
@@ -89,6 +185,15 @@
                   "SAHIL	Khalid",
                   "TORAILLE	Aude"
                 ]
+              },
+              {
+                "Name": "Role co-intervenant",
+                "Type": "List",
+                "Items": [
+                  "Co-animation",
+                  "Observation",
+                  "Intervenant Principal"
+                ]
               }
             ]
           },
@@ -113,7 +218,7 @@
                   "SG PRIV",
                   "CDN",
                   "CDN PRIV",
-                  "CRCM",
+                  "CRC",
                   "PSC",
                   "ASSU",
                   "ORADEA",
@@ -6695,7 +6800,7 @@
                 ]
               },
               {
-                "Name": "CRCM",
+                "Name": "CRC",
                 "Type": "List",
                 "Items": [
                   "Nanterre",
@@ -6779,7 +6884,7 @@
                   "IARD 4060",
                   "HAV",
                   "CBP",
-                  "CRCM 111706",
+                  "CRC 111706",
                   "Webex 111159",
                   "Webex 111162",
                   "Webex 111163",
@@ -6805,8 +6910,35 @@
                   "DR",
                   "DEC",
                   "UC",
-                  "CRCM",
+                  "CRC",
                   "PSC"
+                ]
+              },
+              {
+                "Name": "Lieu formation",
+                "Type": "List",
+                "Items": [
+                  "DR DE BORDEAUX",
+                  "DR DE LILLE",
+                  "DR DE LYON",
+                  "DR DE MARSEILLE",
+                  "DR DE RENNES",
+                  "DR DE STRASBOURG",
+                  "DR ILE DE FRANCE NORD",
+                  "DR ILE DE FRANCE SUD",
+                  "Val de Fontenay",
+                  "La défense",
+                  "BANQUE LAYDERNIER",
+                  "BANQUE COURTOIS",
+                  "BANQUE RHONES ALPES",
+                  "BANQUE TARNEAUD",
+                  "BANQUE KOLB",
+                  "BANQUE NUGER",
+                  "CDN - ILE DE FRANCE",
+                  "CDN - LES PROVINCES DU NORD",
+                  "CDN - REGIONS NORD METROPOLE",
+                  "CDN - REGIONS NORD OUEST",
+                  "SOCIETE MARSEILLAISE DE CREDIT"
                 ]
               }
             ]
@@ -6814,11 +6946,6 @@
           {
             "Name": "Date et heure de l'évenement",
             "Elements" : [
-              {
-                "Name": "Date",
-                "Type": "Text",
-                "TextType": "date"
-              },
               {
                 "Name": "Durée",
                 "Type": "List",
@@ -6828,6 +6955,16 @@
                   "après midi",
                   "Heure spécifique"
                 ]
+              },
+              {
+                "Name": "Date",
+                "Type": "Text",
+                "TextType": "date"
+              },
+              {
+                "Name": "Date de fin",
+                "Type": "Text",
+                "TextType": "date"
               },
               {
                 "Name": "Heure début",
@@ -6903,7 +7040,7 @@
                     ]
                   },
                   {
-                    "Name": "Fonction CRCM/PSC",
+                    "Name": "Fonction CRC/PSC",
                     "Type": "List",
                     "Items": [
                       "CCm junior",
@@ -6921,33 +7058,6 @@
                       "Agent PSC"
                     ]
                   }
-                ]
-              },
-              {
-                "Name": "Lieu formation",
-                "Type": "List",
-                "Items": [
-                  "DR DE BORDEAUX",
-                  "DR DE LILLE",
-                  "DR DE LYON",
-                  "DR DE MARSEILLE",
-                  "DR DE RENNES",
-                  "DR DE STRASBOURG",
-                  "DR ILE DE FRANCE NORD",
-                  "DR ILE DE FRANCE SUD",
-                  "Val de Fontenay",
-                  "La défense",
-                  "BANQUE LAYDERNIER",
-                  "BANQUE COURTOIS",
-                  "BANQUE RHONES ALPES",
-                  "BANQUE TARNEAUD",
-                  "BANQUE KOLB",
-                  "BANQUE NUGER",
-                  "CDN - ILE DE FRANCE",
-                  "CDN - LES PROVINCES DU NORD",
-                  "CDN - REGIONS NORD METROPOLE",
-                  "CDN - REGIONS NORD OUEST",
-                  "SOCIETE MARSEILLAISE DE CREDIT"
                 ]
               }
             ]
@@ -7004,7 +7114,7 @@
                 "TextType": "textarea"
               },
               {
-                "Name": "Thème CRCM/PSC",
+                "Name": "Thème CRC/PSC",
                 "Type": "List",
                 "Items": [
                   "IARD",

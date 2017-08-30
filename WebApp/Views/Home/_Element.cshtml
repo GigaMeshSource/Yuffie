@@ -1,5 +1,4 @@
 @model Yuffie.WebApp.Models.YCPSElement
-
 @{
     var elementId = Model.Name.Replace(" ", "_").Replace("'", "").Replace("/", "_");
 }
@@ -35,7 +34,7 @@
                 <select watch="@elementId" id="el_@elementId">
                     if(Model.Default == null)
                     {
-                        <option value="" disabled selected></option>
+                        <option value="" selected></option>
                     }
                     @for(var itemIndex = 0; itemIndex < Model.Items.Count(); ++itemIndex)
                     {
@@ -109,5 +108,9 @@
         </div>
         <ul watch-list>
         </ul>
+    }
+    @if(Model.Type == "Tree")
+    {
+        Html.RenderPartial("_TreeElement", Model.Tree);
     }
 </div>
