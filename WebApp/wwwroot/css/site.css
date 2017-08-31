@@ -119,6 +119,23 @@
       background-color: #F3F3F3;
   }
 
+  /* Option */
+
+  .specialOption > span {
+    color:black !important;
+  }
+
+  /* Participants */
+
+  .chipsContainer {
+    margin: 15px;
+    margin-top: 35px;
+  }
+
+  .chips .input {
+    width: 160px !important;
+}
+
   /* OVERWRITE MATERIAL CSS MIN WIDTH FOR MOBILE */
   .tabs .tab {
       min-width: 50px !important

@@ -34,7 +34,7 @@
                 <select watch="@elementId" id="el_@elementId">
                     if(Model.Default == null)
                     {
-                        <option value="" selected></option>
+                        <option value="" class="specialOption" selected>Choisissez une option</option>
                     }
                     @for(var itemIndex = 0; itemIndex < Model.Items.Count(); ++itemIndex)
                     {
@@ -81,7 +81,7 @@
     }
     @if(Model.Type == "SubElement")
     {
-         <div parent-element="@(Model.Name)">
+         <div parent-element="@(Model.Name)" class="col s12">
             @foreach(var e in Model.Elements) {
                 Html.RenderPartial("_Element", e);
             }
@@ -91,8 +91,10 @@
                 <input watch="@elementId" type="button" value="Ajouter un(e) @(Model.Name)" />  
             </a>      
         </div>
-        <ul watch-list>
-        </ul>
+        <div class="col s12 chipsContainer">
+            <div watch-list class="chips chips-placeholder">
+            </div>
+        </div>
     }
     @if(Model.Type == "Tree")
     {
