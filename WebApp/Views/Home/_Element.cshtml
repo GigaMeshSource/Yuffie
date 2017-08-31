@@ -21,6 +21,11 @@
                         type = "text";
                         suplClass = "datepicker";
                     }
+                    if(Model.TextType == "time")
+                    {
+                        type = "text";
+                        suplClass = "timepicker";
+                    }
                     <input watch="@elementId" type="@(type)" value="@(Model.Default)" id="el_@elementId" class="@(suplClass)"></input>
                 }
                 <label for="el_@elementId">@(Model.Name)</label>
@@ -32,7 +37,7 @@
         <div class="col s6">
             <div class="input-field">
                 <select watch="@elementId" id="el_@elementId">
-                    if(Model.Default == null)
+                    @if(Model.Default == null)
                     {
                         <option value="" class="specialOption" selected>Choisissez une option</option>
                     }
