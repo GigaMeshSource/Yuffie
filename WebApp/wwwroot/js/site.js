@@ -395,6 +395,16 @@ $(function() {
     $("[tree-select]").click(function(evt) {
         var target = $(evt.target)
         var bindings = target.parents("[bind-to]")
+        var children = target.find("[bind-to]")
+        for(var i in children) {
+            var c = $(children[i])
+            var bindTo = c.attr("bind-to")
+            var e = getElement(bindTo)
+            if(e != null) {
+                e.Value = ""
+                copySummary(e)
+            }
+        }
         for(var i in bindings) {
             var binding =$(bindings[i])
             var bindTo = binding.attr("bind-to")

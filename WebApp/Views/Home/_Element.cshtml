@@ -79,21 +79,6 @@
             <label><input watch="@elementId" type="checkbox" id="el_@elementId" value="@(Model.Name)" />@(Model.Name)</label>
         }
     }
-    @if(Model.Type == "Radio")
-    {
-        @for(var itemIndex = 0; itemIndex < Model.Items.Count(); ++itemIndex)
-        {
-            var item = Model.Items[itemIndex];
-            if(Model.Default == item)
-            {
-                <label><input type="radio" id="el_@(elementId)_@(item)" checked watch="@elementId" value="@(item)" name="@(elementId)" />@item</label>             
-            }
-            else 
-            {
-                <label><input type="radio" id="el_@(elementId)_@(item)" watch="@elementId" value="@(item)" name="@(elementId)" />@item</label>
-            }
-        } 
-    }
     @if(Model.Type == "SubElement")
     {
          <div parent-element="@(Model.Name)">

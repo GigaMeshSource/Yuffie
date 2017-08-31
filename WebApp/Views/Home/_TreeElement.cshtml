@@ -10,7 +10,7 @@
             }
             else 
             {
-                <div class="collapsible-header">@(treeData.Name)</div>
+                <div class="collapsible-header" tree-select>@(treeData.Name)</div>
                 <div class="collapsible-body">
                     @{ Html.RenderPartial("_TreeElement", treeData.Tree); }
                 </div>
