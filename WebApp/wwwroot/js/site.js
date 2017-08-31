@@ -277,7 +277,7 @@ $(function() {
 
     var copySummary = function(element) {
         var summary = $("[summary=" + element.Key + "]")
-        if(summary.is("ul")) {
+        if(summary.is("div")) {
             summary.empty()
             for(var i = 0; i < element.Value.length; ++i) {
                 var subelement = element.Value[i]
@@ -285,7 +285,7 @@ $(function() {
                 for(var property in subelement) {
                     id = id + " " + subelement[property]
                 }
-                summary.append("<li><div class='chip'>" + id + "</div></li>")
+                summary.append("<div class='col s3'><div class='chip'>" + id + "</div></div>")
             }
         }
         else {

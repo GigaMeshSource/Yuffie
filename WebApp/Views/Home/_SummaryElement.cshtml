@@ -9,8 +9,8 @@
     {
         <div class="col s6">
             <label for="el_@(elementId)">@(Model.Name)
-                <p summary="@(elementId)"></p>
             </label>
+            <p summary="@(elementId)"></p>
         </div>
     }
     @if(Model.Type == "Check")
@@ -26,7 +26,7 @@
 
     @if(Model.Type == "SubElement")
     {
-        <ul summary="@(elementId)"></ul>
+        <div summary="@(elementId)"></div>
     }
     @if(Model.Type == "Tree") 
     {
@@ -35,8 +35,8 @@
             var levelId = level.Replace(" ", "_").Replace("'", "").Replace("/", "_");
             <div class="col s6">
                 <label for="el_@(levelId)">@(level)
-                    <p summary="@(levelId)"></p>
                 </label>
+                <p summary="@(levelId)"><i class="material-icons">done</i></p>
             </div>
         }
     }

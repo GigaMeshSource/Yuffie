@@ -41,29 +41,37 @@
     }
     @{
         <div class="page" id="page@(Model.Pages.Count() - 1)" class="col s12">
-            <ul class="collapsible popout " data-collapsible="accordion">
-            @for(var pageIndex = 0; pageIndex < Model.Pages.Count() - 1; ++pageIndex)
-            {
-                var page = Model.Pages[pageIndex];
-                @for(var sectionIndex = 0; page.Sections != null && sectionIndex < page.Sections.Count(); ++sectionIndex)
+            <ul class="collapsible" data-collapsible="accordion">
+                @for(var pageIndex = 0; pageIndex < Model.Pages.Count() - 1; ++pageIndex)
                 {
-                    var section = page.Sections[sectionIndex];
+                    var page = Model.Pages[pageIndex]
                     <li>
-                        <div class="collapsible-header active"><b>@(page.Name)- </b> @(section.Name)</div>
-                        <div class="collapsible-body" id="page@(pageIndex)_section@(sectionIndex)">
-                            <div class="row">
-                                @if(section.Elements != null)
+                        <div class="collapsible-header"><i class="material-icons">@(page.Icon)</i>@(page.Name)</div>
+                        <div class="collapsible-body">
+                            <ul class="collapsible popout " data-collapsible="accordion">
+                                var page = Model.Pages[pageIndex];
+                                @for(var sectionIndex = 0; page.Sections != null && sectionIndex < page.Sections.Count(); ++sectionIndex)
                                 {
-                                    foreach(var element in section.Elements)
-                                    {  
-                                        Html.RenderPartial("_SummaryElement", element);                                            
-                                    }
+                                    var section = page.Sections[sectionIndex];
+                                    <li>
+                                        <div class="collapsible-header active"><b>@(page.Name) - </b> @(section.Name)</div>
+                                        <div class="collapsible-body" id="page@(pageIndex)_section@(sectionIndex)">
+                                            <div class="row">
+                                                @if(section.Elements != null)
+                                                {
+                                                    foreach(var element in section.Elements)
+                                                    {  
+                                                        Html.RenderPartial("_SummaryElement", element);                                            
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </li>
                                 }
-                            </div>
+                            </ul>
                         </div>
                     </li>
                 }
-            }
             </ul>
              <a validate-form class="waves-effect waves-light btn yuffieNextButton" value="valider">Valider</a>
         </div>
