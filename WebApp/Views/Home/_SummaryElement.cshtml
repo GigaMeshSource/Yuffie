@@ -4,7 +4,7 @@
     var elementId = Model.Name.Replace(" ", "_").Replace("'", "").Replace("/", "_");
 }
 
-<div element id="con_@elementId">
+<div id="con_sum_@elementId">
     @if(Model.Type == "Text" || Model.Type == "List" || Model.Type == "Radio")
     {
         <div class="col s6">

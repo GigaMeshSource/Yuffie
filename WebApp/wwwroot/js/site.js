@@ -37,8 +37,8 @@
 },
 {
     "Key": "Service DCO - IP",
-    "Impacted": [   "CDN BANQUE", "CDN REGION", "CDN GROUPE", "CDN AGENCES", "CDN Code AGENCES", 
-                    "SG DR", "SG DEC", "SG UC", "SG Agence", "SG Code Agence", 
+    "Impacted": [   "CDN", 
+                    "SG", 
                     "CRC", "PSC", 
                     "ASSU", "Type d'intervention", "Intervention IP", "Formation", "Type d'intervention 2",
                     "Code Agence", "Numéro vivier", "Fonction CRC/PSC"
@@ -58,53 +58,53 @@
         }
     }
 },
-{
-    "Key": "Service DCO - IP ET Distrib SG",
-    "Impacted": ["SG UC", "SG Agence", "SG Code Agence"],
-    "StartingEffect": {
-        "Css": {
-            "display": "block"
-        }
-    },
-    "Conditions": [{
-        "Key": "Service DCO",
-        "Value": "IP",
-    },
-    {
-        "Key": "Distributeur",
-        "Value": "SG",
-    }],
-    "Effect": {
-        "Css": {
-            "display": "none"
-        }
-    }
-},
-{
-    "Key": "Service DCO - IP ET Distrib CDN",
-    "Impacted": ["CDN GROUPE", "CDN AGENCES", "CDN Code AGENCES"],
-    "StartingEffect": {
-        "Css": {
-            "display": "block"
-        }
-    },
-    "Conditions": [{
-        "Key": "Service DCO",
-        "Value": "IP",
-    },
-    {
-        "Key": "Distributeur",
-        "Value": "CDN",
-    }],
-    "Effect": {
-        "Css": {
-            "display": "none"
-        }
-    }
-},
+// {
+//     "Key": "Service DCO - IP ET Distrib SG",
+//     "Impacted": ["SG UC", "SG Agence", "SG Code Agence"],
+//     "StartingEffect": {
+//         "Css": {
+//             "display": "block"
+//         }
+//     },
+//     "Conditions": [{
+//         "Key": "Service DCO",
+//         "Value": "IP",
+//     },
+//     {
+//         "Key": "Distributeur",
+//         "Value": "SG",
+//     }],
+//     "Effect": {
+//         "Css": {
+//             "display": "none"
+//         }
+//     }
+// },
+// {
+//     "Key": "Service DCO - IP ET Distrib CDN",
+//     "Impacted": ["CDN GROUPE", "CDN AGENCES", "CDN Code AGENCES"],
+//     "StartingEffect": {
+//         "Css": {
+//             "display": "block"
+//         }
+//     },
+//     "Conditions": [{
+//         "Key": "Service DCO",
+//         "Value": "IP",
+//     },
+//     {
+//         "Key": "Distributeur",
+//         "Value": "CDN",
+//     }],
+//     "Effect": {
+//         "Css": {
+//             "display": "none"
+//         }
+//     }
+// },
 {
     "Key": "Service DCO - SG",
-    "Impacted": ["SG DR", "SG DEC", "SG UC", "SG Agence", "SG Code Agence", "CRC", "PSC"],
+    "Impacted": ["SG", "CRC", "PSC"],
     "StartingEffect": {
         "Css": {
             "display": "none"
@@ -122,7 +122,7 @@
 },
 {
     "Key": "Service DCO - CDN",
-    "Impacted": ["CDN BANQUE", "CDN REGION", "CDN GROUPE", "CDN AGENCES", "CDN Code AGENCES"],
+    "Impacted": ["CDN"],
     "StartingEffect": {
         "Css": {
             "display": "none"
@@ -216,10 +216,11 @@ $(function() {
             for(var i = 0; i < impacted.length; ++i) {
                 key = impacted[i];
                 key = formatKey(key)
-                var element = getElement(key)
-                var block = $("#con_" + element.Key)
+                var block = $("#con_" + key)
+                var summaryBlock = $("#con_sum_" + key)
                 for(var property in effect.Css) {
                     block.css(property, effect.Css[property])
+                    summaryBlock.css(property, effect.Css[property])
                 }
             }
         }
@@ -415,7 +416,7 @@ $(function() {
                 var children = binding.find("[bind-to]")
                 for(var j = 0; j < children.length; ++j) {
                     var child = $(children[j])
-                    var bindToClean = child.attr("bind-to")
+                    var bindToClean = formatKey(child.attr("bind-to"))
                     var e = getElement(bindToClean)
                     if(e != null) {
                         e.Value = ""
@@ -423,7 +424,7 @@ $(function() {
                     }
                 }
             }
-            var bindTo = binding.attr("bind-to")
+            var bindTo = formatKey(binding.attr("bind-to"))
             var e = getElement(bindTo)
             if(e == null) {
                 e = {

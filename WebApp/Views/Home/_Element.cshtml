@@ -103,6 +103,7 @@
     }
     @if(Model.Type == "Tree")
     {
+        <label>@(Model.Name)</label>
         Html.RenderPartial("_TreeElement", Model.Tree);
     }
 </div>
