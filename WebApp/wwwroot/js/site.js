@@ -395,18 +395,20 @@ $(function() {
     $("[tree-select]").click(function(evt) {
         var target = $(evt.target)
         var bindings = target.parents("[bind-to]")
-        var children = target.find("[bind-to]")
-        for(var i in children) {
-            var c = $(children[i])
-            var bindTo = c.attr("bind-to")
-            var e = getElement(bindTo)
-            if(e != null) {
-                e.Value = ""
-                copySummary(e)
-            }
-        }
-        for(var i in bindings) {
+        for(var i = 0; i < bindings.length; ++i) {
             var binding =$(bindings[i])
+            if(i == 0) {
+                var children = binding.find("[bind-to]")
+                for(var j = 0; j < children.length; ++j) {
+                    var child = $(children[j])
+                    var bindToClean = child.attr("bind-to")
+                    var e = getElement(bindToClean)
+                    if(e != null) {
+                        e.Value = ""
+                        copySummary(e)
+                    }
+                }
+            }
             var bindTo = binding.attr("bind-to")
             var e = getElement(bindTo)
             if(e == null) {
