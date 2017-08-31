@@ -7109,11 +7109,6 @@
                 ]
               },
               {
-                "Name": "Commentaire ASSU",
-                "Type": "Text",
-                "TextType": "textarea"
-              },
-              {
                 "Name": "Thème CRC/PSC",
                 "Type": "List",
                 "Items": [
@@ -7124,6 +7119,11 @@
                   "Produits",
                   "Manager la protection"
                 ]
+              },
+              {
+                "Name": "Commentaire ASSU",
+                "Type": "Text",
+                "TextType": "textarea"
               },
               {
                 "Name": "Numéro vivier",
