@@ -13,21 +13,19 @@
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3"/>
     <PackageReference Include="ServiceStack.Text.Core" Version="1.0.43"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.1.2"/>
+    <PackageReference Include="System.Data.SqlClient" Version="*"/>
   </ItemGroup>
-
-<ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SQLite">
       <Version>1.0.1</Version>
     </PackageReference>
-<PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
       <Version>1.0.1</Version>
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-   <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.Dotnet" Version="1.0.0" />
-
-</ItemGroup>
-<ItemGroup>
-<DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0" />
-</ItemGroup>
-
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.Dotnet" Version="1.0.0"/>
+  </ItemGroup>
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0"/>
+  </ItemGroup>
 </Project>
