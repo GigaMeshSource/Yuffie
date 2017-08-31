@@ -275,7 +275,21 @@ $(function() {
     }
 
     var copySummary = function(element) {
-        $("[summary=" + element.Key + "]").html(element.Value)
+        var summary = $("[summary=" + element.Key + "]")
+        if(summary.is("ul")) {
+            summary.empty()
+            for(var i = 0; i < element.Value.length; ++i) {
+                var subelement = element.Value[i]
+                var id = ""
+                for(var property in subelement) {
+                    id = id + " " + subelement[property]
+                }
+                summary.append("<li><div class='chip'>" + id + "</div></li>")
+            }
+        }
+        else {
+            summary.html(element.Value)
+        }
     }
 
     $("[watch]").each(function(index, watchElement) {

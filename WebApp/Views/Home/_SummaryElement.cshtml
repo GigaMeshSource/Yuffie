@@ -26,11 +26,7 @@
 
     @if(Model.Type == "SubElement")
     {
-         <div parent-element="@(Model.Name)">
-            @foreach(var e in Model.Elements) {
-                Html.RenderPartial("_SummaryElement", e);
-            }
-        </div>
+        <ul summary="@(elementId)"></ul>
     }
     @if(Model.Type == "Tree") 
     {
