@@ -125,6 +125,44 @@
     color:black !important;
   }
 
+  /* Localisation */
+
+  [tree-selected="1"]:hover {
+    background-color: #1976d2; 
+  }
+
+  [tree-selected="1"] {
+    background-color: #1e88e5; 
+  }
+
+  [bind-to=" Code agence"] > p {
+    font-size:20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    background-color: #fafafa !important;
+  }
+
+  [bind-to="Code agence"] > p {
+    font-size:20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    background-color: #fafafa !important;
+  }
+
+  [bind-to="Codes agence"] > p {
+    font-size:20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    background-color: #fafafa !important;
+  }
+
+  [bind-to=" Codes agence"] > p {
+    font-size:20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    background-color: #fafafa !important;
+  }
+
   /* Date & Time */
 
   #con_Durée > div {
@@ -325,9 +363,4 @@
     -webkit-transform: scale(1, 1);
     transform: scale(1, 1);
   }
-}
-
-
-[tree-selected="1"] {
-  background-color: blue; 
 }

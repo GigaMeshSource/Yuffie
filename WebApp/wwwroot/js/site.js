@@ -102,7 +102,7 @@
                 summary.html("Aucune valeur saisie")
             }
             else {
-                summary.html(element.Value + "<i class='material-icon'>done</i>")
+                summary.html(element.Value + " <i class='material-icons'>done</i>")
             }
         }
     }
