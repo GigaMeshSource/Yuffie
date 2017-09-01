@@ -289,7 +289,7 @@
                     $('#modal_validate [error-msg]').addClass("hide")
                     $('#modal_validate [validate-modal-form]').addClass("hide")
                     setTimeout(function() {
-                        window.location = "~/home/index"             
+                        window.location = "index"             
                     }, 5000);
                 }
                 else 
