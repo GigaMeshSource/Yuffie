@@ -237,7 +237,7 @@ $(function() {
 
     var processChange = function() {
         initEffect();
-         for(var i = 0; i < rules.length; ++i) {
+        for(var i = 0; i < rules.length; ++i) {
             var rule = rules[i]
             console.log("Testing rule : " + rule.Key)
             var result = true
@@ -279,17 +279,27 @@ $(function() {
         var summary = $("[summary=" + element.Key + "]")
         if(summary.is("div")) {
             summary.empty()
-            for(var i = 0; i < element.Value.length; ++i) {
-                var subelement = element.Value[i]
-                var id = ""
-                for(var property in subelement) {
-                    id = id + " " + subelement[property]
+            if(element.Value == null || element.Value.length == 0) {
+                summary.append("<p>Aucune valeur saisie</p>")
+            }
+            else {
+                for(var i = 0; i < element.Value.length; ++i) {
+                    var subelement = element.Value[i]
+                    var id = ""
+                    for(var property in subelement) {
+                        id = id + " " + subelement[property]
+                    }
+                    summary.append("<div class='col s3'><div class='chip'>" + id + "</div></div>")
                 }
-                summary.append("<div class='col s3'><div class='chip'>" + id + "</div></div>")
             }
         }
         else {
-            summary.html(element.Value)
+            if(element.Value == null || element.Value == "") {
+                summary.html("Aucune valeur saisie")
+            }
+            else {
+                summary.html(element.Value + "<i class='material-icon'>done</i>")
+            }
         }
     }
 
@@ -405,6 +415,8 @@ $(function() {
                 copySummary(e)
             })
         }
+        if(element != null)
+            copySummary(element)
     })
 
     $("[tree-select]").click(function(evt) {
@@ -501,15 +513,15 @@ $(function() {
         aftershow: function(){} //Function for after opening timepicker
       });
 
-    $(".yuffieNextButton").click(function(e) {
+    $("[next-button]").click(function(e) {
         var parent = $($(e.target).parents("li"));
         var next = parent.next();
         if(next.is("li")) {
-            next.find(".collapsible-header").click();
+            $(next.find(".collapsible-header")[0]).click();
         }
         else {
             var id = parent.parents(".page").attr("id");
-            $("li.tab a[href='#" + id + "']").parents("li").next().find("a").click()
+            $($("li.tab a[href='#" + id + "']").parents("li").next().find("a")[0]).click()
         }
     })
 

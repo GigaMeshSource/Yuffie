@@ -32,7 +32,7 @@
                                     }
                                 }
                             </div>
-                                <a class="waves-effect waves-light btn yuffieNextButton" value="next">Suivant</a>
+                                <a next-button class="waves-effect waves-light btn yuffieNextButton" value="next">Suivant</a>
                         </div>
                     </li>
                 }
@@ -54,7 +54,7 @@
                                 {
                                     var section = page.Sections[sectionIndex];
                                     <li>
-                                        <div class="collapsible-header active"><b>@(page.Name) - </b> @(section.Name)</div>
+                                        <div class="collapsible-header active">@(section.Name)</div>
                                         <div class="collapsible-body" id="page@(pageIndex)_section@(sectionIndex)">
                                             <div class="row">
                                                 @if(section.Elements != null)
@@ -73,7 +73,7 @@
                     </li>
                 }
             </ul>
-             <a validate-form class="waves-effect waves-light btn yuffieNextButton" value="valider">Valider</a>
+             <a validate-form class="waves-effect waves-light btn" value="valider">Valider</a>
         </div>
     }
 </div>
