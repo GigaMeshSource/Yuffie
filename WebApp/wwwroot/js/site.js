@@ -1,200 +1,4 @@
-﻿var rules = [
-{
-    "Key": "Service DCO - FOR - NO IP",
-    "Impacted": ["Intervention IP", "Thème", "Sous thème", "Sujet", "Thème CRC/PSC"],
-    "StartingEffect": {
-        "Css": {
-            "display": "block"
-        }
-    },
-    "Conditions": [{
-        "Key": "Service DCO",
-        "Value": "FOR",
-    }],
-    "Effect": {
-        "Css": {
-            "display": "none"
-        }
-    }
-},
-{
-    "Key": "Type d'intervention - Animation - NO Lieu formation",
-    "Impacted": ["Lieu formation"],
-    "StartingEffect": {
-        "Css": {
-            "display": "block"
-        }
-    },
-    "Conditions": [{
-        "Key": "Type d'intervention",
-        "Value": "Animation",
-    }],
-    "Effect": {
-        "Css": {
-            "display": "none"
-        }
-    }
-},
-{
-    "Key": "Service DCO - IP",
-    "Impacted": [   "CDN", 
-                    "SG", 
-                    "CRC", "PSC", 
-                    "ASSU", "Type d'intervention", "Intervention IP", "Formation", "Type d'intervention 2",
-                    "Code Agence", "Numéro vivier", "Fonction CRC/PSC"
-                ],
-    "StartingEffect": {
-        "Css": {
-            "display": "none"
-        }
-    },
-    "Conditions": [{
-        "Key": "Service DCO",
-        "Value": "IP",
-    }],
-    "Effect": {
-        "Css": {
-            "display": "block"
-        }
-    }
-},
-// {
-//     "Key": "Service DCO - IP ET Distrib SG",
-//     "Impacted": ["SG UC", "SG Agence", "SG Code Agence"],
-//     "StartingEffect": {
-//         "Css": {
-//             "display": "block"
-//         }
-//     },
-//     "Conditions": [{
-//         "Key": "Service DCO",
-//         "Value": "IP",
-//     },
-//     {
-//         "Key": "Distributeur",
-//         "Value": "SG",
-//     }],
-//     "Effect": {
-//         "Css": {
-//             "display": "none"
-//         }
-//     }
-// },
-// {
-//     "Key": "Service DCO - IP ET Distrib CDN",
-//     "Impacted": ["CDN GROUPE", "CDN AGENCES", "CDN Code AGENCES"],
-//     "StartingEffect": {
-//         "Css": {
-//             "display": "block"
-//         }
-//     },
-//     "Conditions": [{
-//         "Key": "Service DCO",
-//         "Value": "IP",
-//     },
-//     {
-//         "Key": "Distributeur",
-//         "Value": "CDN",
-//     }],
-//     "Effect": {
-//         "Css": {
-//             "display": "none"
-//         }
-//     }
-// },
-{
-    "Key": "Service DCO - SG",
-    "Impacted": ["SG", "CRC", "PSC"],
-    "StartingEffect": {
-        "Css": {
-            "display": "none"
-        }
-    },
-    "Conditions": [{
-        "Key": "Service DCO",
-        "Value": "ANI SG",
-    }],
-    "Effect": {
-        "Css": {
-            "display": "block"
-        }
-    }
-},
-{
-    "Key": "Service DCO - CDN",
-    "Impacted": ["CDN"],
-    "StartingEffect": {
-        "Css": {
-            "display": "none"
-        }
-    },
-    "Conditions": [{
-        "Key": "Service DCO",
-        "Value": "ANI CDN",
-    }],
-    "Effect": {
-        "Css": {
-            "display": "block"
-        }
-    }
-},
-{
-    "Key": "Service DCO - FOR",
-    "Impacted": ["ASSU", "Type d'intervention", "Intervention IP", "Formation", "Type d'intervention 2"],
-    "StartingEffect": {
-        "Css": {
-            "display": "none"
-        }
-    },
-    "Conditions": [{
-        "Key": "Service DCO",
-        "Value": "FOR",
-    }],
-    "Effect": {
-        "Css": {
-            "display": "block"
-        }
-    }
-},
-{
-    "Key": "Durée - heure spécifique",
-    "Impacted": ["Date de fin", "Heure début", "Heure fin"],
-    "StartingEffect": {
-        "Css": {
-            "display": "none"
-        }
-    },
-    "Conditions": [{
-        "Key": "Durée",
-        "Value": "Heure spécifique",
-    }],
-    "Effect": {
-        "Css": {
-            "display": "block"
-        }
-    }
-},
-{
-    "Key": "Distributeur - PSC/CRC",
-    "Impacted": ["Fonction CRC/PSC"],
-    "StartingEffect": {
-        "Css": {
-            "display": "none"
-        }
-    },
-    "Conditions": [{
-        "Key": "Distributeur",
-        "Value": ["PSC", "CRC"],
-    }],
-    "Effect": {
-        "Css": {
-            "display": "block"
-        }
-    }
-}
-]
-
-$(function() {
+﻿$(function() {
     var elements = []
 
     var formatKey = function(key) {
@@ -289,7 +93,7 @@ $(function() {
                     for(var property in subelement) {
                         id = id + " " + subelement[property]
                     }
-                    summary.append("<div class='col s3'><div class='chip'>" + id + "</div></div>")
+                    summary.append("<div class='col s3'><div chip-for='" + (element.Value.length - 1) + "' class='chip'>" + id + "</div></div>")
                 }
             }
         }
@@ -409,7 +213,7 @@ $(function() {
 
                 e.Value.push(obj)
                 
-                $("#con_" + e.Key + " [watch-list]").append("<div class='chip'>" + id + "<i class='close material-icons'>close</i></div>")
+                $("#con_" + e.Key + " [watch-list]").append("<div chip-for='" + (e.Value.length - 1) + "' class='chip'>" + id + "<i chip-close='"+e.Key+"' class='close material-icons'>close</i></div>")
 
                 processChange()
                 copySummary(e)
@@ -476,6 +280,20 @@ $(function() {
         });
     })
 
+    $("body").on("click", "[chip-close]", function(evt) {
+        evt.stopPropagation()
+        var target = $(evt.target)
+        var key = target.attr("chip-close")
+        var element = getElement(key)
+        var index = $(target.parents("[chip-for]")[0]).attr("chip-for")
+
+        if(element.Value != null && index > -1) {
+            element.Value.splice(index);
+            $("[chip-for='" + index + "']").remove();
+        }
+        copySummary(element)
+    })
+
 
     $('select').material_select();
     
@@ -536,6 +354,7 @@ $(function() {
     }
     exceptions();
 })
+var rules = []
 
 var exceptions = function() {
     
