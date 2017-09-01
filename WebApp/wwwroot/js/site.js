@@ -225,6 +225,9 @@
 
     $("[tree-select]").click(function(evt) {
         var target = $(evt.target)
+        $(target.parents("ul")[0]).find("[tree-selected=1]").attr("tree-selected", "0")
+        target.attr("tree-selected", "1")
+
         var bindings = target.parents("[bind-to]")
         for(var i = 0; i < bindings.length; ++i) {
             var binding =$(bindings[i])
@@ -293,6 +296,8 @@
         }
         copySummary(element)
     })
+
+    $(".not-collapse").on("click", function(e) { e.stopPropagation(); });
 
 
     $('select').material_select();
