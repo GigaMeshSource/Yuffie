@@ -54,7 +54,7 @@ namespace WebApp.Controllers
                       using (var reader = await sqlCommand.ExecuteReaderAsync())
                         {
                             while (reader.Read())
-                            {                           
+                            {
                                 entity.Id = reader.GetInt32(0);
                                 entity.Date = reader.GetDateTime(1);
                                 entity.Value = reader.GetString(2);
@@ -82,6 +82,7 @@ namespace WebApp.Controllers
             try {
                 using (var connection = new SqlConnection(@"Server=tcp:anime-co-db.database.windows.net,1433;Initial Catalog=yuffie-anim;Persist Security Info=False;User ID=azureworker;Password=Tennis94;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30"))
                 {
+                    //useless to open with using ?
                     connection.Open();
                     using (var sqlCommand = new SqlCommand("INSERT INTO JsonFile VALUES(@Date, @Json)" , connection))
                     {
@@ -89,7 +90,8 @@ namespace WebApp.Controllers
                         sqlCommand.Parameters.Add(new SqlParameter("Json", data));
 
                          sqlCommand.ExecuteNonQuery();
-                    }   
+                    }
+                    connection.Close();   
                 }
             }
             catch (Exception ex)
@@ -108,16 +110,6 @@ namespace WebApp.Controllers
         {
             public string Key {get;set;}
             public object Value {get;set;}
-        }
-
-        public class Conseiller {
-            public Dictionary<string, object>[] dico {get;set;}
-        }
-        
-        public class Intervenants {
-            // public  Dictionary<object,object> intervenants {get;set;}
-            // public Conseiller conseiller {get;set;}
-            public List<YuffieFrontValue> values {get;set;}
         }
     }
 }
