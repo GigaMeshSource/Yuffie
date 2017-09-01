@@ -263,8 +263,8 @@
     })
 
     initEffect()
-    
-    $("[validate-form]").click(function(){
+
+    var sendData = function() {
         var toSend = []
         for(var i in elements) {
             var e = elements[i]
@@ -273,15 +273,51 @@
             }
         }
         console.log(toSend)
+
+        var error = function(error) {
+            $('#modal_validate [error-msg]').removeClass("hide")
+            $('#modal_validate [success-msg]').addClass("hide")            
+            $('#modal_validate [validate-modal-form]').removeClass("hide")
+        }
         $.ajax({
             type: "POST",
             url: "/Home/PushData",
             data: "data=" + JSON.stringify(convertToDictionary(toSend)),
-            success: function() {
-                window.location = window.location.href
-            }
+            success: function(result, response) {
+                if(result.status == 200) {
+                    $('#modal_validate [success-msg]').removeClass("hide")
+                    $('#modal_validate [error-msg]').addClass("hide")
+                    $('#modal_validate [validate-modal-form]').addClass("hide")
+                    setTimeout(function() {
+                        window.location = "~/home/index"             
+                    }, 5000);
+                }
+                else 
+                {
+                    console.log("error")
+                    error()
+                }
+            },
+            error: error
         });
+    }
+    
+    $("[validate-form]").click(function(){
+        $('#modal_validate [success-msg]').addClass("hide")        
+        $('#modal_validate [error-msg]').addClass("hide")
+        $('#modal_validate [validate-modal-form]').addClass("hide")
+        $('#modal_validate').modal();
+        setTimeout(sendData, 2000)
     })
+
+    $("[validate-modal-form]").click(function(){
+        $('#modal_validate [success-msg]').addClass("hide")        
+        $('#modal_validate [error-msg]').addClass("hide")
+        $('#modal_validate [validate-modal-form]').addClass("hide")
+        sendData()
+    })
+
+
 
     $("body").on("click", "[chip-close]", function(evt) {
         evt.stopPropagation()

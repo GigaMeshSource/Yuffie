@@ -94,12 +94,12 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                var res = ex.Message;
+                return NotFound(ex);
             }
-            return Redirect("/Home/Index");
+            return Ok();
         }
         
-        public IActionResult Error()
+        public IActionResult Errore()
         {
             return View();
         }
