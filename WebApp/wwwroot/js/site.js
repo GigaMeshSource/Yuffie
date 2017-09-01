@@ -283,7 +283,7 @@
             type: "POST",
             url: "/Home/PushData",
             data: "data=" + JSON.stringify(convertToDictionary(toSend)),
-            success: function(result, response) {
+            success: function(wtf, response, result) {
                 if(result.status == 200) {
                     $('#modal_validate [success-msg]').removeClass("hide")
                     $('#modal_validate [error-msg]').addClass("hide")
