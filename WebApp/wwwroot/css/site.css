@@ -125,6 +125,12 @@
     color:black !important;
   }
 
+  /* Date & Time */
+
+  #con_Durée > div {
+    width:100%;
+  }
+
   /* Participants */
 
   .chipsContainer {
@@ -134,7 +140,19 @@
 
   .chips .input {
     width: 160px !important;
-}
+  }
+
+  /* Thème */
+
+  #con_Commentaire_ASSU > div {
+    width:100%;
+  }
+
+  /* Summary */ 
+
+  #page3 > div > a {
+    text-align: center;
+  }
 
   /* OVERWRITE MATERIAL CSS MIN WIDTH FOR MOBILE */
   .tabs .tab {
