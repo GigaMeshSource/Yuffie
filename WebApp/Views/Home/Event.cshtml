@@ -74,9 +74,21 @@
                 }
             </ul>
             <div class="center">
-                <a validate-form class="waves-effect waves-light btn" value="valider">Valider</a>
+                <a validate-form data-target="modal_validate" class="waves-effect waves-light btn modal-trigger" value="valider">Valider</a>
             </div>
         </div>
     }
 
 </div>
+ <!-- Modal Structure -->
+  <div id="modal_validate" class="modal">
+    <div class="modal-content">
+      <h4>Envoie des données</h4>
+      <p>Veuillez patienter, nos experts enregistrent les informations...</p>
+      <p error-msg>C'est Dommage... Une erreur est survenue ! Veuillez réessayer.</p>
+      <p success-msg>C'est un succès ! Vous allez être redirigé dans 5 secondes.</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" validate-modal-form class="modal-action waves-effect waves-green btn-flat">Réessayez</a>
+    </div>
+  </div>

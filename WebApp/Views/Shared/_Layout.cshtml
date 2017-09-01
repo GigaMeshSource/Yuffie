@@ -10,12 +10,8 @@
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="~/lib/materialize5/css/materialize.css"  media="screen,projection"/>
 
-    <environment names="Development">
-        <link rel="stylesheet" href="~/css/site.css" />
-    </environment>
-    <environment names="Staging,Production">
-        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    </environment>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/projects/animco/css/event.css" asp-append-version="true"/>
 </head>
 <body>
     <header>
@@ -45,6 +41,9 @@
 
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/projects/animco/js/rules.js" asp-append-version="true"></script>
+    <script src="~/projects/animco/js/exceptions.js" asp-append-version="true"></script>
+    
     <script type="text/javascript" src="~/lib/materialize5/js/materialize.min.js"></script>
 
     @RenderSection("Scripts", required: false)

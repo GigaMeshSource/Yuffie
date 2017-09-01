@@ -326,3 +326,8 @@
     transform: scale(1, 1);
   }
 }
+
+
+[tree-selected="1"] {
+  background-color: blue; 
+}
