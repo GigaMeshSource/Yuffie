@@ -97,7 +97,8 @@
                 "Co-animation",
                 "Observation",
                 "Intervenant Principal"
-              ]
+              ],
+              "Default": "Intervenant Principal"
             },
             {
               "Name": "Co-animateur",

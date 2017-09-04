@@ -127,6 +127,7 @@
         elements.push(element);
 
         if(watchElement.is("input") || watchElement.is("select")) {
+            element.Value = watchElement.val()
             watchElement.change(function() {
                 var e = getElement(watchElement.attr("watch"))
                 if(e == null && parentId != null) {
@@ -225,8 +226,7 @@
 
     $("[tree-select]").click(function(evt) {
         var target = $(evt.target)
-        $(target.parents("ul")[0]).find("[tree-selected=1]").attr("tree-selected", "0")
-        target.attr("tree-selected", "1")
+        var alreadySelected = target.attr("tree-selected") == "1";
 
         var bindings = target.parents("[bind-to]")
         for(var i = 0; i < bindings.length; ++i) {
@@ -238,7 +238,7 @@
                     var bindToClean = formatKey(child.attr("bind-to"))
                     var e = getElement(bindToClean)
                     if(e != null) {
-                        e.Value = ""
+                        e.Value = null
                         copySummary(e)
                     }
                 }
@@ -250,16 +250,29 @@
                     Key: bindTo,
                     Value: null
                 }
+                elements.push(e)
             }
-            elements.push(e)
-            if(binding.find("span a").length == 1) {
-                e.Value = target.html()
+            if((i == 0 && !alreadySelected) || i > 0) {
+                if(binding.find("span a").length == 1) {
+                    e.Value = target.html()
+                }
+                else {
+                    e.Value = binding.find(".collapsible-header").html()
+                }
             }
             else {
-                e.Value = binding.find(".collapsible-header").html()
+                e.Value = null
             }
             copySummary(e)
         }
+        $(target.parents("ul")[0]).find("[tree-selected=1]").attr("tree-selected", "0")
+        if(alreadySelected) {
+            target.attr("tree-selected", "0")
+        }
+        else {
+            target.attr("tree-selected", "1")
+        }
+        
     })
 
     initEffect()

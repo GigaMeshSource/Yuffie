@@ -364,3 +364,7 @@
     transform: scale(1, 1);
   }
 }
+
+p[summary] {
+  height:31px;
+}
