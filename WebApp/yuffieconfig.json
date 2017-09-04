@@ -224,7 +224,7 @@
             {
               "Name": "SG",
               "Type": "Tree",
-              "Levels": [ "SG DR", "SG DEC", "SG UC", "SG Agence" ],
+              "Levels": [ "SG DR", "SG DEC", "SG UC", "SG Agences" ],
               "Tree": [
                 {
                     "BindTo":"SG DR",
