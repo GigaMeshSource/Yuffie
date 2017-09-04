@@ -1,6 +1,6 @@
 @model List<Yuffie.WebApp.Models.TreeData>
 
-<ul class="collapsible" data-collapsible="accordion">
+<ul class="collapsible tree-select" data-collapsible="accordion">
     @foreach(var treeData in Model) 
     {
         <li bind-to="@(treeData.BindTo)">

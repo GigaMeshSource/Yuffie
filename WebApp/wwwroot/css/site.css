@@ -365,6 +365,12 @@
   }
 }
 
-p[summary] {
-  height:31px;
+.tree-select .collapsible-body {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 0px;
+}
+.tree-select .collapsible-body ul {
+  margin-top:0;
+  margin-bottom:0;
 }
