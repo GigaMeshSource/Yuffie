@@ -11,6 +11,7 @@ using ServiceStack;
 using Yuffie.WebApp;
 using Yuffie.WebApp.Models;
 using System.Data.SqlClient;
+using OfficeOpenXml;
 
 namespace WebApp.Controllers
 {
@@ -40,10 +41,89 @@ namespace WebApp.Controllers
         {
             return View("Admin");
         }
+        private static string RemoveSpecialCharacters(string str)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < str.Length; i++)
+            {
+                    if (str[i] != '{' && str[i] != '\\' && str[i] != '}')
+                    {
+                        sb.Append(str[i]);
+                    }
+            }
+
+            return sb.ToString();
+        }
+        private string CreateHeader(string[] Splitstr, string separator)
+        {
+            var header = "";
+            foreach(var str in Splitstr)
+            {
+                var cleanStr = RemoveSpecialCharacters(str);
+                var tmp = cleanStr.Split(':');
+                if (tmp.Count() < 2)
+                    continue;
+                if (tmp.Count() >= 3) {
+                    header += separator + tmp[1];
+                }
+                else {
+                    header += separator + tmp[0];
+                }
+            }
+            return header;
+        }
+
+        private string Migrate(List<Entity> Entity)
+        {
+            var separator = ";";
+            var csvData = "";
+            var header = "Id;Date;Value";
+            var tmpCounsel = "";
+            string[] counsel;
+            List<string> list = new List<string>();
+            
+            try {
+                foreach (var item in Entity)
+                {
+                    item.Value.Trim();
+                    csvData += item.Id + separator + item.Date + separator;
+                    var splitStr = item.Value.Split(',');
+                    var Header = CreateHeader(splitStr, separator);
+                    foreach (var str in splitStr)
+                    {
+                        var cleanStr = RemoveSpecialCharacters(str);
+                        var tmp = cleanStr.Split(':');
+                        if (tmp.Count() < 2)
+                            continue;
+                        if (tmp[0] == "Conseiller") {
+                            counsel = cleanStr.Split('}');
+                            
+                            continue;
+                        }
+                        else {
+                            list.Add(tmp[1]);
+                        }
+                    }
+
+                    foreach (var l in list)
+                    {
+                        tmpCounsel += separator + l;
+                        tmpCounsel += "\n";
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                var toto = ex.Message;
+            }        
+            return header + "\n" + csvData;
+        }
+
 
         public async Task<IActionResult> Download()
         {
-           var entity = new Entity();
+           var entity = new List<Entity>();
 
             try {
                 using (var connection = new SqlConnection(@"Server=tcp:anime-co-db.database.windows.net,1433;Initial Catalog=yuffie-anim;Persist Security Info=False;User ID=azureworker;Password=Tennis94;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30"))
@@ -55,9 +135,12 @@ namespace WebApp.Controllers
                         {
                             while (reader.Read())
                             {
-                                entity.Id = reader.GetInt32(0);
-                                entity.Date = reader.GetDateTime(1);
-                                entity.Value = reader.GetString(2);
+                                var e = new Entity();
+                                e.Id = reader.GetInt32(0);
+                                e.Date = reader.GetDateTime(1);
+                                e.Value = reader.GetString(2);
+
+                                entity.Add(e);
                             }
                         }
                     }
@@ -68,11 +151,10 @@ namespace WebApp.Controllers
             {
                 var res  = ex.Message;
             }
-            
+            var data = Migrate(entity);
              //write in csv file            
             var fileName = DateTime.Now.ToString("yyyy-MM-dd HH:mm") + ".csv";            
-            var fileData = UTF8Encoding.UTF8.GetBytes(entity.Value.ToCsv());
-                
+            var fileData = UTF8Encoding.UTF8.GetBytes(data);
             return File(fileData, "text/plain", fileName);
         }
 
@@ -100,6 +182,21 @@ namespace WebApp.Controllers
             }
             return Ok();
         }
+
+        // public async Task<IActionResult> PushData(string data)
+        // {
+        //     return Ok();
+        // }
+
+        // public async Task<IActionResult> Download()
+        // {
+        //     var entity = new Entity();
+
+        //     var fileName = DateTime.Now.ToString("yyyy-MM-dd HH:mm") + ".csv";            
+        //     var fileData = UTF8Encoding.UTF8.GetBytes(entity.Value.ToCsv());
+                
+        //     return File(fileData, "text/plain", fileName);
+        // } 
         
         public IActionResult Errore()
         {
