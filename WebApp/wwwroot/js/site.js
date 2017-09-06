@@ -210,7 +210,7 @@
                 });
                 if(obj.length == 0) return;
 
-                if(e.Value == null) e.Value = []
+                if(e.Value == null || e.Value.constructor !== Array) e.Value = []
 
                 e.Value.push(obj)
                 
