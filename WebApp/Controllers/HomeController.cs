@@ -11,7 +11,7 @@ using ServiceStack;
 using Yuffie.WebApp;
 using Yuffie.WebApp.Models;
 using System.Data.SqlClient;
-using OfficeOpenXml;
+
 
 namespace WebApp.Controllers
 {
@@ -76,50 +76,51 @@ namespace WebApp.Controllers
 
         private string Migrate(List<Entity> Entity)
         {
+            Newtonsoft.Json.Linq.JArray array = new Newtonsoft.Json.Linq.JArray();
+            var dataCsv = "";
+            var tmp = "";
             var separator = ";";
-            var csvData = "";
-            var header = "Id;Date;Value";
-            var tmpCounsel = "";
-            string[] counsel;
-            List<string> list = new List<string>();
-            
-            try {
-                foreach (var item in Entity)
+            bool repeat = false;
+            var first = "";
+            var last = "";
+
+             foreach (var item in Entity)
                 {
-                    item.Value.Trim();
-                    csvData += item.Id + separator + item.Date + separator;
-                    var splitStr = item.Value.Split(',');
-                    var Header = CreateHeader(splitStr, separator);
-                    foreach (var str in splitStr)
+                    var deserialized = JsonConvert.DeserializeObject<Dictionary<string, object>>(item.Value);
+                    foreach (var keyVal in deserialized)
                     {
-                        var cleanStr = RemoveSpecialCharacters(str);
-                        var tmp = cleanStr.Split(':');
-                        if (tmp.Count() < 2)
-                            continue;
-                        if (tmp[0] == "Conseiller") {
-                            counsel = cleanStr.Split('}');
-                            
-                            continue;
+                        if (keyVal.Value.GetType() == typeof(Newtonsoft.Json.Linq.JArray))
+                        {
+                            array = keyVal.Value as Newtonsoft.Json.Linq.JArray;
+                            repeat = true;
                         }
-                        else {
-                            list.Add(tmp[1]);
+
+                        if (keyVal.Value.GetType() == typeof(string))
+                        {
+                            if (repeat)
+                                last += (string)keyVal.Value + separator;
+                            else   
+                                first += (string)keyVal.Value + separator;
                         }
                     }
-
-                    foreach (var l in list)
+                    if (repeat)
                     {
-                        tmpCounsel += separator + l;
-                        tmpCounsel += "\n";
+                        foreach (var slot in array)
+                        {
+                            foreach(var elem in slot)
+                            {
+                                tmp += (string)elem + separator;
+                            }
+                            dataCsv += first + tmp + last + "\n";
+                            repeat = false;
+                        }
+                    }
+                    else {
+                        dataCsv += first + "\n";
                     }
                 }
-            }
-            catch(Exception ex)
-            {
-                var toto = ex.Message;
-            }        
-            return header + "\n" + csvData;
+            return dataCsv;
         }
-
 
         public async Task<IActionResult> Download()
         {
