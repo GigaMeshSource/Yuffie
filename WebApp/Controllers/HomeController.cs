@@ -55,32 +55,15 @@ namespace WebApp.Controllers
 
             return sb.ToString();
         }
-        private string CreateHeader(string[] Splitstr, string separator)
+        
+        private string Export(List<Entity> Entity)
         {
-            var header = "";
-            foreach(var str in Splitstr)
-            {
-                var cleanStr = RemoveSpecialCharacters(str);
-                var tmp = cleanStr.Split(':');
-                if (tmp.Count() < 2)
-                    continue;
-                if (tmp.Count() >= 3) {
-                    header += separator + tmp[1];
-                }
-                else {
-                    header += separator + tmp[0];
-                }
-            }
-            return header;
-        }
+            var array = new Newtonsoft.Json.Linq.JArray();
+            bool repeat = false;
 
-        private string Migrate(List<Entity> Entity)
-        {
-            Newtonsoft.Json.Linq.JArray array = new Newtonsoft.Json.Linq.JArray();
             var dataCsv = "";
             var tmp = "";
             var separator = ";";
-            bool repeat = false;
             var first = "";
             var last = "";
 
@@ -112,14 +95,43 @@ namespace WebApp.Controllers
                                 tmp += (string)elem + separator;
                             }
                             dataCsv += first + tmp + last + "\n";
-                            repeat = false;
                         }
+                        repeat = false;
                     }
                     else {
                         dataCsv += first + "\n";
                     }
                 }
             return dataCsv;
+        }
+
+        private void CreateHeader()
+        {
+            var header = "";
+            var separator = ";";
+
+            var json = System.IO.File.ReadAllText(@"yuffieconfig.json");
+            var deserializedObject = JsonConvert.DeserializeObject<YuffieConfiguration>(json);
+            foreach (var pages in deserializedObject.Pages)
+            {
+                foreach(var sections in pages.Sections)
+                {
+                    foreach (var element in sections.Elements)
+                    {
+                        if (element.Type == "List")
+                        {
+                            header += element.Name + separator;
+                        }
+                        if (element.Type == "SubElement")
+                        {
+                            foreach(var subElement in element.Elements)
+                            {
+                                header += subElement.Name;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public async Task<IActionResult> Download()
@@ -152,7 +164,8 @@ namespace WebApp.Controllers
             {
                 var res  = ex.Message;
             }
-            var data = Migrate(entity);
+            CreateHeader();
+            var data = Export(entity);
              //write in csv file            
             var fileName = DateTime.Now.ToString("yyyy-MM-dd HH:mm") + ".csv";            
             var fileData = UTF8Encoding.UTF8.GetBytes(data);
@@ -184,20 +197,6 @@ namespace WebApp.Controllers
             return Ok();
         }
 
-        // public async Task<IActionResult> PushData(string data)
-        // {
-        //     return Ok();
-        // }
-
-        // public async Task<IActionResult> Download()
-        // {
-        //     var entity = new Entity();
-
-        //     var fileName = DateTime.Now.ToString("yyyy-MM-dd HH:mm") + ".csv";            
-        //     var fileData = UTF8Encoding.UTF8.GetBytes(entity.Value.ToCsv());
-                
-        //     return File(fileData, "text/plain", fileName);
-        // } 
         
         public IActionResult Errore()
         {
