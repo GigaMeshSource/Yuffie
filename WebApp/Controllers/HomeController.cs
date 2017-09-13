@@ -19,7 +19,7 @@ namespace WebApp.Controllers
     {
         private IHostingEnvironment HostingEnv {get;set;}
         private readonly Yuffie.WebApp.Models.AppContext _context;
-
+        private List<Entity> Entity {get;set;}
 
         public HomeController(IHostingEnvironment hostingEnv, Yuffie.WebApp.Models.AppContext context)
         {
@@ -56,82 +56,192 @@ namespace WebApp.Controllers
             return sb.ToString();
         }
         
+        //stringbuilder instead of =+
         private string Export(List<Entity> Entity)
         {
             var array = new Newtonsoft.Json.Linq.JArray();
             bool repeat = false;
-
-            var dataCsv = "";
+ 
+            var dataCsv = CreateHeader() + "\n";
             var tmp = "";
             var separator = ";";
             var first = "";
             var last = "";
+            var header = CreateHeader().Split(';');
 
-             foreach (var item in Entity)
+            
+            foreach (var item in Entity)
+            {
+                var elements = YuffieApp.Config.Pages.SelectMany(p => p.Sections != null ? p.Sections.SelectMany(s => s.Elements) : new List<YCPSElement>()).ToList();
+                
+                var deserialized = JsonConvert.DeserializeObject<Dictionary<string, object>>(item.Value);
+                foreach (var element in elements)
                 {
-                    var deserialized = JsonConvert.DeserializeObject<Dictionary<string, object>>(item.Value);
-                    foreach (var keyVal in deserialized)
+                    var parsed = element.Name.Replace(" ", "_").Replace("'", "").Replace("/", "_");
+                    if (element.Type == "List" || element.Type == "Text")
                     {
-                        if (keyVal.Value.GetType() == typeof(Newtonsoft.Json.Linq.JArray))
-                        {
-                            array = keyVal.Value as Newtonsoft.Json.Linq.JArray;
-                            repeat = true;
-                        }
-
-                        if (keyVal.Value.GetType() == typeof(string))
+                       if (deserialized.ContainsKey(parsed))
                         {
                             if (repeat)
-                                last += (string)keyVal.Value + separator;
-                            else   
-                                first += (string)keyVal.Value + separator;
+                                last += deserialized[parsed] + separator;
+                            else
+                                first += deserialized[parsed] + separator;
                         }
-                    }
-                    if (repeat)
-                    {
-                        foreach (var slot in array)
+                        else 
                         {
-                            foreach(var elem in slot)
-                            {
-                                tmp += (string)elem + separator;
-                            }
-                            dataCsv += first + tmp + last + "\n";
+                            if (repeat)
+                                last += separator;
+                            else
+                                first += separator;
                         }
-                        repeat = false;
                     }
-                    else {
-                        dataCsv += first + "\n";
+                    if (element.Type == "SubElement")
+                    {
+                        var subElementEncode = element.Name.Replace(" ", "_").Replace("'", "").Replace("/", "_");
+                        if(deserialized.ContainsKey(subElementEncode))
+                        {
+                            array = deserialized[subElementEncode] as Newtonsoft.Json.Linq.JArray;
+                            if (array != null) 
+                            {
+                                repeat = true;       
+                            }
+                        }
+                        else
+                        {
+                            if (repeat)
+                                last += separator;
+                            else
+                                first += separator;
+                        }
+
                     }
+                    if (element.Type == "Tree")
+                    {
+                        foreach(var level in element.Levels)
+                        {
+                            var levelEncode = level.Replace(" ", "_").Replace("'", "").Replace("/", "_");
+                            if (deserialized.ContainsKey(levelEncode))
+                            {
+                                if (repeat)
+                                    last += deserialized[levelEncode] + separator;
+                                else
+                                    first += deserialized[levelEncode] + separator;
+                            }
+                            else 
+                            {
+                                if (repeat)
+                                    last += separator;
+                                else
+                                    first += separator;
+                            }
+                        }
+                    }
+                } 
+                if (repeat)
+                {
+                    foreach (var slot in array)
+                    {
+                        foreach(var elem in slot)
+                        {
+                            tmp += (string)elem + separator;
+                        }
+                        dataCsv += first + tmp + last + "\n";
+                        tmp = ""; 
+                    }
+                    first = "";
+                    last = "";
+                    repeat = false;
                 }
+                else
+                {
+                    dataCsv += first + "\n";
+                }
+            }            
             return dataCsv;
         }
 
-        private void CreateHeader()
+        private void Test(StringBuilder data, object obj = null)
+        {
+            if (obj != null)
+            {
+                var dico = obj as Dictionary<string, string>;
+                foreach (var key in dico)
+                {
+                    // check header
+                    data.Append(key.Value + ";");                    
+                }
+                return ;
+            }
+
+           Dictionary<string, object> deserializedObject;
+
+           foreach(var entity in Entity)
+           {
+               var first = "";
+               deserializedObject = JsonConvert.DeserializeObject<Dictionary<string, object>>(entity.Value);
+                foreach(var keyVal in deserializedObject)
+                {
+                    if (keyVal.Value.GetType() == typeof(string))
+                    {
+                        first += (string)keyVal.Value + ";";
+
+                        //data.Append((string)keyVal.Value + ";");
+                    }
+                    if (keyVal.Value.GetType() == typeof(Newtonsoft.Json.Linq.JArray))
+                    {
+                        var o = (Newtonsoft.Json.Linq.JArray)keyVal.Value;
+                        for(int i = 0; i < o.Count(); i++)
+                        {
+                            var csvData = new StringBuilder();
+                            Test(csvData, o[i]);
+                            data.Append(first);
+                            data.Append(csvData);
+                        }
+                    }
+                }
+                data.Append("\n");
+           }
+        }
+
+        private string CreateHeader()
         {
             var header = "";
             var separator = ";";
 
             var json = System.IO.File.ReadAllText(@"yuffieconfig.json");
             var deserializedObject = JsonConvert.DeserializeObject<YuffieConfiguration>(json);
+
             foreach (var pages in deserializedObject.Pages)
             {
                 foreach(var sections in pages.Sections)
                 {
                     foreach (var element in sections.Elements)
                     {
-                        if (element.Type == "List")
+                        if (element.Type == "List" || element.Type == "Text")
                         {
                             header += element.Name + separator;
                         }
                         if (element.Type == "SubElement")
                         {
+                            
                             foreach(var subElement in element.Elements)
                             {
-                                header += subElement.Name;
+                                header += subElement.Name + separator;
+                            }
+                        }
+                        if (element.Type == "Tree")
+                        {
+                            
+                            foreach(var tree in element.Levels)
+                            {
+                                header += tree + separator;
                             }
                         }
                     }
                 }
             }
+            return header;
+
         }
 
         public async Task<IActionResult> Download()
@@ -164,8 +274,8 @@ namespace WebApp.Controllers
             {
                 var res  = ex.Message;
             }
-            CreateHeader();
             var data = Export(entity);
+            // Test(new StringBuilder(), null);
              //write in csv file            
             var fileName = DateTime.Now.ToString("yyyy-MM-dd HH:mm") + ".csv";            
             var fileData = UTF8Encoding.UTF8.GetBytes(data);
