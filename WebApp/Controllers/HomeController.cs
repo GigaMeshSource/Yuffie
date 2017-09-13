@@ -61,14 +61,14 @@ namespace WebApp.Controllers
             var array = new Newtonsoft.Json.Linq.JArray();
             bool repeat = false;
  
-            var dataCsv = CreateHeader() + "\n";
-            var tmp = "";
-            var separator = ";";
-            var first = "";
-            var last = "";
-            var header = CreateHeader().Split(';');
-
             
+            var separator = ";";
+            var tmp = new StringBuilder();
+            var first = new StringBuilder();
+            var last = new StringBuilder();
+
+            var dataCsv = new StringBuilder(CreateHeader() + "\n");
+
             foreach (var item in Entity)
             {
                 var elements = YuffieApp.Config.Pages.SelectMany(p => p.Sections != null ? p.Sections.SelectMany(s => s.Elements) : new List<YCPSElement>()).ToList();
@@ -82,16 +82,16 @@ namespace WebApp.Controllers
                        if (deserialized.ContainsKey(parsed))
                         {
                             if (repeat)
-                                last += deserialized[parsed] + separator;
+                                last.Append(deserialized[parsed] + separator);
                             else
-                                first += deserialized[parsed] + separator;
+                                first.Append(deserialized[parsed] + separator);
                         }
                         else 
                         {
                             if (repeat)
-                                last += separator;
+                                last.Append(separator);
                             else
-                                first += separator;
+                                first.Append(separator);
                         }
                     }
                     if (element.Type == "SubElement")
@@ -106,9 +106,9 @@ namespace WebApp.Controllers
                         else
                         {
                             if (repeat)
-                                last += separator;
+                                last.Append(separator);
                             else
-                                first += separator;
+                                first.Append(separator);
                         }
 
                     }
@@ -120,16 +120,16 @@ namespace WebApp.Controllers
                             if (deserialized.ContainsKey(levelEncode))
                             {
                                 if (repeat)
-                                    last += deserialized[levelEncode] + separator;
+                                    last.Append(deserialized[levelEncode] + separator);
                                 else
-                                    first += deserialized[levelEncode] + separator;
+                                    first.Append(deserialized[levelEncode] + separator);
                             }
                             else 
                             {
                                 if (repeat)
-                                    last += separator;
+                                    last.Append(separator);
                                 else
-                                    first += separator;
+                                    first.Append(separator);
                             }
                         }
                     }
@@ -140,21 +140,22 @@ namespace WebApp.Controllers
                     {
                         foreach(var elem in slot)
                         {
-                            tmp += (string)elem + separator;
+                            tmp.Append((string)elem + separator);
                         }
-                        dataCsv += first + tmp + last + "\n";
-                        tmp = ""; 
+                        var line = first.ToString() + tmp.ToString() + last.ToString() + "\n";
+                        dataCsv.Append(line);
+                        tmp.Clear(); 
                     }
-                    first = "";
-                    last = "";
+                    first.Clear();
+                    last.Clear();
                     repeat = false;
                 }
                 else
                 {
-                    dataCsv += first + "\n";
+                    dataCsv.Append(first + "\n");
                 }
             }            
-            return dataCsv;
+            return dataCsv.ToString();
         }
 
         private string CreateHeader()
