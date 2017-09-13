@@ -19,7 +19,6 @@ namespace WebApp.Controllers
     {
         private IHostingEnvironment HostingEnv {get;set;}
         private readonly Yuffie.WebApp.Models.AppContext _context;
-        private List<Entity> Entity {get;set;}
 
         public HomeController(IHostingEnvironment hostingEnv, Yuffie.WebApp.Models.AppContext context)
         {
@@ -102,9 +101,7 @@ namespace WebApp.Controllers
                         {
                             array = deserialized[subElementEncode] as Newtonsoft.Json.Linq.JArray;
                             if (array != null) 
-                            {
-                                repeat = true;       
-                            }
+                                repeat = true;
                         }
                         else
                         {
@@ -160,49 +157,6 @@ namespace WebApp.Controllers
             return dataCsv;
         }
 
-        private void Test(StringBuilder data, object obj = null)
-        {
-            if (obj != null)
-            {
-                var dico = obj as Dictionary<string, string>;
-                foreach (var key in dico)
-                {
-                    // check header
-                    data.Append(key.Value + ";");                    
-                }
-                return ;
-            }
-
-           Dictionary<string, object> deserializedObject;
-
-           foreach(var entity in Entity)
-           {
-               var first = "";
-               deserializedObject = JsonConvert.DeserializeObject<Dictionary<string, object>>(entity.Value);
-                foreach(var keyVal in deserializedObject)
-                {
-                    if (keyVal.Value.GetType() == typeof(string))
-                    {
-                        first += (string)keyVal.Value + ";";
-
-                        //data.Append((string)keyVal.Value + ";");
-                    }
-                    if (keyVal.Value.GetType() == typeof(Newtonsoft.Json.Linq.JArray))
-                    {
-                        var o = (Newtonsoft.Json.Linq.JArray)keyVal.Value;
-                        for(int i = 0; i < o.Count(); i++)
-                        {
-                            var csvData = new StringBuilder();
-                            Test(csvData, o[i]);
-                            data.Append(first);
-                            data.Append(csvData);
-                        }
-                    }
-                }
-                data.Append("\n");
-           }
-        }
-
         private string CreateHeader()
         {
             var header = "";
@@ -222,16 +176,14 @@ namespace WebApp.Controllers
                             header += element.Name + separator;
                         }
                         if (element.Type == "SubElement")
-                        {
-                            
+                        {   
                             foreach(var subElement in element.Elements)
                             {
                                 header += subElement.Name + separator;
                             }
                         }
                         if (element.Type == "Tree")
-                        {
-                            
+                        {   
                             foreach(var tree in element.Levels)
                             {
                                 header += tree + separator;
