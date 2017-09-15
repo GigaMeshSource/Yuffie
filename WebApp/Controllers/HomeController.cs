@@ -11,7 +11,7 @@ using ServiceStack;
 using Yuffie.WebApp;
 using Yuffie.WebApp.Models;
 using System.Data.SqlClient;
-
+using Neo4j.Driver.V1;
 
 namespace WebApp.Controllers
 {
@@ -55,7 +55,6 @@ namespace WebApp.Controllers
             return sb.ToString();
         }
         
-        //stringbuilder instead of =+
         private string Export(List<Entity> Entity)
         {
             var array = new Newtonsoft.Json.Linq.JArray();
@@ -261,7 +260,7 @@ namespace WebApp.Controllers
         }
 
         
-        public IActionResult Errore()
+        public IActionResult Error()
         {
             return View();
         }
