@@ -18,12 +18,14 @@ namespace WebApp.Controllers
     public class HomeController : Controller
     {
         private IHostingEnvironment HostingEnv {get;set;}
-        private readonly Yuffie.WebApp.Models.AppContext _context;
+
+        private Graph Graph {get;set;}
 
         public HomeController(IHostingEnvironment hostingEnv, Yuffie.WebApp.Models.AppContext context)
         {
             HostingEnv = hostingEnv;
-            _context = context;    
+
+            Graph =  new Graph(new Uri("bolt://localhost:7687/"), "neo4j", "lolilol");
         }
 
         public IActionResult Index()
@@ -40,20 +42,6 @@ namespace WebApp.Controllers
         {
             return View("Admin");
         }
-        private static string RemoveSpecialCharacters(string str)
-        {
-            StringBuilder sb = new StringBuilder();
-
-            for (int i = 0; i < str.Length; i++)
-            {
-                    if (str[i] != '{' && str[i] != '\\' && str[i] != '}')
-                    {
-                        sb.Append(str[i]);
-                    }
-            }
-
-            return sb.ToString();
-        }
         
         private string Export(List<Entity> Entity)
         {
@@ -67,11 +55,13 @@ namespace WebApp.Controllers
             var last = new StringBuilder();
 
             var dataCsv = new StringBuilder(CreateHeader() + "\n");
+            
+            Graph.GetEntities();
 
             foreach (var item in Entity)
             {
-                var elements = YuffieApp.Config.Pages.SelectMany(p => p.Sections != null ? p.Sections.SelectMany(s => s.Elements) : new List<YCPSElement>()).ToList();
-                
+                var elements = YuffieApp.Config.Pages.SelectMany(p => p.Sections != null ? p.Sections.SelectMany(s => s.Elements) : new List<YCPSElement>()).ToList();                
+
                 var deserialized = JsonConvert.DeserializeObject<Dictionary<string, object>>(item.Value);
                 foreach (var element in elements)
                 {
@@ -226,8 +216,8 @@ namespace WebApp.Controllers
             {
                 var res  = ex.Message;
             }
+    
             var data = Export(entity);
-            // Test(new StringBuilder(), null);
              //write in csv file            
             var fileName = DateTime.Now.ToString("yyyy-MM-dd HH:mm") + ".csv";            
             var fileData = UTF8Encoding.UTF8.GetBytes(data);
@@ -238,24 +228,25 @@ namespace WebApp.Controllers
         public async Task<IActionResult> PushData(string data)
         {
             try {
-                using (var connection = new SqlConnection(@"Server=tcp:anime-co-db.database.windows.net,1433;Initial Catalog=yuffie-anim;Persist Security Info=False;User ID=azureworker;Password=Tennis94;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30"))
-                {
-                    //useless to open with using ?
-                    connection.Open();
-                    using (var sqlCommand = new SqlCommand("INSERT INTO JsonFile VALUES(@Date, @Json)" , connection))
-                    {
-                        sqlCommand.Parameters.Add(new SqlParameter("Date", DateTime.UtcNow));
-                        sqlCommand.Parameters.Add(new SqlParameter("Json", data));
+                Graph.CreateEntities(data);
+                // using (var connection = new SqlConnection(@"Server=tcp:anime-co-db.database.windows.net,1433;Initial Catalog=yuffie-anim;Persist Security Info=False;User ID=azureworker;Password=Tennis94;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30"))
+                // {
+                //     //useless to open with using ?
+                //     connection.Open();
+                //     using (var sqlCommand = new SqlCommand("INSERT INTO JsonFile VALUES(@Date, @Json)" , connection))
+                //     {
+                //         sqlCommand.Parameters.Add(new SqlParameter("Date", DateTime.UtcNow));
+                //         sqlCommand.Parameters.Add(new SqlParameter("Json", data));
 
-                         sqlCommand.ExecuteNonQuery();
-                    }
-                    connection.Close();   
-                }
+                //          sqlCommand.ExecuteNonQuery();
+                //     }
+                //     connection.Close();   
+                // }
             }
             catch (Exception ex)
             {
                 return NotFound(ex);
-            }
+             }
             return Ok();
         }
 
