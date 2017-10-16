@@ -217,7 +217,8 @@ namespace WebApp.Controllers
                 var res  = ex.Message;
             }
     
-            var data = Export(entity);
+            //var data = Export(entity);
+            var data = Graph.GetEntities();
              //write in csv file            
             var fileName = DateTime.Now.ToString("yyyy-MM-dd HH:mm") + ".csv";            
             var fileData = UTF8Encoding.UTF8.GetBytes(data);

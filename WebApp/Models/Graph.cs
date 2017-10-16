@@ -35,7 +35,8 @@ namespace Yuffie.WebApp.Models {
 
         public  void CreateEntities(string data)
         {
-            int id = 11;
+            int id = 0;
+            bool comma = true;
             var deserializedObject = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
             try
             {
@@ -56,32 +57,43 @@ namespace Yuffie.WebApp.Models {
                         id = Convert.ToInt32(request.FirstOrDefault().Values["ID(entity)"]);              
                     queryBuilder.Clear();
 
-                    queryBuilder.Append("MATCH (" + ENTITY_PARAM + ":" + ENTITY_NAME + ") WHERE ID(" + ENTITY_PARAM + ") = $pid\n");
+                    queryBuilder.Append("MATCH (" + ENTITY_PARAM + ":" + ENTITY_NAME + ") WHERE ID(" + ENTITY_PARAM + ") = $pid\n CREATE");
                     parameters.Add("pid", id);
 
                     foreach (var item in deserializedObject)
                     {
-                        if (deserializedObject.ContainsKey("Conseiller") && string.Equals(item.Key,"Conseiller"))
+                        if (deserializedObject.ContainsKey("Conseiller") && (string.Equals(item.Key,"Conseiller") || string.Equals(item.Key,"CONSEILLER")))
                         {
+                            var check = true;
                             var res = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(item.Value.ToString());
-                            query.Append("CREATE ( e: " + ENTITY_NAME + ")\n");                            
-
+                            query.Append("CREATE (e: " + ENTITY_NAME + "),\n");                            
+                            
                             foreach(var dico in res)
                             {
                                 foreach (var element in dico)
                                 {
-                                    query.Append("CREATE (e)-[:LINKS {name:'" + element.Key + "'}]->(:" + VALUE_NAME + " {" + VALUE_PROPERTY + ":'" + element.Value.ToString() + "'})\n");
+                                    if (check)
+                                        check = false;
+                                    else
+                                        query.Append(",\n"); 
+                                    query.Append("(e)-[:LINKS {name:'" + element.Key + "'}]->(:" + VALUE_NAME + " {" + VALUE_PROPERTY + ":'" + element.Value.ToString() + "'})");
                                 }
                             }
+                            query.Append("\nWITH e\nMATCH (" + ENTITY_PARAM + ":" + ENTITY_NAME + ") WHERE ID(" + ENTITY_PARAM + ") = $pid\n");
                             query.Append("CREATE (" + ENTITY_PARAM + ")-[:CONSEILLER]->(e)");
                             continue;
                         }
+                        if (comma)
+                            comma = false;
+                        else
+                            queryBuilder.Append(",\n");
 
-                        queryBuilder.Append(" CREATE (" + ENTITY_PARAM + ")-[:LINKS {name: '" + item.Key.ToUpper() + "'}]->");
-                        queryBuilder.Append("(:"+ VALUE_NAME + " {" + VALUE_PROPERTY + ": '"  + item.Value + "'})\n");
+                        queryBuilder.Append(" (" + ENTITY_PARAM + ")-[:LINKS {name: '" + item.Key.ToUpper() + "'}]->");
+                        queryBuilder.Append("(:"+ VALUE_NAME + " {" + VALUE_PROPERTY + ": '"  + item.Value + "'})");
+                       
                     }
-                    Console.WriteLine(queryBuilder.Append(query));
-
+                    
+                    Console.WriteLine(queryBuilder);
                     request.Clear();
                     request = session.WriteTransaction(tx => 
                     {
@@ -103,14 +115,19 @@ namespace Yuffie.WebApp.Models {
             }           
         }
 
-        public void GetEntities()
+        public string GetEntities()
         {
             var queryBuilder = new StringBuilder();
             var parameters = new Dictionary<string, object>();
+            var sb = new StringBuilder();            
+
             List<entity> entityList = new List<entity>();
             List<string> header = new List<string>();
             List<string> csvData = new List<string>();
+            List<string> arrayData = new List<string>();
 
+            Neo4j.Driver.V1.INode childNode = null;
+            Neo4j.Driver.V1.INode parentNode = null;
             try {
                 using (var session = _db.Session())
                 {
@@ -124,43 +141,72 @@ namespace Yuffie.WebApp.Models {
                     });
                     
                     // see response structure to create adequate model
+                    var e = new entity();
+
                     foreach (var item in request)
                     {
-                        foreach (var element in item.Values)
+                        if (item.Values.Count == 3)
                         {
-                            var e = new entity();
+                            Neo4j.Driver.V1.INode node = null;
+                            if (item.Values.ElementAt(0).Value is Neo4j.Driver.V1.INode)
+                                node = item.Values.ElementAt(0).Value as Neo4j.Driver.V1.INode;
 
-                            var obj = element.Value;
-                            var node = element.Value as Neo4j.Driver.V1.INode;
-                            object entity = null;
-                            if (node != null && node.Properties.Count > 0)
-                                entity = node;
-                            
-                            
-                            // if (obj is Neo4j.Driver.V1.INode)
-                            // {
-                            //     var startNode = obj as Neo4j.Driver.V1.INode;
-                            //     e.Id = startNode.Id;
-                            //     var relationship = item.Values[REL_PARAM] as Neo4j.Driver.V1.IRelationship;
-                            //     var endNode = item.Values[VALUE_PARAM] as Neo4j.Driver.V1.INode;
-                            //     e.Data.Add(relationship.Type, endNode.Labels);
-                            // }
-                            // entityList.Add(e);
+
+                            if (parentNode == null && item.Values.ElementAt(0).Value is Neo4j.Driver.V1.INode)
+                            {
+                                parentNode = item.Values.ElementAt(0).Value as Neo4j.Driver.V1.INode;
+                                if (parentNode != null && parentNode.Properties.Count > 0)
+                                {          
+                                    e.Id = parentNode.Id;
+                                    e.Date = parentNode.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
+                                }
+                            }
+                            if (e.Id != node.Id) //&& node.Properties.Count == 0
+                            {
+                                childNode = item.Values.ElementAt(0).Value as Neo4j.Driver.V1.INode;
+                                var childRelationship = item.Values[REL_PARAM] as Neo4j.Driver.V1.IRelationship;
+                                var childRelationshipProperty = childRelationship.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();                             
+                                header.Add(childRelationshipProperty);
+                                var childValue = item.Values[VALUE_PARAM] as Neo4j.Driver.V1.INode;
+                                var childValueProperty = childValue.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
+                                arrayData.Add(childValueProperty);
+                                continue;
+                            }
 
                             var relationship = item.Values[REL_PARAM] as Neo4j.Driver.V1.IRelationship;
-                            var relationshipProperty = relationship.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
-                            header.Add(relationshipProperty);
-                            var value = item.Values[VALUE_PARAM] as Neo4j.Driver.V1.INode;
-                            var valueProperty = value.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
-                            csvData.Add(valueProperty);
+
+                            if (relationship.Properties.Count > 0)
+                            {
+                                var relationshipProperty = relationship.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
+                                header.Add(relationshipProperty);
+                                var value = item.Values[VALUE_PARAM] as Neo4j.Driver.V1.INode;
+                                var valueProperty = value.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
+                                csvData.Add(valueProperty);
+                            }
                         }
-                        csvData.Add("\n");
                     }
+                    csvData.AddRange(arrayData);
+                    csvData.Add("\n");
+                    foreach(var h in header)
+                    {
+                        sb.Append(h);
+                        sb.Append(";");
+                    }
+                    sb.Append("\n");
+                    foreach (var d in csvData)
+                    {
+                        sb.Append(d);
+                        sb.Append(";");
+                    }
+                    csvData.Clear();
+                    sb.Append("\n");
+                    
+                    return sb.ToString();
                 }
             }
             catch(Exception ex)
             {
-                var err = ex.Message;
+                return ex.Message;
             }
         }
     }
