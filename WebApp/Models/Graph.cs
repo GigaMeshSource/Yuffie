@@ -17,6 +17,10 @@ namespace Yuffie.WebApp.Models {
         public const string VALUE_PROPERTY = "value";
         public const string REL_NAME = "NAME";
         public const string REL_PARAM = "rel";
+
+        private StringBuilder Header = new StringBuilder();
+        private StringBuilder sbFormat = new StringBuilder();
+
         private IDriver _db;
 
         public Graph(Uri uri, string login, string password)
@@ -38,6 +42,7 @@ namespace Yuffie.WebApp.Models {
             int id = 0;
             bool comma = true;
             var deserializedObject = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
+
             try
             {
                 var query = new StringBuilder();
@@ -93,7 +98,6 @@ namespace Yuffie.WebApp.Models {
                        
                     }
                     
-                    Console.WriteLine(queryBuilder);
                     request.Clear();
                     request = session.WriteTransaction(tx => 
                     {
@@ -118,21 +122,22 @@ namespace Yuffie.WebApp.Models {
         public string GetEntities()
         {
             var queryBuilder = new StringBuilder();
-            var parameters = new Dictionary<string, object>();
-            var sb = new StringBuilder();            
+            var parameters = new Dictionary<string, object>();       
 
             List<entity> entityList = new List<entity>();
-            List<string> header = new List<string>();
+           
             List<string> csvData = new List<string>();
             List<string> arrayData = new List<string>();
 
-            Neo4j.Driver.V1.INode childNode = null;
-            Neo4j.Driver.V1.INode parentNode = null;
+            INode childNode = null;
+            INode parentNode = null;
+            bool headerComplete = false;
+
             try {
                 using (var session = _db.Session())
                 {
                     queryBuilder.Append("MATCH (" + ENTITY_PARAM + ")-[" + REL_PARAM + "]->(" + VALUE_PARAM + ") RETURN "
-                    + ENTITY_PARAM + "," + REL_PARAM + ", " + VALUE_PARAM);
+                    + ENTITY_PARAM + "," + REL_PARAM + ", " + VALUE_PARAM + " ORDER BY ID(" + VALUE_PARAM + ") ASC");
                     
                     var request = session.ReadTransaction(tx =>
                     {
@@ -140,6 +145,7 @@ namespace Yuffie.WebApp.Models {
                         return result.ToList();
                     });
                     
+                    // CreateHeader(request);
                     // see response structure to create adequate model
                     var e = new entity();
 
@@ -147,67 +153,122 @@ namespace Yuffie.WebApp.Models {
                     {
                         if (item.Values.Count == 3)
                         {
-                            Neo4j.Driver.V1.INode node = null;
-                            if (item.Values.ElementAt(0).Value is Neo4j.Driver.V1.INode)
-                                node = item.Values.ElementAt(0).Value as Neo4j.Driver.V1.INode;
+                            INode node = null;
+                            if (item.Values.ElementAt(0).Value is INode)
+                                node = item.Values.ElementAt(0).Value as INode;
 
 
-                            if (parentNode == null && item.Values.ElementAt(0).Value is Neo4j.Driver.V1.INode)
+                            if (!string.IsNullOrEmpty(e.Date) && node.Properties.Count > 0)
                             {
-                                parentNode = item.Values.ElementAt(0).Value as Neo4j.Driver.V1.INode;
+                                if (!string.Equals(e.Date, node.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString()))
+                                {
+                                    if (csvData.Count > 0)
+                                    {
+                                        csvData.AddRange(arrayData);
+                                        Format(csvData);
+                                        parentNode = null;
+
+                                        csvData.Clear();
+                                        arrayData.Clear();
+                                        headerComplete = true;
+                                    }
+                                }
+                            }
+                            
+
+                            if (parentNode == null && item.Values.ElementAt(0).Value is INode)
+                            {
+                                parentNode = item.Values.ElementAt(0).Value as INode;
                                 if (parentNode != null && parentNode.Properties.Count > 0)
                                 {          
                                     e.Id = parentNode.Id;
                                     e.Date = parentNode.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
                                 }
                             }
-                            if (e.Id != node.Id) //&& node.Properties.Count == 0
+
+                            var relationship = item.Values[REL_PARAM] as IRelationship;
+                            if (!headerComplete && relationship.Properties.Count > 0)
+                                AddItemToHeader(relationship.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString());
+
+                            if (e.Id != node.Id && relationship.Properties.Count > 0)
                             {
-                                childNode = item.Values.ElementAt(0).Value as Neo4j.Driver.V1.INode;
-                                var childRelationship = item.Values[REL_PARAM] as Neo4j.Driver.V1.IRelationship;
-                                var childRelationshipProperty = childRelationship.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();                             
-                                header.Add(childRelationshipProperty);
-                                var childValue = item.Values[VALUE_PARAM] as Neo4j.Driver.V1.INode;
+                                childNode = item.Values.ElementAt(0).Value as INode;     
+                                
+                                var childValue = item.Values[VALUE_PARAM] as INode;
                                 var childValueProperty = childValue.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
                                 arrayData.Add(childValueProperty);
                                 continue;
                             }
 
-                            var relationship = item.Values[REL_PARAM] as Neo4j.Driver.V1.IRelationship;
-
                             if (relationship.Properties.Count > 0)
                             {
-                                var relationshipProperty = relationship.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
-                                header.Add(relationshipProperty);
-                                var value = item.Values[VALUE_PARAM] as Neo4j.Driver.V1.INode;
+                                var value = item.Values[VALUE_PARAM] as INode;
                                 var valueProperty = value.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
                                 csvData.Add(valueProperty);
+                                
                             }
+                            if (relationship.Type == "CONSEILLER")
+                                continue;
+                            
                         }
                     }
                     csvData.AddRange(arrayData);
-                    csvData.Add("\n");
-                    foreach(var h in header)
-                    {
-                        sb.Append(h);
-                        sb.Append(";");
-                    }
-                    sb.Append("\n");
-                    foreach (var d in csvData)
-                    {
-                        sb.Append(d);
-                        sb.Append(";");
-                    }
-                    csvData.Clear();
-                    sb.Append("\n");
-                    
-                    return sb.ToString();
+                    Format(csvData);
+                    Header.Append("\n");
+                    Header.Append(sbFormat.ToString());
+                    return Header.ToString();
                 }
             }
             catch(Exception ex)
             {
                 return ex.Message;
             }
+        }
+
+        private void AddItemToHeader(string item)
+        {
+            Header.Append(item);
+            Header.Append(";");
+        }
+
+        private void CreateHeader(List<IRecord> header)
+        {
+            var tmp = new StringBuilder();
+
+            foreach (var item in header)
+            {
+                if (item.Values.Count == 3)
+                {
+                    var relationship = item.Values[REL_PARAM] as Neo4j.Driver.V1.IRelationship;
+                    if (relationship.Properties.Count > 0)
+                    {
+                        var title = relationship.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
+                        Header.Append(title);
+                        Header.Append(";");
+                    }
+                }
+            }
+
+            // if (tmp.Length > Header.Length)
+            // {
+            //     Header = new StringBuilder(tmp.ToString());
+
+            //     Header.Clear();
+            //     Header.Append(tmp);
+            // }
+
+            Header.Append("\n");
+        }
+
+        private void Format(List<string> csvData)
+        {
+            foreach (var d in csvData)
+            {
+                sbFormat.Append(d);
+                sbFormat.Append(";");
+            }
+
+            sbFormat.Append("\n");
         }
     }
 }

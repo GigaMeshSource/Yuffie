@@ -190,32 +190,32 @@ namespace WebApp.Controllers
         {
            var entity = new List<Entity>();
 
-            try {
-                using (var connection = new SqlConnection(@"Server=tcp:anime-co-db.database.windows.net,1433;Initial Catalog=yuffie-anim;Persist Security Info=False;User ID=azureworker;Password=Tennis94;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30"))
-                {
-                    connection.Open();
-                    using (var sqlCommand = new SqlCommand("SELECT * FROM JsonFile" , connection))
-                    {
-                      using (var reader = await sqlCommand.ExecuteReaderAsync())
-                        {
-                            while (reader.Read())
-                            {
-                                var e = new Entity();
-                                e.Id = reader.GetInt32(0);
-                                e.Date = reader.GetDateTime(1);
-                                e.Value = reader.GetString(2);
+            // try {
+            //     using (var connection = new SqlConnection(@"Server=tcp:anime-co-db.database.windows.net,1433;Initial Catalog=yuffie-anim;Persist Security Info=False;User ID=azureworker;Password=Tennis94;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30"))
+            //     {
+            //         connection.Open();
+            //         using (var sqlCommand = new SqlCommand("SELECT * FROM JsonFile" , connection))
+            //         {
+            //           using (var reader = await sqlCommand.ExecuteReaderAsync())
+            //             {
+            //                 while (reader.Read())
+            //                 {
+            //                     var e = new Entity();
+            //                     e.Id = reader.GetInt32(0);
+            //                     e.Date = reader.GetDateTime(1);
+            //                     e.Value = reader.GetString(2);
 
-                                entity.Add(e);
-                            }
-                        }
-                    }
-                    connection.Close();  
-                }
-            }
-            catch(Exception ex)
-            {
-                var res  = ex.Message;
-            }
+            //                     entity.Add(e);
+            //                 }
+            //             }
+            //         }
+            //         connection.Close();  
+            //     }
+            // }
+            // catch(Exception ex)
+            // {
+            //     var res  = ex.Message;
+            // }
     
             //var data = Export(entity);
             var data = Graph.GetEntities();
