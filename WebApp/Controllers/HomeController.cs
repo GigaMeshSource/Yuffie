@@ -56,7 +56,7 @@ namespace WebApp.Controllers
 
             var dataCsv = new StringBuilder(CreateHeader() + "\n");
             
-            Graph.GetEntities();
+            //Graph.GetEntities();
 
             foreach (var item in Entity)
             {
@@ -217,7 +217,7 @@ namespace WebApp.Controllers
             //     var res  = ex.Message;
             // }
     
-            //var data = Export(entity);
+            // var data = Export(entity);
             var data = Graph.GetEntities();
              //write in csv file            
             var fileName = DateTime.Now.ToString("yyyy-MM-dd HH:mm") + ".csv";            

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Neo4j.Driver.V1;
 using Newtonsoft.Json;
+using WebApp;
 
 namespace Yuffie.WebApp.Models {
 
@@ -19,8 +20,15 @@ namespace Yuffie.WebApp.Models {
         public const string REL_PARAM = "rel";
 
         private StringBuilder Header = new StringBuilder();
+        private List<string> ListHeader = new List<string>();
+        private Dictionary<string, List<string>> csv = new Dictionary<string, List<string>>();
         private StringBuilder sbFormat = new StringBuilder();
-
+        private StringBuilder arrayFormat = new StringBuilder();
+        private List<string> headerArrayData;
+        private Dictionary<string, List<string>> arrayData = new Dictionary<string, List<string>>();
+        private static readonly string[] tab = {""};
+        int consultantCount = 0;
+        
         private IDriver _db;
 
         public Graph(Uri uri, string login, string password)
@@ -128,10 +136,10 @@ namespace Yuffie.WebApp.Models {
            
             List<string> csvData = new List<string>();
             List<string> arrayData = new List<string>();
+            var arrayHeader = new StringBuilder();
 
             INode childNode = null;
             INode parentNode = null;
-            bool headerComplete = false;
 
             try {
                 using (var session = _db.Session())
@@ -145,10 +153,11 @@ namespace Yuffie.WebApp.Models {
                         return result.ToList();
                     });
                     
-                    // CreateHeader(request);
+                    CreateHeader();
                     // see response structure to create adequate model
                     var e = new entity();
-
+                    var cnt = 1;
+                   
                     foreach (var item in request)
                     {
                         if (item.Values.Count == 3)
@@ -157,24 +166,15 @@ namespace Yuffie.WebApp.Models {
                             if (item.Values.ElementAt(0).Value is INode)
                                 node = item.Values.ElementAt(0).Value as INode;
 
-
                             if (!string.IsNullOrEmpty(e.Date) && node.Properties.Count > 0)
                             {
                                 if (!string.Equals(e.Date, node.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString()))
                                 {
-                                    if (csvData.Count > 0)
-                                    {
-                                        csvData.AddRange(arrayData);
-                                        Format(csvData);
-                                        parentNode = null;
-
-                                        csvData.Clear();
-                                        arrayData.Clear();
-                                        headerComplete = true;
-                                    }
+                                    parentNode = null;
+                                   
+                                   
                                 }
                             }
-                            
 
                             if (parentNode == null && item.Values.ElementAt(0).Value is INode)
                             {
@@ -187,37 +187,39 @@ namespace Yuffie.WebApp.Models {
                             }
 
                             var relationship = item.Values[REL_PARAM] as IRelationship;
-                            if (!headerComplete && relationship.Properties.Count > 0)
-                                AddItemToHeader(relationship.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString());
 
-                            if (e.Id != node.Id && relationship.Properties.Count > 0)
-                            {
-                                childNode = item.Values.ElementAt(0).Value as INode;     
-                                
-                                var childValue = item.Values[VALUE_PARAM] as INode;
-                                var childValueProperty = childValue.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
-                                arrayData.Add(childValueProperty);
-                                continue;
-                            }
 
-                            if (relationship.Properties.Count > 0)
+                            if (e.Id == node.Id && relationship.Properties.Count > 0)
                             {
+                                var relationshipName = relationship.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
+
                                 var value = item.Values[VALUE_PARAM] as INode;
                                 var valueProperty = value.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
-                                csvData.Add(valueProperty);
+                                csv[relationshipName].Add(valueProperty);
                                 
-                            }
-                            if (relationship.Type == "CONSEILLER")
                                 continue;
-                            
+                            }
+
+                            if (relationship.Type == "CONSEILLER")
+                            {
+                                foreach (var element in csv)
+                                {
+                                    if (element.Value.Count() < cnt)
+                                    {
+                                        element.Value.Add("");
+                                    }
+                                }
+                                    
+                                cnt++;
+                                CreateConsultantData(relationship.EndNodeId);
+                                continue;
+                            }
                         }
                     }
-                    csvData.AddRange(arrayData);
-                    Format(csvData);
-                    Header.Append("\n");
-                    Header.Append(sbFormat.ToString());
-                    return Header.ToString();
                 }
+                FormatCSV();
+                
+                return sbFormat.ToString();
             }
             catch(Exception ex)
             {
@@ -225,39 +227,192 @@ namespace Yuffie.WebApp.Models {
             }
         }
 
-        private void AddItemToHeader(string item)
+        private void CreateConsultantData(long id)
         {
-            Header.Append(item);
-            Header.Append(";");
+            var parameters = new Dictionary<string, object>();
+            var nb = 0;
+            var dico = new Dictionary<string, List<string>>();
+
+            try 
+            {
+                using (var session = _db.Session())
+                {
+                    var query = "MATCH (" + ENTITY_PARAM + ")-[" + REL_PARAM + "]->(" + VALUE_PARAM + ") WHERE ID(" + ENTITY_PARAM + ") = $pid RETURN " + ENTITY_PARAM + ", " + REL_PARAM + ",  " + VALUE_PARAM
+                    + " ORDER BY " + VALUE_PARAM + " ASC";
+
+                    var queryCountNodes = "MATCH(" + ENTITY_PARAM + ")-[" + REL_PARAM + "]->(" + VALUE_PARAM + ") WHERE ID(" + ENTITY_PARAM + ") = $pid RETURN COUNT(*)";
+                    parameters.Add("pid", id);
+
+                    var responseCountNodes = session.ReadTransaction(tx =>
+                    {
+                        var result = tx.Run(queryCountNodes.ToString(), new {pid = id});
+                        return result.ToList();
+                    });
+
+                     if (responseCountNodes != null)
+                        nb = Convert.ToInt32(responseCountNodes.FirstOrDefault().Values["COUNT(*)"]);              
+
+
+                    var response = session.ReadTransaction(tx =>
+                    {
+                        var result = tx.Run(query.ToString(), new {pid = id});
+                        return result.ToList();
+                    });
+
+
+                    string[] header =  {"Nom_conseiller", "Prénom_conseiller", "Matricule_conseiller", "Fonction_conseiller", "Code_Agence", "Fonction_CRC_PSC"};
+                    arrayData = new Dictionary<string, List<string>>();
+                    foreach(var h in header)
+                    {
+                        arrayData.Add(h, new List<string>());
+                    }
+
+                    foreach (var item in response)
+                    {
+                        if (item.Values.Count == 3)
+                        {
+                            INode node = null;
+                            if (item.Values.ElementAt(0).Value is INode)
+                                node = item.Values.ElementAt(0).Value as INode;
+
+                            var relationship = item.Values[REL_PARAM] as IRelationship;
+                            if (relationship.Properties.Count > 0)
+                            {
+                                var relationshipName = relationship.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
+
+                                var value = item.Values[VALUE_PARAM] as INode;
+                                var valueProperty = value.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
+                                if (arrayData.Keys.Contains(relationshipName))
+                                {
+                                    arrayData[relationshipName].Add(valueProperty);
+                                }
+
+                                // arrayData.Add(relationshipName, new List<string>{valueProperty});
+
+
+                                // var relationshipName = relationship.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
+                                // var value = item.Values[VALUE_PARAM] as INode;
+                                // var valueProperty = value.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
+                                // arrayData.Add(valueProperty);
+                                // headerArrayData.Add(relationshipName);
+                            }                                    
+                        }
+                    }
+                     
+                    foreach (var array in arrayData)
+                    {
+                        var tmp = array.Value.Count();
+
+                        if (tmp > consultantCount)
+                        {
+                            consultantCount = tmp;
+                        }
+                    }                    
+
+                    for(var i = 0; i < consultantCount; ++i)
+                    {
+                        foreach(var element in arrayData)
+                        {  
+                            if (element.Value.Count() < consultantCount)
+                            {
+                                element.Value.Add("");
+                            } 
+                        }
+                    }
+
+                    headerArrayData = new List<string>();
+                    for (var x = 0; x < consultantCount;++x)
+                    {
+                        foreach (var item in arrayData)
+                        {
+                            headerArrayData.Add(item.Key);
+                        }   
+                    }
+                }
+                var cnt = arrayData.Values.FirstOrDefault().Count();
+                for(var x = 0; x < cnt; x++)
+                {
+                    foreach(var array in arrayData)
+                    {
+                        arrayFormat.Append(array.Value[x]);
+                        arrayFormat.Append(";");
+                    }    
+                }              
+                arrayFormat.Append("\n");
+            }
+            catch(Exception ex)
+            {
+                var err = ex.Message;
+            }
         }
 
-        private void CreateHeader(List<IRecord> header)
-        {
-            var tmp = new StringBuilder();
 
-            foreach (var item in header)
+
+        private void FormatCSV()
+        {
+            var separator = ";";
+            var index = 0;
+
+            try 
             {
-                if (item.Values.Count == 3)
+                foreach(var item in ListHeader)
                 {
-                    var relationship = item.Values[REL_PARAM] as Neo4j.Driver.V1.IRelationship;
-                    if (relationship.Properties.Count > 0)
+                    sbFormat.Append(item + separator);
+                }
+
+                foreach (var h in headerArrayData)
+                {
+                    sbFormat.Append(h + separator);
+                }
+                sbFormat.Append("\n");
+
+                var cnt = csv.Values.FirstOrDefault().Count();
+                var arrayTab = arrayFormat.ToString().Split('\n');
+                for(var x = 0; x < cnt; x++)
+                {
+                    foreach(var item in csv)
                     {
-                        var title = relationship.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
-                        Header.Append(title);
-                        Header.Append(";");
+                        sbFormat.Append(item.Value[x] + separator);
+                    }
+                    sbFormat.Append(arrayTab[x]);
+                    sbFormat.Append("\n");
+                }
+               
+            
+            }
+            
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+            }
+        }
+
+        private void CreateHeader()
+        {
+            var separator = ";";
+            var elements = YuffieApp.Config.Pages.SelectMany(p => p.Sections != null ? p.Sections.SelectMany(s => s.Elements) : new List<YCPSElement>()).ToList();
+
+            foreach (var element in elements)
+            {
+                if (element.Type == "List" || element.Type == "Text")
+                {
+                    var parsed = element.Name.Replace(" ", "_").Replace("'", "").Replace("/", "_");
+                    Header.Append(parsed.ToUpper() + separator);
+                    csv.Add(parsed.ToUpper(), new List<string>());
+                    ListHeader.Add(parsed.ToUpper());
+                }
+
+                if (element.Type == "Tree")
+                {   
+                    foreach(var tree in element.Levels)
+                    {
+                        var parsed = tree.Replace(" ", "_").Replace("'", "").Replace("/", "_");   
+                        Header.Append(parsed.ToUpper() + separator);
+                        csv.Add(parsed.ToUpper(), new List<string>());
+                        ListHeader.Add(parsed.ToUpper());
                     }
                 }
             }
-
-            // if (tmp.Length > Header.Length)
-            // {
-            //     Header = new StringBuilder(tmp.ToString());
-
-            //     Header.Clear();
-            //     Header.Append(tmp);
-            // }
-
-            Header.Append("\n");
         }
 
         private void Format(List<string> csvData)
@@ -268,6 +423,18 @@ namespace Yuffie.WebApp.Models {
                 sbFormat.Append(";");
             }
 
+            sbFormat.Append("\n");
+        }
+
+        private void FormatDico()
+        {
+            foreach (var item in csv)
+            {
+                foreach (var l in item.Value)
+                {
+                    sbFormat.Append(l + ";");
+                }
+            }
             sbFormat.Append("\n");
         }
     }
