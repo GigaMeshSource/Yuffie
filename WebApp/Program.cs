@@ -16,7 +16,7 @@ namespace WebApp
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
-                .UseUrls("http://0.0.0.0:80")
+                .UseUrls("http://*:8080")
                 .Build();
 
             host.Run();
