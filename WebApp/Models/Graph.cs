@@ -123,7 +123,7 @@ namespace Yuffie.WebApp.Models {
             }
             catch(Exception ex)
             {
-                var err = ex.Message;
+                var err = ex.Message + " " + ex.StackTrace;
             }           
         }
 
@@ -223,7 +223,7 @@ namespace Yuffie.WebApp.Models {
             }
             catch(Exception ex)
             {
-                return ex.Message;
+                return ex.Message + " " + ex.StackTrace;
             }
         }
 
