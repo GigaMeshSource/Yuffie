@@ -25,7 +25,7 @@ namespace WebApp.Controllers
         {
             HostingEnv = hostingEnv;
 
-            Graph =  new Graph(new Uri("bolt://localhost:7689/"), "", "");
+            Graph =  new Graph(new Uri("bolt://localhost:7687/"), "", "");
         }
 
         public IActionResult Index()
