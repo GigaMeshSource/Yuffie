@@ -23,11 +23,11 @@ namespace WebApp.Controllers
 
         public HomeController(IHostingEnvironment hostingEnv, Yuffie.WebApp.Models.AppContext context)
         {
+
             HostingEnv = hostingEnv;
 
-            Graph =  new Graph(new Uri("bolt://localhost:7687/"), "", "");
+            Graph =  new Graph(new Uri("bolt://database:7687/"), "", "");
         }
-
         public IActionResult Index()
         {
             return View("Index", YuffieApp.Config);
