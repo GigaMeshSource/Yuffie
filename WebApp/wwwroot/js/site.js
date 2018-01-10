@@ -257,7 +257,11 @@
                     e.Value = target.html()
                 }
                 else {
-                    e.Value = binding.find(".collapsible-header").html()
+                    let headers = binding.find(".collapsible-header");
+                    if(headers.length > 0)
+                        e.Value = $(headers[0]).html()
+                    else
+                        e.Value = binding.find("p").html()
                 }
             }
             else {
