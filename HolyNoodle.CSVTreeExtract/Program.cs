@@ -36,14 +36,14 @@ namespace HolyNoodle.CSVTreeExtract
             var levels = new string[] { };
 
             Console.WriteLine("Going through lines");
-            i = 0
+            var lineIndex = 0;
             foreach (var line in lines)
             {
                 var fields = line.Split(";");
-                if(i == 0) 
+                if(lineIndex == 0) 
                 {
                     levels = fields;
-                    ++i;
+                    ++lineIndex;
                     continue;
                 }
 
