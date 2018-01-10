@@ -36775,31 +36775,6 @@
               ]
             },
             {
-              "Name": "CRC",
-              "Type": "List",
-              "Items": [
-                "Nanterre",
-                "Lille",
-                "Lyon",
-                "Marseille"
-              ]
-            },
-            {
-              "Name": "PSC",
-              "Type": "List",
-              "Items": [
-                "SCS Lyon",
-                "Scs 2",
-                "Succ SdF",
-                "Succ Strasbourg",
-                "Succ Caen",
-                "Succ Orléans",
-                "Succ Nice",
-                "PSC xxx"
-              ]
-            },
-
-            {
               "Name": "ASSU",
               "Type": "List",
               "Items": [
@@ -36887,33 +36862,6 @@
                 "UC",
                 "CRC",
                 "PSC"
-              ]
-            },
-            {
-              "Name": "Lieu formation",
-              "Type": "List",
-              "Items": [
-                "DR DE BORDEAUX",
-                "DR DE LILLE",
-                "DR DE LYON",
-                "DR DE MARSEILLE",
-                "DR DE RENNES",
-                "DR DE STRASBOURG",
-                "DR ILE DE FRANCE NORD",
-                "DR ILE DE FRANCE SUD",
-                "Val de Fontenay",
-                "La défense",
-                "BANQUE LAYDERNIER",
-                "BANQUE COURTOIS",
-                "BANQUE RHONES ALPES",
-                "BANQUE TARNEAUD",
-                "BANQUE KOLB",
-                "BANQUE NUGER",
-                "CDN - ILE DE FRANCE",
-                "CDN - LES PROVINCES DU NORD",
-                "CDN - REGIONS NORD METROPOLE",
-                "CDN - REGIONS NORD OUEST",
-                "SOCIETE MARSEILLAISE DE CREDIT"
               ]
             }
           ]
@@ -37081,18 +37029,6 @@
                 "Santé Co",
                 "Retraite",
                 "Collecte"
-              ]
-            },
-            {
-              "Name": "Thème CRC/PSC",
-              "Type": "List",
-              "Items": [
-                "IARD",
-                "Prev",
-                "Apporteurs + PJ / Certi",
-                "Double écoute",
-                "Produits",
-                "Manager la protection"
               ]
             },
             {
