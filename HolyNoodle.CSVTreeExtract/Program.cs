@@ -33,13 +33,20 @@ namespace HolyNoodle.CSVTreeExtract
 
             Console.WriteLine("Reading csv File");
             var lines = File.ReadAllLines(CSV_PATH);
-
-            var levels = new string[] {  "Distributeur","Sous-distributeur","Niveau 1","Niveau 2 ","Niveau 3","Niveau 4","Codes Agences" };
+            var levels = new string[] { };
 
             Console.WriteLine("Going through lines");
+            i = 0
             foreach (var line in lines)
             {
                 var fields = line.Split(";");
+                if(i == 0) 
+                {
+                    levels = fields;
+                    ++i;
+                    continue;
+                }
+
                 var key = "";
                 for(var i = 0; i < fields.Length; ++i)
                 {
