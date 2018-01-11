@@ -4,15 +4,14 @@
     var formatKey = function(key) {
         return key.replace(/ /ig, "_").replace(/\'/ig, "").replace(/\//ig, "_")
     }
-    var getElement = function(key){
-        key = formatKey(key)
-
+    var elementDic = {}
+    var initElementDic = function(){
         for(var i = 0; i < elements.length; ++i) {
-            if(elements[i].Key == key) {
-                return elements[i]
-            }
+            elementDic[elements[i].Key] = elements[i]
         }
-        return null
+    }
+    var getElement = function(key){
+        return elementDic[formatKey(key)];
     }
 
     var processEffect = function(impacted, effect) {
@@ -410,6 +409,7 @@
         }
         return dic;
     }
+    initElementDic();
     exceptions();
 })
 var rules = []
