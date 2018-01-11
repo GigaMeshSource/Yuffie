@@ -374,3 +374,8 @@
   margin-top:0;
   margin-bottom:0;
 }
+p[tree-select] {
+  font-size:1.2em;
+  padding: 5px;
+  border-bottom: 1px lightgrey solid;
+}

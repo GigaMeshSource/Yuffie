@@ -211,21 +211,6 @@
               ]
             },
             {
-              "Name": "Distributeur",
-              "Type": "List",
-              "Items": [
-                "SG",
-                "SG PRIV",
-                "CDN",
-                "CDN PRIV",
-                "CRC",
-                "PSC",
-                "ASSU",
-                "ORADEA",
-                "IBFS"
-              ]
-            },
-            {
               "Name": "Localisation",
               "Type": "Tree",
               "Levels": ["Localisation Distributeur","Localisation Sous-distributeur","Niveau 1","Niveau 2 ","Niveau 3","Niveau 4","Codes "],

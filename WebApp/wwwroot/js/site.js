@@ -89,8 +89,14 @@
                 for(var i = 0; i < element.Value.length; ++i) {
                     var subelement = element.Value[i]
                     var id = ""
+                    var limit = 2;
+                    var index = 0;
                     for(var property in subelement) {
                         id = id + " " + subelement[property]
+                        index++;
+                        if(index >= limit) {
+                            break;
+                        }
                     }
                     summary.append("<div class='col s3'><div chip-for='" + (element.Value.length - 1) + "' class='chip'>" + id + "</div></div>")
                 }
@@ -125,7 +131,7 @@
         }
         elements.push(element);
 
-        if(watchElement.is("input") || watchElement.is("select")) {
+        if(watchElement.is("input") || watchElement.is("select") || watchElement.is("textarea")) {
             element.Value = watchElement.val()
             watchElement.change(function() {
                 var e = getElement(watchElement.attr("watch"))
