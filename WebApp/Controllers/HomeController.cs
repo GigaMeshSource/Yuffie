@@ -25,9 +25,10 @@ namespace WebApp.Controllers
         {
 
             HostingEnv = hostingEnv;
-
-            // Graph =  new Graph(new Uri("bolt://database:7687/"), "neo4j", "lolilol");
-            Graph =  new Graph(new Uri("bolt://localhost:7687/"), "neo4j", "lolilol");
+            // run on docker containers
+            Graph =  new Graph(new Uri("bolt://database:7687/"), "", "");
+            //run without docker
+            // Graph =  new Graph(new Uri("bolt://localhost:7687/"), "neo4j", "lolilol");
             
         }
         public IActionResult Index()
