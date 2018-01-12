@@ -60,6 +60,7 @@ namespace Yuffie.WebApp.Models {
                 
                 using (var session = _db.Session())
                 {
+                    // var request = session.Run(queryBuilder.ToString());
                     var request = session.WriteTransaction(tx =>
                     {
                         var result = tx.Run(queryBuilder.ToString());
@@ -107,6 +108,8 @@ namespace Yuffie.WebApp.Models {
                     }
                     
                     request.Clear();
+                    // session.Run(queryBuilder.ToString(), new {pid = id});
+                    // session.Run(query.ToString(), new {pid = id});
                     request = session.WriteTransaction(tx => 
                     {
                         var result = tx.Run(queryBuilder.ToString(), new {pid = id});
@@ -147,6 +150,7 @@ namespace Yuffie.WebApp.Models {
                     queryBuilder.Append("MATCH (" + ENTITY_PARAM + ")-[" + REL_PARAM + "]->(" + VALUE_PARAM + ") RETURN "
                     + ENTITY_PARAM + "," + REL_PARAM + ", " + VALUE_PARAM + " ORDER BY ID(" + VALUE_PARAM + ") ASC");
                     
+                    // var request = session.Run(queryBuilder.ToString());
                     var request = session.ReadTransaction(tx =>
                     {
                         var result = tx.Run(queryBuilder.ToString());
@@ -191,13 +195,20 @@ namespace Yuffie.WebApp.Models {
 
                             if (e.Id == node.Id && relationship.Properties.Count > 0)
                             {
-                                var relationshipName = relationship.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
+                                try {
+                                    var relationshipName = relationship.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
 
-                                var value = item.Values[VALUE_PARAM] as INode;
-                                var valueProperty = value.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
-                                csv[relationshipName].Add(valueProperty);
-                                
-                                continue;
+                                    var value = item.Values[VALUE_PARAM] as INode;
+                                    var valueProperty = value.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
+                                    if(!csv.ContainsKey(relationshipName))
+                                        continue;
+                                    csv[relationshipName].Add(valueProperty);
+                                    continue;
+                                }
+                                catch (Exception ex)
+                                {
+                                    return ex.Message + " " + ex.StackTrace;
+                                }                                
                             }
 
                             if (relationship.Type == "CONSEILLER")
@@ -223,7 +234,7 @@ namespace Yuffie.WebApp.Models {
             }
             catch(Exception ex)
             {
-                return ex.Message + " " + ex.StackTrace;
+                return "KIKOO " + ex.Message + " " + ex.StackTrace;
             }
         }
 
