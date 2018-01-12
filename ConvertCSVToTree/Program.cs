@@ -65,7 +65,7 @@ namespace ConvertCSVToTree
                     var parentKey = string.IsNullOrEmpty(key) ? "root":key;
                     key += field + "_";
 
-                    if (!nodes.ContainsKey(key))
+                    if (!nodes.ContainsKey(key) && !string.IsNullOrEmpty(field))
                     {
                         nodes.Add(key, new Node { BindTo = levels[i], Name = field });
                         var parent = nodes[parentKey];
