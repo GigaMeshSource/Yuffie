@@ -1,4 +1,7 @@
-var rules = [
+"use strict";
+
+$(function() { 
+    var rules = [
     {
         "Key": "Service DCO - FOR - NO IP",
         "Impacted": ["Intervention IP", "Thème", "Sous thème", "Sujet", "Thème CRC/PSC"],
@@ -193,3 +196,4 @@ var rules = [
         }
     }
 ]
+});
