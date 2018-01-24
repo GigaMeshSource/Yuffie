@@ -11,6 +11,7 @@ namespace Yuffie.WebApp.Models {
 
     public class Graph
     {
+        // Macro for neo4j requests
         public const string ENTITY_NAME = "Entity";
         public const string ENTITY_PARAM = "entity";
         public const string VALUE_NAME = "Value";
@@ -19,6 +20,7 @@ namespace Yuffie.WebApp.Models {
         public const string REL_NAME = "NAME";
         public const string REL_PARAM = "rel";
 
+        // csv header
         private StringBuilder Header = new StringBuilder();
         private List<string> ListHeader = new List<string>();
         private Dictionary<string, List<string>> csv = new Dictionary<string, List<string>>();
@@ -45,6 +47,10 @@ namespace Yuffie.WebApp.Models {
             return true;
         }
 
+        // Insert in DB when user add an event
+
+        // Neo4j data model :
+        // (Parent node w/ ID && Date) -[LINKS {property name/csv header column name}]-> (value of the property name)
         public  void CreateEntities(string data)
         {
             int id = 0;
@@ -55,7 +61,8 @@ namespace Yuffie.WebApp.Models {
             {
                 var query = new StringBuilder();
                 var parameters = new Dictionary<string, object>();
-              
+
+                // First create the parent node
                 var queryBuilder = new StringBuilder("CREATE (" + ENTITY_PARAM + ":" + ENTITY_NAME + "{DateTime: '" + DateTime.UtcNow + "'}) RETURN ID(entity)");
                 
                 using (var session = _db.Session())
@@ -76,6 +83,7 @@ namespace Yuffie.WebApp.Models {
 
                     foreach (var item in deserializedObject)
                     {
+                        // Conseiller object doesn't have a static size
                         if (deserializedObject.ContainsKey("Conseiller") && (string.Equals(item.Key,"Conseiller") || string.Equals(item.Key,"CONSEILLER")))
                         {
                             var check = true;
@@ -97,19 +105,18 @@ namespace Yuffie.WebApp.Models {
                             query.Append("CREATE (" + ENTITY_PARAM + ")-[:CONSEILLER]->(e)");
                             continue;
                         }
+                        // useless ?
                         if (comma)
                             comma = false;
                         else
                             queryBuilder.Append(",\n");
 
                         queryBuilder.Append(" (" + ENTITY_PARAM + ")-[:LINKS {name: '" + item.Key.ToUpper() + "'}]->");
-                        queryBuilder.Append("(:"+ VALUE_NAME + " {" + VALUE_PROPERTY + ": '"  + item.Value + "'})");
+                        queryBuilder.Append("(:" + VALUE_NAME + " {" + VALUE_PROPERTY + ": '"  + item.Value + "'})");
                        
                     }
                     
                     request.Clear();
-                    // session.Run(queryBuilder.ToString(), new {pid = id});
-                    // session.Run(query.ToString(), new {pid = id});
                     request = session.WriteTransaction(tx => 
                     {
                         var result = tx.Run(queryBuilder.ToString(), new {pid = id});
@@ -137,8 +144,8 @@ namespace Yuffie.WebApp.Models {
 
             List<entity> entityList = new List<entity>();
            
-            List<string> csvData = new List<string>();
-            List<string> arrayData = new List<string>();
+            //List<string> csvData = new List<string>();
+            //List<string> arrayData = new List<string>();
             var arrayHeader = new StringBuilder();
 
             INode childNode = null;
@@ -158,7 +165,7 @@ namespace Yuffie.WebApp.Models {
                     });
                     
                     CreateHeader();
-                    // see response structure to create adequate model
+
                     var e = new entity();
                     var cnt = 1;
                    
@@ -173,25 +180,20 @@ namespace Yuffie.WebApp.Models {
                             if (!string.IsNullOrEmpty(e.Date) && node.Properties.Count > 0)
                             {
                                 if (!string.Equals(e.Date, node.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString()))
-                                {
                                     parentNode = null;
-                                   
-                                   
-                                }
                             }
 
                             if (parentNode == null && item.Values.ElementAt(0).Value is INode)
                             {
                                 parentNode = item.Values.ElementAt(0).Value as INode;
                                 if (parentNode != null && parentNode.Properties.Count > 0)
-                                {          
+                                {
                                     e.Id = parentNode.Id;
                                     e.Date = parentNode.Properties.Single().As<KeyValuePair<string, object>>().Value.ToString();
                                 }
                             }
 
                             var relationship = item.Values[REL_PARAM] as IRelationship;
-
 
                             if (e.Id == node.Id && relationship.Properties.Count > 0)
                             {
@@ -241,8 +243,8 @@ namespace Yuffie.WebApp.Models {
         private void CreateConsultantData(long id)
         {
             var parameters = new Dictionary<string, object>();
-            var nb = 0;
             var dico = new Dictionary<string, List<string>>();
+            var nb = 0;
 
             try 
             {
@@ -270,7 +272,7 @@ namespace Yuffie.WebApp.Models {
                         return result.ToList();
                     });
 
-
+                    //REDOOO
                     string[] header =  {"Nom_conseiller", "Prénom_conseiller", "Matricule_conseiller", "Fonction_conseiller", "Code_Agence", "Fonction_CRC_PSC"};
                     arrayData = new Dictionary<string, List<string>>();
                     foreach(var h in header)
@@ -356,8 +358,6 @@ namespace Yuffie.WebApp.Models {
                 var err = ex.Message;
             }
         }
-
-
 
         private void FormatCSV()
         {
