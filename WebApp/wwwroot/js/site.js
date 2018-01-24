@@ -1,4 +1,5 @@
-﻿$(function() {
+﻿"use strict";
+$(function() {
     var elements = []
 
     var formatKey = function(key) {
@@ -416,10 +417,5 @@
         return dic;
     }
     initElementDic();
-    exceptions();
 })
 var rules = []
-
-var exceptions = function() {
-    
-}
