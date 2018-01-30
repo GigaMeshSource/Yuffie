@@ -1,7 +1,27 @@
 @model Yuffie.WebApp.Models.YCPSElement
 
 @{
-    var elementId = Model.Name.Replace(" ", "_").Replace("'", "").Replace("/", "_");
+    var changeletters = new List<string[]>()
+    {
+        new string[] {"éèêë", "e"},
+        new string[] {"àäâ", "a"},
+        new string[] {"ïî", "i"},
+        new string[] {"öô", "o"},
+        new string[] {"üû", "u"},
+        new string[] {"ÿŷ", "y"},
+        new string[] {" /", "_"},
+        new string[] {"'", ""}
+    };
+    var elementId = Model.Name;
+    for(var i = 0; i < changeletters.Count; ++i) 
+    {
+        var letters = changeletters[i][0];
+        var replacement = changeletters[i][1];
+        for(var j = 0; j < letters.Length; ++j) 
+        {
+            elementId = elementId.Replace(letters[j].ToString(), replacement);
+        }
+    }
 }
 
 <div id="con_sum_@elementId">
@@ -32,7 +52,16 @@
     {
         foreach(var level in Model.Levels)
         {
-            var levelId = level.Replace(" ", "_").Replace("'", "").Replace("/", "_");
+            var levelId = level;
+            for(var i = 0; i < changeletters.Count; ++i) 
+            {
+                var letters = changeletters[i][0];
+                var replacement = changeletters[i][1];
+                for(var j = 0; j < letters.Length; ++j) 
+                {
+                    levelId = levelId.Replace(letters[j].ToString(), replacement);
+                }
+            }
             <div class="col s6">
                 <label for="el_@(levelId)">@(level)
                 </label>

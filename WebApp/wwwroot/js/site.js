@@ -15,15 +15,16 @@ $(function() {
     var elements = []
     
     var formatKey = function(key) {
+        if(key === null || key === undefined) return "";
+
         for(var i = 0; i < changeletters.length; ++i) {
             var letters = changeletters[i][0];
             var replacement = changeletters[i][1];
-            for(var j =0; j < letters.length; ++j) {
-                var re = new RegExp(letters[j],"ig");
+            for(var j = 0; j < letters.length; ++j) {
+                var re = new RegExp(letters[j],"ig");    
                 key = key.replace(re, replacement);
             }
         }
-        console.log(key)
         return key;
     }
     var elementDic = {}
@@ -36,13 +37,17 @@ $(function() {
         return elementDic[formatKey(key)];
     }
 
+    var addElement = function(key, element) {
+        elements.push(element);
+        elementDic[formatKey(key)] = element;
+    }
+
     var processEffect = function(impacted, effect) {
         if(effect.Css != undefined && effect.Css != null) {
             for(var i = 0; i < impacted.length; ++i) {
                 let key = formatKey(impacted[i]);
                 let block = $("#con_" + key)
                 let summaryBlock = $("#con_sum_" + key)
-                console.log(key)
                 for(let property in effect.Css) {
                     block.css(property, effect.Css[property])
                     summaryBlock.css(property, effect.Css[property])
@@ -253,58 +258,55 @@ $(function() {
 
     $("[tree-select]").click(function(evt) {
         var target = $(evt.target)
+        console.log(target.attr("tree-selected"))
         var alreadySelected = target.attr("tree-selected") == "1";
 
-        var bindings = target.parents("[bind-to]")
-        for(var i = 0; i < bindings.length; ++i) {
-            var binding =$(bindings[i])
-            if(i == 0) {
-                var children = binding.find("[bind-to]")
-                for(var j = 0; j < children.length; ++j) {
-                    var child = $(children[j])
-                    var bindToClean = formatKey(child.attr("bind-to"))
-                    var e = getElement(bindToClean)
-                    if(e != null) {
-                        e.Value = null
-                        copySummary(e)
-                    }
-                }
+        let selected = target.parents("[element]").find("[tree-selected='1']");
+        for(var i = 0; i < selected.length; ++i) {
+            let selectedElement = $(selected[i]);
+            let element = getElement(formatKey(selectedElement.parent().attr("bind-to")));
+            if(element != null) {
+                element.Value = null;
+                copySummary(element);
             }
-            var bindTo = formatKey(binding.attr("bind-to"))
-            var e = getElement(bindTo)
-            if(e == null) {
-                e = {
+        }
+        selected.attr("tree-selected", "0");
+
+        if(target.parentElement == null) {
+            let bindings = target.parent().parents("[bind-to]");
+            for(let i = 0; i < bindings.length; ++i) {
+                let binding = $(bindings[i]);
+                let bindTo = formatKey(binding.attr("bind-to"));
+                let element = getElement(bindTo);
+                if(element == null) {
+                    element = {
+                        Key: bindTo,
+                        Value: null
+                    }
+                    addElement(bindTo, element);
+                }
+                let header = binding.find(".collapsible-header").first();
+                element.Value = header.text();
+                header.attr("tree-selected", "1");
+                copySummary(element);   
+            }
+        }
+
+        if(!alreadySelected) {
+            let bindTo = formatKey(target.parent().attr("bind-to"));
+            let element = getElement(bindTo);
+            if(element == null) {
+                element = {
                     Key: bindTo,
                     Value: null
                 }
-                elements.push(e)
+                addElement(bindTo, element);
             }
-            if((i == 0 && !alreadySelected) || i > 0) {
-                if(binding.find("span a").length == 1) {
-                    e.Value = target.html()
-                }
-                else {
-                    let headers = binding.find(".collapsible-header");
-                    if(headers.length > 0)
-                        e.Value = $(headers[0]).html()
-                    else
-                        e.Value = binding.find("p").html()
-                }
-            }
-            else {
-                e.Value = null
-            }
-            copySummary(e)
+            element.Value = target.text();
+            target.attr("tree-selected", "1");
+            copySummary(element);
         }
-        $(target.parents("ul")[0]).find("[tree-selected=1]").attr("tree-selected", "0")
-        if(alreadySelected) {
-            target.attr("tree-selected", "0")
-        }
-        else {
-            target.attr("tree-selected", "1")
-        }
-        
-    })
+    });
 
     initEffect()
 
@@ -360,8 +362,6 @@ $(function() {
         $('#modal_validate [validate-modal-form]').addClass("hide")
         sendData()
     })
-
-
 
     $("body").on("click", "[chip-close]", function(evt) {
         evt.stopPropagation()
