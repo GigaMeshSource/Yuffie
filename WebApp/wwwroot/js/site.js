@@ -1,9 +1,28 @@
 ﻿"use strict";
+
+var changeletters = [
+    ["éèêë", "e"],
+    ["àäâ", "a"],
+    ["ïî", "i"],
+    ["öô", "o"],
+    ["üû", "u"],
+    ["ÿŷ", "y"],
+    [" \/", "_"],
+    ["'", ""]
+]
+
 $(function() {
     var elements = []
-
+    
     var formatKey = function(key) {
-        return key.replace(/ /ig, "_").replace(/\'/ig, "").replace(/\//ig, "_")
+        for(var i = 0; i < changeletters.length; ++i) {
+            var letters = changeletters[i][0];
+            var replacement = changeletters[i][1];
+            for(var j =0; j < letters.length; ++j) {
+                key = key.replace(/letters[0]/ig, replacement);
+            }
+        }
+        return key;
     }
     var elementDic = {}
     var initElementDic = function(){
@@ -80,7 +99,7 @@ $(function() {
     }
 
     var copySummary = function(element) {
-        var summary = $("[summary=" + element.Key + "]")
+        var summary = $("[summary='" + element.Key + "']")
         if(summary.is("div")) {
             summary.empty()
             if(element.Value == null || element.Value.length == 0) {

@@ -4,7 +4,7 @@ $(function() {
     var rules = [
     {
         "Key": "Service DCO - FOR - NO IP",
-        "Impacted": ["Intervention IP", "Thème", "Sous thème", "Sujet", "Thème CRC/PSC"],
+        "Impacted": ["Thème", "Sujet"],
         "StartingEffect": {
             "Css": {
                 "display": "block"
@@ -21,31 +21,8 @@ $(function() {
         }
     },
     {
-        "Key": "Type d'intervention - Animation - NO Lieu formation",
-        "Impacted": ["Lieu formation"],
-        "StartingEffect": {
-            "Css": {
-                "display": "block"
-            }
-        },
-        "Conditions": [{
-            "Key": "Type d'intervention",
-            "Value": "Animation",
-        }],
-        "Effect": {
-            "Css": {
-                "display": "none"
-            }
-        }
-    },
-    {
         "Key": "Service DCO - IP",
-        "Impacted": [   "CDN", 
-                        "SG", 
-                        "CRC", "PSC", 
-                        "ASSU", "Type d'intervention", "Intervention IP", "Formation", "Type d'intervention 2",
-                        "Code Agence", "Numéro vivier", "Fonction CRC/PSC"
-                    ],
+        "Impacted": [ "Type d'intervention", "Numéro vivier" ],
         "StartingEffect": {
             "Css": {
                 "display": "none"
@@ -61,89 +38,9 @@ $(function() {
             }
         }
     },
-    // {
-    //     "Key": "Service DCO - IP ET Distrib SG",
-    //     "Impacted": ["SG UC", "SG Agence", "SG Code Agence"],
-    //     "StartingEffect": {
-    //         "Css": {
-    //             "display": "block"
-    //         }
-    //     },
-    //     "Conditions": [{
-    //         "Key": "Service DCO",
-    //         "Value": "IP",
-    //     },
-    //     {
-    //         "Key": "Distributeur",
-    //         "Value": "SG",
-    //     }],
-    //     "Effect": {
-    //         "Css": {
-    //             "display": "none"
-    //         }
-    //     }
-    // },
-    // {
-    //     "Key": "Service DCO - IP ET Distrib CDN",
-    //     "Impacted": ["CDN GROUPE", "CDN AGENCES", "CDN Code AGENCES"],
-    //     "StartingEffect": {
-    //         "Css": {
-    //             "display": "block"
-    //         }
-    //     },
-    //     "Conditions": [{
-    //         "Key": "Service DCO",
-    //         "Value": "IP",
-    //     },
-    //     {
-    //         "Key": "Distributeur",
-    //         "Value": "CDN",
-    //     }],
-    //     "Effect": {
-    //         "Css": {
-    //             "display": "none"
-    //         }
-    //     }
-    // },
-    {
-        "Key": "Service DCO - SG",
-        "Impacted": ["SG", "CRC", "PSC"],
-        "StartingEffect": {
-            "Css": {
-                "display": "none"
-            }
-        },
-        "Conditions": [{
-            "Key": "Service DCO",
-            "Value": "ANI SG",
-        }],
-        "Effect": {
-            "Css": {
-                "display": "block"
-            }
-        }
-    },
-    {
-        "Key": "Service DCO - CDN",
-        "Impacted": ["CDN"],
-        "StartingEffect": {
-            "Css": {
-                "display": "none"
-            }
-        },
-        "Conditions": [{
-            "Key": "Service DCO",
-            "Value": "ANI CDN",
-        }],
-        "Effect": {
-            "Css": {
-                "display": "block"
-            }
-        }
-    },
     {
         "Key": "Service DCO - FOR",
-        "Impacted": ["ASSU", "Type d'intervention", "Intervention IP", "Formation", "Type d'intervention 2"],
+        "Impacted": ["Type d'intervention"],
         "StartingEffect": {
             "Css": {
                 "display": "none"
