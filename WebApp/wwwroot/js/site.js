@@ -19,9 +19,11 @@ $(function() {
             var letters = changeletters[i][0];
             var replacement = changeletters[i][1];
             for(var j =0; j < letters.length; ++j) {
-                key = key.replace(/letters[0]/ig, replacement);
+                var re = new RegExp(letters[j],"ig");
+                key = key.replace(re, replacement);
             }
         }
+        console.log(key)
         return key;
     }
     var elementDic = {}
@@ -37,11 +39,11 @@ $(function() {
     var processEffect = function(impacted, effect) {
         if(effect.Css != undefined && effect.Css != null) {
             for(var i = 0; i < impacted.length; ++i) {
-                key = impacted[i];
-                key = formatKey(key)
-                var block = $("#con_" + key)
-                var summaryBlock = $("#con_sum_" + key)
-                for(var property in effect.Css) {
+                let key = formatKey(impacted[i]);
+                let block = $("#con_" + key)
+                let summaryBlock = $("#con_sum_" + key)
+                console.log(key)
+                for(let property in effect.Css) {
                     block.css(property, effect.Css[property])
                     summaryBlock.css(property, effect.Css[property])
                 }
