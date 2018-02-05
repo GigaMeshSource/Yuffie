@@ -12,6 +12,7 @@ using Yuffie.WebApp;
 using Yuffie.WebApp.Models;
 using System.Data.SqlClient;
 using Neo4j.Driver.V1;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApp.Controllers
 {
@@ -43,6 +44,19 @@ namespace WebApp.Controllers
 
         public IActionResult Admin()
         {
+            return View("Admin");
+        }
+
+        public IActionResult Upload(IFormFile file) 
+        {
+            using(var ms = new MemoryStream()) 
+            {
+                file.CopyTo(ms);
+                ms.Position = 0;
+                System.IO.File.WriteAllBytes(HostingEnv.ContentRootPath, ms.ToArray());
+            }
+
+            YuffieApp.SetConfiguration();
             return View("Admin");
         }
         

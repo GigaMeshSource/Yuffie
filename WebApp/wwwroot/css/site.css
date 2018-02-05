@@ -4,10 +4,10 @@
     flex-direction: column;
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#3023ae+0,c76dd7+100 */
     background: #3023ae; /* Old browsers */
-    background: -moz-linear-gradient(-45deg, #3023ae 0%, #c76dd7 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(-45deg, #3023ae 0%,#c76dd7 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(135deg, #3023ae 0%,#c76dd7 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3023ae', endColorstr='#c76dd7',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    background: -moz-linear-gradient(-45deg, #3023ae 0%, #1976d2 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(-45deg, #3023ae 0%,#1976d2 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(135deg, #3023ae 0%,#1976d2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3023ae', endColorstr='#1976d2',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
   }
 
   main {

@@ -14,30 +14,27 @@ namespace WebApp
 {
     public static class YuffieApp
     {
-        public static void SetConfiguration(IConfigurationBuilder builder)
+        public static void SetConfiguration()
         {
-            var configuration = builder.Build();
+            var configuration = Builder.Build();
             Config = configuration.Get<YuffieConfiguration>();
         }
         public static YuffieConfiguration Config {get;private set;}
+        public static IConfigurationBuilder Builder {get; set;}
     }
     public class Startup
     {
         public Startup(IHostingEnvironment env)
         {
-            var builder = new ConfigurationBuilder()
+            YuffieApp.Builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            Configuration = builder.Build();
-
-            var specificBuilder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("yuffieconfig.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables();
+            Configuration = YuffieApp.Builder.Build();
 
-            YuffieApp.SetConfiguration(specificBuilder);
+            YuffieApp.SetConfiguration();
         }
 
         public IConfigurationRoot Configuration { get; }
