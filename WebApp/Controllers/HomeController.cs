@@ -53,7 +53,7 @@ namespace WebApp.Controllers
             {
                 file.CopyTo(ms);
                 ms.Position = 0;
-                System.IO.File.WriteAllBytes(HostingEnv.ContentRootPath, ms.ToArray());
+                System.IO.File.WriteAllBytes(Path.Combine(HostingEnv.ContentRootPath, "yuffieconfig.json"), ms.ToArray());
             }
 
             YuffieApp.SetConfiguration();
