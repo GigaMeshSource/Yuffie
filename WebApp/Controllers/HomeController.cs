@@ -63,7 +63,7 @@ namespace WebApp.Controllers
             var targetFile = "WebApp/yuffieconfig.json";
             var localFile = "yuffieconfig.json";
             var Owner = "NebcoOrganization";
-            var RepositoryName = "yuffie";
+            var RepositoryName = "Yuffie";
             
             var client = new GitHubClient(new ProductHeaderValue("Yuffie"));
             client.Credentials = new Credentials("d0b153a11afddc249bc8c1ad933d9f86f9b612fb");
