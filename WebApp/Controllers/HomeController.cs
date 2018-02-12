@@ -100,7 +100,7 @@ namespace WebApp.Controllers
             catch (Exception ex)
             {
                 //TODO : Error managment
-                Console.WriteLine($"An exception is detected in the commit step. {ex.Message}");                                
+                Console.WriteLine($"An exception is detected in the commit step. {ex.StackTrace}");                                
             }
 
             return View("Admin");
